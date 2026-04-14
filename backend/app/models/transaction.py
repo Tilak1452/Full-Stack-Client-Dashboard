@@ -75,10 +75,10 @@ class Transaction(Base):
     )
 
     # ── Enum Column ────────────────────────────────────────────────────────
-    # SAEnum maps the Python TransactionType enum to a DB-level ENUM type.
-    # The DB will REJECT any value not in ('buy', 'sell') — hard constraint.
+    # SAEnum maps the Python TransactionType enum to a DB-level Enum.
+    # native_enum=False stores as VARCHAR — avoids PostgreSQL CREATE TYPE issues on Supabase.
     transaction_type: Mapped[TransactionType] = mapped_column(
-        SAEnum(TransactionType, name="transaction_type_enum", create_type=True),
+        SAEnum(TransactionType, name="transaction_type_enum", native_enum=False),
         nullable=False,
     )
 

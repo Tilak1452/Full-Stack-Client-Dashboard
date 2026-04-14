@@ -37,7 +37,7 @@ FinSight AI is a **production-grade financial research dashboard** that combines
 
 Both the frontend and backend live inside a **single monorepo** called `Full-Stack-Client-Dashboard`.
 
-The frontend communicates with the backend over HTTP REST APIs and WebSocket connections. The backend fetches live market data from Yahoo Finance, runs technical analysis, manages portfolios in a SQLite database, and can perform AI-powered stock analysis using LLMs (Groq, OpenAI, or Gemini).
+The frontend communicates with the backend over HTTP REST APIs and WebSocket connections. The backend fetches live market data from Yahoo Finance, runs technical analysis, manages portfolios in a Supabase (PostgreSQL) cloud database, and can perform AI-powered stock analysis using LLMs (Groq, OpenAI, or Gemini).
 
 **Key Features:**
 - Live Indian market indices (NIFTY 50, SENSEX, NIFTY BANK, NIFTY IT)
@@ -63,12 +63,10 @@ Full-Stack-Client-Dashboard/              ← ROOT (open this in your editor)
 ├── .env.example                          ← Safe template for .env (empty values, committed to Git)
 ├── .gitignore                            ← Blocks node_modules, .venv, .env, *.db from Git
 ├── requirements.txt                      ← Python dependencies (pip install -r requirements.txt)
-├── financial_ai.db                       ← SQLite database (auto-created on first backend run)
 ├── git_guide.md                          ← Team collaboration guide for Git/GitHub workflow
 │
 ├── backend/                              ← FastAPI Python backend
 │   ├── __init__.py
-│   ├── financial_ai.db                   ← Duplicate DB (legacy, main one is at project root)
 │   ├── pytest.ini                        ← Pytest configuration
 │   ├── vector_db/                        ← ChromaDB local vector store files (for RAG)
 │   ├── tests/                            ← Test files
@@ -207,7 +205,9 @@ Full-Stack-Client-Dashboard/              ← ROOT (open this in your editor)
 | **FastAPI** | Web framework / API server | Latest |
 | **Uvicorn** | ASGI server (runs FastAPI) | Latest (with `[standard]` extras) |
 | **SQLAlchemy** | ORM / database abstraction | 2.x |
-| **SQLite** | Default database (dev) | Built-in |
+| **Supabase (PostgreSQL)** | Cloud-hosted relational database | Latest |
+| **psycopg2-binary** | PostgreSQL Python adapter | Latest |
+| **SQLite** | Local database (development fallback only) | Built-in |
 | **Pydantic** + **pydantic-settings** | Data validation + config management | v2 |
 | **yfinance** | Yahoo Finance market data | Latest |
 | **LangChain** + **LangGraph** | LLM orchestration framework | Latest |
@@ -276,6 +276,9 @@ A safe template with empty values is committed as `.env.example`. New developers
 
 **Required variables:**
 ```env
+# Supabase PostgreSQL connection string (required)
+DATABASE_URL=postgresql+psycopg2://postgres:[YOUR-PASSWORD]@db.xxxxxxxxxxxx.supabase.co:5432/postgres
+
 # At least ONE LLM key is required (Groq is free)
 GROQ_API_KEY=
 OPENAI_API_KEY=
@@ -356,7 +359,7 @@ The frontend and backend are **completely separate processes** communicating ove
 │   localhost:3000     │                                   │   localhost:8000    │
 │                      │  GET /api/v1/indices              │                     │
 │   React components   │  POST /api/v1/analyze             │   Python services   │
-│   call apiFetch()    │  WS /api/v1/stream/price/AAPL     │   SQLite + yFinance │
+│   call apiFetch()    │  WS /api/v1/stream/price/AAPL     │   Supabase + yFinance│
 └─────────────────────┘                                   └─────────────────────┘
 ```
 
@@ -403,8 +406,8 @@ app.include_router(market.router)       # /api/v1/indices, /api/v1/movers
 
 | File | Purpose |
 |------|---------|
-| `config.py` | Loads `.env` from project root via pydantic-settings. Exposes `settings` singleton. Fields: `app_name`, `debug`, `log_level`, `database_url`, `openai_api_key`, `gemini_api_key`, `groq_api_key`, `news_api_key`, `redis_url`. |
-| `database.py` | Creates SQLAlchemy engine (SQLite by default, PostgreSQL supported). Exports `engine`, `SessionLocal`, `Base`, `validate_db_connection()`. Uses `check_same_thread=False` for SQLite. |
+| `config.py` | Loads `.env` from project root via pydantic-settings. Exposes `settings` singleton. Fields: `app_name`, `debug`, `log_level`, `database_url` (required, from env), `openai_api_key`, `gemini_api_key`, `groq_api_key`, `news_api_key`, `redis_url`. |
+| `database.py` | Creates SQLAlchemy engine (Supabase PostgreSQL with connection pooling, SQLite fallback supported). Exports `engine`, `SessionLocal`, `Base`, `validate_db_connection()`. PostgreSQL uses `pool_pre_ping`, `pool_size=5`, `max_overflow=10`, `pool_recycle=1800`. |
 | `dependencies.py` | `get_db()` generator: yields a session, commits on success, rollbacks on error, always closes. Used via `Depends(get_db)`. |
 | `cache.py` | `CacheService` class: tries Redis, falls back to in-memory dict. Exports `cache` singleton with `.get()`, `.set()`, `.clear()`. |
 | `circuit_breaker.py` | Circuit breaker pattern using `pybreaker` for external API calls. |
@@ -484,13 +487,12 @@ app.include_router(market.router)       # /api/v1/indices, /api/v1/movers
 
 ## SECTION 7 — DATABASE MODELS & SCHEMAS
 
-### Database: SQLite (default)
+### Database: Supabase (PostgreSQL)
 
-Location: `Full-Stack-Client-Dashboard/financial_ai.db` (auto-created on first startup)
-
-The database URL is configured in `config.py` as: `sqlite:///{project_root}/financial_ai.db`
-
-Tables are auto-created via `Base.metadata.create_all(bind=engine)` during the `on_startup` lifecycle event.
+Location: Supabase cloud (PostgreSQL).
+Connection configured via `DATABASE_URL` in `.env`.
+Tables are auto-created by SQLAlchemy on first backend startup via `Base.metadata.create_all(bind=engine)`.
+Supabase dashboard: https://supabase.com/dashboard
 
 ### ORM Models (backend/app/models/)
 
@@ -778,7 +780,7 @@ All prices are displayed in **Indian Rupees (₹)** using `toLocaleString('en-IN
 
 5. **Portfolio P&L computation:** The backend `/portfolios/{id}/summary` does NOT include live market prices. The frontend must separately call `/api/v1/stock/{symbol}` for each holding and compute P&L as: `(current_price - average_price) * quantity`.
 
-6. **Database location:** The `financial_ai.db` file exists in both the project root and `backend/`. The one at the project root is the actively used one (configured in `config.py`).
+6. **Database is now Supabase (PostgreSQL):** SQLite has been replaced. The `DATABASE_URL` in `.env` must point to the Supabase connection string. Tables are auto-created on startup. The old `.db` files have been deleted.
 
 7. **Mock data still in use:** The dashboard portfolio value chart and AI insight cards still read from `frontend/src/lib/mock.ts`. These should be replaced with live API calls in a future task.
 
