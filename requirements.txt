@@ -1,0 +1,79 @@
+# Web Framework
+fastapi
+uvicorn[standard]
+
+# Data Validation
+pydantic
+pydantic-settings
+
+# Database
+sqlalchemy
+psycopg2-binary  # PostgreSQL driver (used when DATABASE_URL=postgresql+psycopg2://...)
+
+# Environment
+python-dotenv
+
+# Caching
+redis
+
+# Data Sources
+yfinance
+alpha_vantage
+fredapi
+
+# Data Processing
+pandas
+pandas-datareader # Economic data querying
+numpy
+requests
+pybreaker       # Circuit breaker pattern for external APIs
+tenacity        # Retry / exponential backoff for external API calls
+feedparser      # RSS feed parsing for News Service
+PyPortfolioOpt  # Modern Portfolio Theory (mpt_service)
+
+# NLP / Sentiment (legacy modules)
+textblob
+vaderSentiment
+
+# Background Task Polling
+apscheduler
+
+# LLM & AI Agents
+langchain
+langchain-core
+langchain-openai
+langchain-google-genai
+langchain-groq
+langchain-community
+chromadb
+langchain-chroma
+pinecone
+pypdf
+
+# API File Uploads
+python-multipart
+
+# Frontend
+streamlit>=1.31.0
+altair<5.0
+plotly
+streamlit-option-menu
+streamlit-aggrid
+fpdf2
+
+# Testing
+pytest
+pytest-asyncio
+httpx  # required by FastAPI TestClient
+
+# Security & API limits
+slowapi
+
+# Observability
+langsmith
+structlog
+
+# Linting (dev)
+ruff
+black
+isort
