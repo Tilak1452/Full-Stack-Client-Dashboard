@@ -28,22 +28,27 @@ from .config import settings
 logger = logging.getLogger(__name__)
 
 # ── Engine ────────────────────────────────────────────────────────────────────
-# `connect_args` is only needed for SQLite (disables the same-thread check).
-# For PostgreSQL the condition evaluates to {} — no extra args needed.
-_connect_args = (
-    {"check_same_thread": False}
-    if settings.database_url.startswith("sqlite")
-    else {}
-)
+# Determine if we are connecting to SQLite (for local fallback) or PostgreSQL/Supabase
+if settings.database_url.startswith("sqlite"):
+    engine = create_engine(
+        settings.database_url,
+        connect_args={"check_same_thread": False},
+        echo=settings.debug,
+        future=True,
+    )
+else:
+    # PostgreSQL / Supabase
+    engine = create_engine(
+        settings.database_url,
+        pool_pre_ping=True,       # Checks connection health before using from pool
+        pool_size=5,              # Keep 5 connections open (suitable for dev/staging)
+        max_overflow=10,          # Allow up to 10 extra connections under burst load
+        pool_recycle=1800,        # Recycle connections every 30 minutes
+        echo=settings.debug,
+        future=True,
+    )
 
-engine = create_engine(
-    settings.database_url,
-    connect_args=_connect_args,
-    echo=settings.debug,   # prints all generated SQL when DEBUG=True
-    future=True,           # enables SQLAlchemy 2.x style API
-)
-
-logger.info("Database engine created | url=%s", settings.database_url)
+logger.info("Database engine created | url=%s", settings.database_url.split("@")[-1] if "@" in settings.database_url else settings.database_url)
 
 # ── Session Factory ───────────────────────────────────────────────────────────
 SessionLocal = sessionmaker(

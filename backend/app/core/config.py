@@ -12,18 +12,14 @@ current_file_dir = os.path.dirname(os.path.abspath(__file__))
 root_dir = os.path.abspath(os.path.join(current_file_dir, "..", "..", ".."))
 
 env_path = os.path.join(root_dir, ".env")
-# Path for the database file (always at the root_dir level)
-db_path = os.path.join(root_dir, "financial_ai.db")
-db_url = f"sqlite:///{db_path}"
 
 class Settings(BaseSettings):
     app_name: str = "Financial Research AI"
     debug: bool = False
     log_level: str = "INFO"
 
-    # Database
-    # Standardized: Absolute path to root_dir/financial_ai.db
-    database_url: str = db_url
+    # Database — read from DATABASE_URL in .env (required, no default)
+    database_url: str
 
     # LLM
     openai_api_key: str = ""

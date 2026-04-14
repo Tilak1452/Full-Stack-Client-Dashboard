@@ -2,7 +2,7 @@
 Alert Model (models/alert.py)
 SQLAlchemy model for persisting user-defined market alerts.
 """
-from sqlalchemy import Column, Integer, String, Float, Boolean, DateTime, Enum
+from sqlalchemy import Column, Integer, String, Float, Boolean, DateTime, Enum as SAEnum
 from sqlalchemy.sql import func
 import enum
 from ..core.database import Base
@@ -29,9 +29,9 @@ class Alert(Base):
 
     id          = Column(Integer, primary_key=True, index=True)
     symbol      = Column(String, nullable=False, index=True)
-    condition   = Column(Enum(AlertCondition), nullable=False)
+    condition   = Column(SAEnum(AlertCondition, name='alertcondition', native_enum=False), nullable=False)
     threshold   = Column(Float, nullable=False)
-    status      = Column(Enum(AlertStatus), default=AlertStatus.ACTIVE)
+    status      = Column(SAEnum(AlertStatus, name='alertstatus', native_enum=False), default=AlertStatus.ACTIVE)
     message     = Column(String, nullable=True)          # Last triggered message
     created_at  = Column(DateTime(timezone=True), server_default=func.now())
     triggered_at = Column(DateTime(timezone=True), nullable=True)
