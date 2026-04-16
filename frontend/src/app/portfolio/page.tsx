@@ -1,15 +1,22 @@
 "use client";
 
-import React from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { portfolioApi } from '@/lib/portfolio.api';
-import { stockApi } from '@/lib/stock.api';
+import React, { useState } from 'react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { portfolioApi, HoldingItem } from '@/lib/portfolio.api';
+import { AddToPortfolioModal } from '@/components/AddToPortfolioModal';
+import { SellHoldingModal } from '@/components/SellHoldingModal';
 import { TopBar } from '@/components/TopBar';
 import { PieChart, Pie, Cell } from 'recharts';
 
-const CHART_COLORS = ['#d1ff4c', '#bb86fc', '#3b82f6', '#ffb74d', '#ff6b6b'];
+const CHART_COLORS = ['#d1ff4c', '#bb86fc', '#3b82f6', '#ffb74d', '#ff6b6b', '#4dd0e1', '#ab47bc', '#66bb6a'];
 
 export default function PortfolioPage() {
+  const queryClient = useQueryClient();
+
+  // Modal states
+  const [buyModal, setBuyModal] = useState<{open: boolean; symbol: string; price: number}>({open: false, symbol: '', price: 0});
+  const [sellModal, setSellModal] = useState<{open: boolean; holding: HoldingItem | null}>({open: false, holding: null});
+
   const { data: portfolios = [], isLoading: portfoliosLoading, error: portfoliosError } = useQuery({
     queryKey: ['portfolios'],
     queryFn: portfolioApi.list,
@@ -23,29 +30,7 @@ export default function PortfolioPage() {
     enabled: portfolioId !== null,
   });
 
-  const symbols = summary?.holdings.map(h => h.symbol) ?? [];
-
-  const { data: livePrices = {}, isLoading: pricesLoading } = useQuery({
-    queryKey: ['live-prices', symbols],
-    queryFn: async () => {
-      const results: Record<string, number> = {};
-      await Promise.allSettled(
-        symbols.map(async (sym) => {
-          try {
-            const data = await stockApi.getFullData(sym);
-            results[sym] = data.current_price;
-          } catch {
-            // price unavailable for this symbol
-          }
-        })
-      );
-      return results;
-    },
-    enabled: symbols.length > 0,
-    staleTime: 60_000,
-  });
-
-  const isLoading = portfoliosLoading || summaryLoading || (symbols.length > 0 && pricesLoading);
+  const isLoading = portfoliosLoading || summaryLoading;
   const error = portfoliosError || summaryError;
 
   if (isLoading) {
@@ -80,34 +65,42 @@ export default function PortfolioPage() {
     );
   }
 
-  const enrichedHoldings = (summary?.holdings ?? []).map(holding => {
-    const livePrice = livePrices[holding.symbol] ?? holding.average_price;
-    const currentValue = livePrice * holding.quantity;
-    const invested = holding.average_price * holding.quantity;
-    const gain = currentValue - invested;
-    const gainPct = invested > 0 ? (gain / invested) * 100 : 0;
+  // Use pre-calculated values from backend (no N+1 API calls!)
+  const holdings = summary?.holdings ?? [];
+  const totalInvested = summary?.total_invested ?? 0;
+  const totalCurrentValue = summary?.total_current_value ?? totalInvested;
+  const totalUnrealizedPL = summary?.total_unrealized_pl ?? 0;
+  const totalUnrealizedPLPct = summary?.total_unrealized_pl_pct ?? 0;
+  const totalRealizedPL = summary?.total_realized_pl ?? 0;
+
+  const enrichedHoldings = holdings.map(h => {
+    const costBasis = h.cost_basis ?? h.quantity * h.average_price;
+    const currentValue = h.current_value ?? costBasis;
+    const unrealizedPL = h.unrealized_pl ?? 0;
+    const unrealizedPLPct = h.unrealized_pl_pct ?? 0;
+    const ltp = h.current_price ?? h.average_price;
+
     return {
-      sym: holding.symbol,
-      qty: holding.quantity,
-      avg: holding.average_price,
-      ltp: livePrice,
+      id: h.id,
+      sym: h.symbol,
+      qty: h.quantity,
+      avg: h.average_price,
+      ltp,
       val: currentValue,
-      gain: gain,
-      pct: gainPct.toFixed(2),
-      up: gain >= 0,
+      costBasis,
+      gain: unrealizedPL,
+      pct: unrealizedPLPct.toFixed(2),
+      up: unrealizedPL >= 0,
+      realizedPL: h.realized_pl ?? 0,
+      hasPriceData: h.current_price != null,
+      raw: h,
     };
   });
-
-  const totalValue = enrichedHoldings.reduce((sum, h) => sum + h.val, 0);
-  const totalInvested = summary?.total_invested ?? 0;
-  const totalGain = totalValue - totalInvested;
-  const totalReturn = totalInvested > 0 ? (totalGain / totalInvested) * 100 : 0;
-  const totalPct = totalReturn.toFixed(2);
 
   const alloc = enrichedHoldings.map((h, i) => ({
     name: h.sym.replace('.NS', ''),
     valRaw: h.val,
-    v: totalValue > 0 ? ((h.val / totalValue) * 100).toFixed(1) : '0.0',
+    v: totalCurrentValue > 0 ? ((h.val / totalCurrentValue) * 100).toFixed(1) : '0.0',
     color: CHART_COLORS[i % CHART_COLORS.length],
   }));
 
@@ -117,16 +110,17 @@ export default function PortfolioPage() {
       <div className="flex-1 overflow-y-auto p-5 md:p-[22px] flex flex-col gap-3.5">
         
         {/* Summary cards */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
           {[
-            { label: 'Total value', val: `₹${totalValue.toLocaleString('en-IN', {maximumFractionDigits:2})}`, color: 'text-text' },
+            { label: 'Total value', val: `₹${totalCurrentValue.toLocaleString('en-IN', {maximumFractionDigits:2})}`, color: 'text-text' },
             { label: 'Total invested', val: `₹${totalInvested.toLocaleString('en-IN', {maximumFractionDigits:2})}`, color: 'text-text' },
-            { label: 'Total gain', val: `${totalGain >= 0 ? '+' : ''}₹${totalGain.toLocaleString('en-IN', {maximumFractionDigits:2})}`, color: totalGain >= 0 ? 'text-green' : 'text-red' },
-            { label: 'Return', val: `${totalReturn >= 0 ? '+' : ''}${totalPct}%`, color: totalReturn >= 0 ? 'text-lime' : 'text-red' },
+            { label: 'Unrealized P&L', val: `${totalUnrealizedPL >= 0 ? '+' : ''}₹${totalUnrealizedPL.toLocaleString('en-IN', {maximumFractionDigits:2})}`, color: totalUnrealizedPL >= 0 ? 'text-green' : 'text-red' },
+            { label: 'Unrealized %', val: `${totalUnrealizedPLPct >= 0 ? '+' : ''}${totalUnrealizedPLPct.toFixed(2)}%`, color: totalUnrealizedPLPct >= 0 ? 'text-lime' : 'text-red' },
+            { label: 'Realized P&L', val: `${totalRealizedPL >= 0 ? '+' : ''}₹${totalRealizedPL.toLocaleString('en-IN', {maximumFractionDigits:2})}`, color: totalRealizedPL >= 0 ? 'text-green' : 'text-red' },
           ].map(c => (
             <div key={c.label} className="bg-card border border-border rounded-2xl p-5">
               <div className="text-[11px] text-muted mb-1.5 tracking-[0.04em]">{c.label}</div>
-              <div className={`text-[22px] font-semibold tracking-[-0.03em] ${c.color}`}>{c.val}</div>
+              <div className={`text-[20px] font-semibold tracking-[-0.03em] ${c.color}`}>{c.val}</div>
             </div>
           ))}
         </div>
@@ -138,31 +132,61 @@ export default function PortfolioPage() {
             {enrichedHoldings.length === 0 ? (
               <div className="text-center p-4 text-muted text-sm">No holdings found.</div>
             ) : (
-            <table className="w-full border-collapse whitespace-nowrap min-w-[600px]">
+            <table className="w-full border-collapse whitespace-nowrap min-w-[750px]">
               <thead>
                 <tr>
-                  {['Symbol', 'Qty', 'Avg cost', 'LTP', 'Mkt value', 'P&L', 'Return'].map(h => (
+                  {['Symbol', 'Qty', 'Avg Cost', 'LTP', 'Mkt Value', 'Unrealized P&L', 'Return', 'Realized', 'Actions'].map(h => (
                     <th key={h} className="text-left text-[10.5px] text-muted font-medium p-[0_8px_10px] tracking-[0.04em]">{h}</th>
                   ))}
                 </tr>
               </thead>
               <tbody>
                 {enrichedHoldings.map((h) => (
-                  <tr key={h.sym} className="border-t border-border">
+                  <tr key={h.sym} className="border-t border-border group">
                     <td className="p-3 px-2">
                       <div className="text-[13px] font-semibold">{h.sym}</div>
                     </td>
                     <td className="p-3 px-2 text-[13px] text-muted">{h.qty}</td>
                     <td className="p-3 px-2 text-[13px]">₹{h.avg.toLocaleString('en-IN', {maximumFractionDigits:2})}</td>
-                    <td className="p-3 px-2 text-[13px]">₹{h.ltp.toLocaleString('en-IN', {maximumFractionDigits:2})}</td>
+                    <td className="p-3 px-2 text-[13px]">
+                      {h.hasPriceData 
+                        ? `₹${h.ltp.toLocaleString('en-IN', {maximumFractionDigits:2})}`
+                        : <span className="text-muted text-[11px]">Updating...</span>
+                      }
+                    </td>
                     <td className="p-3 px-2 text-[13px]">₹{h.val.toLocaleString('en-IN', {maximumFractionDigits:2})}</td>
                     <td className={`p-3 px-2 text-[13px] ${h.up ? 'text-green' : 'text-red'}`}>
-                      {h.up ? '+' : ''}{h.gain < 0 ? '-₹' + Math.abs(h.gain).toLocaleString('en-IN', {maximumFractionDigits:2}) : '₹' + h.gain.toLocaleString('en-IN', {maximumFractionDigits:2})}
+                      {h.up ? '+' : ''}₹{h.gain.toLocaleString('en-IN', {maximumFractionDigits:2})}
                     </td>
                     <td className="p-3 px-2">
                       <span className={`text-xs font-semibold px-2 py-[3px] rounded-md ${h.up ? 'text-green bg-green/10' : 'text-red bg-red/10'}`}>
                         {h.up ? '+' : ''}{h.pct}%
                       </span>
+                    </td>
+                    <td className="p-3 px-2 text-[13px]">
+                      {h.realizedPL !== 0 ? (
+                        <span className={h.realizedPL >= 0 ? 'text-green' : 'text-red'}>
+                          {h.realizedPL >= 0 ? '+' : ''}₹{h.realizedPL.toLocaleString('en-IN', {maximumFractionDigits:2})}
+                        </span>
+                      ) : (
+                        <span className="text-muted">—</span>
+                      )}
+                    </td>
+                    <td className="p-3 px-2">
+                      <div className="flex gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button
+                          onClick={() => setBuyModal({open: true, symbol: h.sym, price: h.ltp})}
+                          className="text-[10px] bg-lime/10 text-lime border border-lime/20 px-2 py-1 rounded-md font-semibold cursor-pointer hover:bg-lime/20 transition-colors"
+                        >
+                          Buy More
+                        </button>
+                        <button
+                          onClick={() => setSellModal({open: true, holding: h.raw})}
+                          className="text-[10px] bg-red/10 text-red border border-red/20 px-2 py-1 rounded-md font-semibold cursor-pointer hover:bg-red/20 transition-colors"
+                        >
+                          Sell
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -198,6 +222,27 @@ export default function PortfolioPage() {
         </div>
 
       </div>
+
+      {/* Buy More Modal */}
+      <AddToPortfolioModal
+        isOpen={buyModal.open}
+        symbol={buyModal.symbol}
+        currentPrice={buyModal.price}
+        onClose={() => setBuyModal({open: false, symbol: '', price: 0})}
+      />
+
+      {/* Sell Modal */}
+      {sellModal.holding && portfolioId && (
+        <SellHoldingModal
+          isOpen={sellModal.open}
+          symbol={sellModal.holding.symbol}
+          availableQuantity={sellModal.holding.quantity}
+          currentPrice={sellModal.holding.current_price ?? sellModal.holding.average_price}
+          averageCost={sellModal.holding.average_price}
+          portfolioId={portfolioId}
+          onClose={() => setSellModal({open: false, holding: null})}
+        />
+      )}
     </div>
   );
 }

@@ -4,16 +4,21 @@ Holding Model (holding.py)
 Responsibilities:
 1. Represents a single stock position inside a portfolio.
 2. Stores the stock symbol, number of shares, and average buy price.
-3. Linked to a parent Portfolio via a foreign key.
+3. Tracks current market data (price, value, unrealized P&L).
+4. Tracks realized P&L from completed sales.
+5. Linked to a parent Portfolio via a foreign key.
 
 Relationships:
 - Many Holdings → One Portfolio (many-to-one).
 - Cascade: If a Portfolio is deleted, all its Holdings are deleted automatically.
 """
 
-from sqlalchemy import String, Float, ForeignKey
+from datetime import datetime
+from typing import TYPE_CHECKING, Optional
+
+from sqlalchemy import String, Float, ForeignKey, DateTime
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from typing import TYPE_CHECKING
+from sqlalchemy.sql import func
 
 from ..core.database import Base
 
@@ -35,7 +40,16 @@ class Holding(Base):
     - portfolio_id: Foreign key referencing portfolios.id.
     - symbol: Stock ticker (e.g., 'AAPL'), indexed for fast lookups.
     - quantity: Number of shares held (supports fractional shares).
-    - average_price: The average cost per share across all buy transactions.
+    - average_price: The weighted average cost per share across all buy transactions.
+    - cost_basis: Total invested amount (quantity × average_price).
+    - current_price: Last fetched market price (updated by background job).
+    - current_value: quantity × current_price.
+    - unrealized_pl: current_value - cost_basis.
+    - unrealized_pl_pct: (unrealized_pl / cost_basis) × 100.
+    - realized_pl: Cumulative P&L from completed sales (FIFO).
+    - realized_pl_pct: realized_pl as percentage of original cost_basis.
+    - first_purchase_date: When the position was first opened.
+    - last_price_update: When current_price was last refreshed.
     """
     __tablename__ = "holdings"
     __table_args__ = {"extend_existing": True}
@@ -43,29 +57,45 @@ class Holding(Base):
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
 
     # ── Foreign Key ────────────────────────────────────────────────────────
-    # ondelete="CASCADE" → If the parent Portfolio row is deleted from the DB,
-    # all child Holding rows for that portfolio are automatically deleted.
-    # This enforces referential integrity at the DATABASE level.
     portfolio_id: Mapped[int] = mapped_column(
         ForeignKey("portfolios.id", ondelete="CASCADE"),
         nullable=False,
-        index=True,  # indexed for fast joins when fetching all holdings for a portfolio
+        index=True,
     )
 
     symbol: Mapped[str] = mapped_column(
         String(20),
         nullable=False,
-        index=True,  # indexed for fast lookups like "find all portfolios holding AAPL"
+        index=True,
     )
     quantity: Mapped[float] = mapped_column(Float, nullable=False)
     average_price: Mapped[float] = mapped_column(Float, nullable=False)
 
+    # ── New: Cost Basis (denormalized for performance) ─────────────────────
+    cost_basis: Mapped[Optional[float]] = mapped_column(Float, nullable=True)
+
+    # ── New: Current Market Data (updated by background job) ───────────────
+    current_price: Mapped[Optional[float]] = mapped_column(Float, nullable=True)
+    current_value: Mapped[Optional[float]] = mapped_column(Float, nullable=True)
+    unrealized_pl: Mapped[Optional[float]] = mapped_column(Float, nullable=True)
+    unrealized_pl_pct: Mapped[Optional[float]] = mapped_column(Float, nullable=True)
+
+    # ── New: Realized P&L (from completed sales) ──────────────────────────
+    realized_pl: Mapped[Optional[float]] = mapped_column(Float, default=0.0, server_default="0")
+    realized_pl_pct: Mapped[Optional[float]] = mapped_column(Float, default=0.0, server_default="0")
+
+    # ── New: Metadata ─────────────────────────────────────────────────────
+    first_purchase_date: Mapped[Optional[datetime]] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        nullable=True,
+    )
+    last_price_update: Mapped[Optional[datetime]] = mapped_column(
+        DateTime(timezone=True),
+        nullable=True,
+    )
+
     # ── ORM Relationship ───────────────────────────────────────────────────
-    # `back_populates="holdings"` wires this side of the relationship to the
-    # `holdings` attribute on the Portfolio model (defined in portfolio.py).
-    # cascade="all, delete-orphan" → If a Portfolio object is deleted in Python
-    # (in-session), SQLAlchemy will also delete its Holding objects.
-    # This is the ORM-level mirror of the DB-level ondelete="CASCADE".
     portfolio: Mapped["Portfolio"] = relationship(
         "Portfolio",
         back_populates="holdings",

@@ -6,6 +6,7 @@ import { useParams, useRouter } from 'next/navigation';
 import TradingViewWidget from '@/components/TradingViewWidget';
 import TechnicalTab from '@/components/TechnicalTab';
 import FundamentalTab from '@/components/FundamentalTab';
+import { AddToPortfolioModal } from '@/components/AddToPortfolioModal';
 import { IcSearch } from '@/components/Icons';
 import { TopBar } from '@/components/TopBar';
 import { stockApi } from '@/lib/stock.api';
@@ -43,6 +44,7 @@ export default function StockPage() {
   const [inWatchlist, setInWatchlist] = useState(false);
   const [activeTab, setActiveTab] = useState<'technical' | 'fundamental'>('technical');
   const [activeInterval, setActiveInterval] = useState<IntervalOption>(INTERVALS[3]); // default: 1d 1mo
+  const [showAddModal, setShowAddModal] = useState(false);
   const router = useRouter();
 
   // Check if current symbol is already in watchlist
@@ -186,8 +188,11 @@ export default function StockPage() {
             Analyze
           </button>
           <div className="ml-auto flex gap-2">
-            <button className="bg-card2 border border-border rounded-[9px] px-3.5 py-2 text-xs text-muted cursor-pointer hover:text-text">
-              Compare
+            <button 
+              onClick={() => setShowAddModal(true)}
+              className="bg-lime border-none rounded-[9px] px-3.5 py-2 text-xs text-black font-semibold cursor-pointer hover:brightness-110 transition-all"
+            >
+              + Add to Portfolio
             </button>
             <button 
               onClick={handleWatchlistToggle}
@@ -288,8 +293,15 @@ export default function StockPage() {
           )}
         </div>
 
+        {/* Add to Portfolio Modal */}
+        <AddToPortfolioModal
+          isOpen={showAddModal}
+          symbol={symbol}
+          currentPrice={currentPrice ?? 0}
+          onClose={() => setShowAddModal(false)}
+        />
+
       </div>
     </div>
   );
 }
-

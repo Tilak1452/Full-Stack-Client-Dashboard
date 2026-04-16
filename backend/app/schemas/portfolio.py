@@ -67,14 +67,32 @@ class RecordTransactionRequest(BaseModel):
         return v.lower().strip()
 
 
+class SellHoldingRequest(BaseModel):
+    """Request body for POST /portfolios/{portfolio_id}/holdings/{symbol}/sell."""
+    quantity: float = Field(..., gt=0, description="Number of shares to sell (must be > 0)")
+    price: float = Field(..., gt=0, description="Per-share selling price")
+
+
 # ── Response Schemas ──────────────────────────────────────────────────────────
 
 class HoldingSummary(BaseModel):
-    """A single holding entry in the portfolio summary."""
+    """A single holding entry in the portfolio summary — with all P&L data."""
+    id: Optional[int] = None
     symbol: str
     quantity: float
     average_price: float
-    total_invested: float
+    total_invested: Optional[float] = None
+
+    # Pre-calculated values (from backend)
+    cost_basis: Optional[float] = None
+    current_price: Optional[float] = None
+    current_value: Optional[float] = None
+    unrealized_pl: Optional[float] = None
+    unrealized_pl_pct: Optional[float] = None
+    realized_pl: Optional[float] = 0.0
+    realized_pl_pct: Optional[float] = 0.0
+    first_purchase_date: Optional[datetime] = None
+    last_price_update: Optional[datetime] = None
 
     model_config = {"from_attributes": True}
 
@@ -91,20 +109,25 @@ class PortfolioResponse(BaseModel):
 
 class PortfolioSummaryResponse(BaseModel):
     """
-    Aggregated portfolio summary response.
+    Aggregated portfolio summary response with pre-calculated P&L.
 
     Includes:
-    - All holdings with per-holding totals.
-    - total_invested: Sum of (quantity × average_price) across all holdings.
-    - total_holdings: Count of distinct stock positions.
-    - market_value: Placeholder (None until Stock Service is integrated in Task 3).
+    - All holdings with per-holding P&L.
+    - total_invested: Sum of cost basis across all holdings.
+    - total_current_value: Sum of current values.
+    - total_unrealized_pl: Aggregate unrealized P&L.
+    - total_realized_pl: Aggregate realized P&L from sales.
     """
     id: int
     name: str
     created_at: datetime
     total_holdings: int
     total_invested: float
-    market_value: Optional[float] = None  # Placeholder — populated by Stock Service (Task 3)
+    total_current_value: Optional[float] = None
+    total_unrealized_pl: Optional[float] = None
+    total_unrealized_pl_pct: Optional[float] = None
+    total_realized_pl: Optional[float] = None
+    market_value: Optional[float] = None
     holdings: List[HoldingSummary] = []
 
     model_config = {"from_attributes": True}
@@ -118,6 +141,16 @@ class TransactionResponse(BaseModel):
     transaction_type: str
     quantity: float
     price: float
+    total_amount: Optional[float] = None
+    realized_pl: Optional[float] = None
     timestamp: datetime
 
     model_config = {"from_attributes": True}
+
+
+class SellResponse(BaseModel):
+    """Response for a sell operation."""
+    status: str
+    message: str
+    realized_pl: float
+    remaining_quantity: float
