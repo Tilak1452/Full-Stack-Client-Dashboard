@@ -32,6 +32,10 @@ class Settings(BaseSettings):
     # Caching
     redis_url: str = "redis://localhost:6379/0"
 
+    # JWT Authentication
+    jwt_secret: str = "CHANGE_THIS_TO_A_LONG_RANDOM_SECRET_IN_PRODUCTION"
+    jwt_algorithm: str = "HS256"
+    jwt_expire_days: int = 7
     class Config:
         env_file = env_path
         extra = "ignore"

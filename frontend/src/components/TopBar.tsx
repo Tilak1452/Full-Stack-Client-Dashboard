@@ -3,10 +3,12 @@
 import React, { useState } from 'react';
 import { IcSearch, IcBell } from './Icons';
 import { useRouter } from 'next/navigation';
+import { useAuth } from '@/lib/auth-context';
 
 export function TopBar({ title }: { title: string }) {
   const [q, setQ] = useState('');
   const router = useRouter();
+  const { user } = useAuth();
 
   const handleSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' && q.trim()) {
@@ -35,11 +37,11 @@ export function TopBar({ title }: { title: string }) {
       </div>
       
       <div className="flex items-center gap-2.5 cursor-pointer px-2.5 py-1.5 rounded-[10px] border border-border ml-2">
-        <div className="w-[30px] h-[30px] rounded-full bg-gradient-to-br from-purple to-pink flex items-center justify-center text-[12px] font-bold text-white">
-          A
+        <div className="w-[30px] h-[30px] rounded-full bg-gradient-to-br from-purple to-pink flex items-center justify-center text-[12px] font-bold text-white uppercase">
+          {user?.name?.[0] || 'U'}
         </div>
         <div>
-          <div className="text-[12.5px] font-medium leading-[1.2]">Arjun Shah</div>
+          <div className="text-[12.5px] font-medium leading-[1.2]">{user?.name || 'User'}</div>
           <div className="text-[10.5px] text-lime leading-[1.2]">Pro Plan</div>
         </div>
       </div>

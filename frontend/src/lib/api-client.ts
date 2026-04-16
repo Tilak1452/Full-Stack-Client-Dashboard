@@ -14,24 +14,33 @@ export class ApiError extends Error {
 
 export async function apiFetch<T>(
   endpoint: string,
-  options?: RequestInit
+  options: RequestInit = {}
 ): Promise<T> {
-  const url = `${BASE_URL}${endpoint}`;
+  const token = typeof window !== "undefined"
+    ? localStorage.getItem("finsight_token")
+    : null;
 
-  let response: Response;
-  try {
-    response = await fetch(url, {
-      headers: {
-        'Content-Type': 'application/json',
-        ...options?.headers,
-      },
-      ...options,
-    });
-  } catch (networkError) {
-    throw new ApiError(0, 'Cannot reach backend server. Is it running on port 8000?');
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+    ...(options.headers as Record<string, string>),
+  };
+
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
   }
 
+  const response = await fetch(`${BASE_URL}${endpoint}`, {
+    ...options,
+    headers,
+  });
+
   if (!response.ok) {
+    // Auto-redirect on 401 (expired/invalid token)
+    if (response.status === 401 && typeof window !== "undefined") {
+      localStorage.removeItem("finsight_token");
+      localStorage.removeItem("finsight_user");
+      window.location.href = "/auth/login";
+    }
     let detail = `HTTP ${response.status}`;
     try {
       const body = await response.json();

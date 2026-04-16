@@ -90,3 +90,9 @@ export const IcTrash = ({ s = 15, c = 'currentColor', className }: IconProps) =>
     <path d="M4 5h12M8 5V3h4v2M6 5l1 12h6l1-12" stroke={c} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
   </svg>
 );
+
+export const IcLogout = ({ s = 16, c = 'currentColor', className }: IconProps) => (
+  <svg width={s} height={s} viewBox="0 0 20 20" fill="none" className={className}>
+    <path d="M7 16L3 10L7 4M3 10H13M10 2H15C16.1046 2 17 2.89543 17 4V16C17 17.1046 16.1046 18 15 18H10" stroke={c} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);

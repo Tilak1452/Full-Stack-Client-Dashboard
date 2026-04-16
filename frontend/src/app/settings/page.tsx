@@ -2,8 +2,10 @@
 
 import React from 'react';
 import { TopBar } from '@/components/TopBar';
+import { useAuth } from '@/lib/auth-context';
 
 export default function SettingsPage() {
+  const { user } = useAuth();
   const InputCls = "bg-card2 border border-border rounded-[10px] p-[10px_14px] text-text text-[13px] outline-none font-sans w-full focus:border-border-hi transition-colors";
 
   return (
@@ -15,8 +17,8 @@ export default function SettingsPage() {
           <div className="bg-card border border-border rounded-2xl p-5 md:p-6">
             <div className="text-sm font-semibold mb-4">Profile</div>
             {[
-              ['Full name', 'Arjun Shah'],
-              ['Email', 'arjun@finsight.ai'],
+              ['Full name', user?.name || ''],
+              ['Email', user?.email || ''],
               ['Phone', '+91 98765 43210']
             ].map(([l, v]) => (
               <div key={l} className="mb-3.5">

@@ -80,3 +80,49 @@ def get_db() -> Generator[Session, None, None]:
         # Prevents connection exhaustion under high load.
         db.close()
         logger.debug("DB session closed")
+
+from fastapi import Depends, HTTPException, status
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+
+from app.core.security import decode_access_token
+from app.models.user import User
+
+bearer_scheme = HTTPBearer(auto_error=False)
+
+
+def get_current_user(
+    credentials: HTTPAuthorizationCredentials = Depends(bearer_scheme),
+    db: Session = Depends(get_db),
+) -> User:
+    """
+    FastAPI dependency that extracts and validates the JWT from the
+    Authorization: Bearer <token> header.
+
+    Usage in any route:
+        @router.get("/protected")
+        def protected_route(current_user: User = Depends(get_current_user)):
+            ...
+    """
+    if not credentials:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Not authenticated. Please log in.",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+    payload = decode_access_token(credentials.credentials)
+    if not payload:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Token is invalid or has expired.",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+    user_id = int(payload.get("sub", 0))
+    user = db.query(User).filter(User.id == user_id, User.is_active == True).first()
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="User not found or deactivated.",
+        )
+    return user

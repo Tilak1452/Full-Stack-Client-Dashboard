@@ -13,6 +13,8 @@ export const metadata: Metadata = {
   description: 'Financial Research AI Agent SaaS application',
 };
 
+import { AuthProvider } from '@/lib/auth-context';
+
 export default function RootLayout({
   children,
 }: {
@@ -21,12 +23,14 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${outfit.variable} ${dmSans.variable}`}>
       <body className="h-screen flex overflow-hidden">
-        <Providers>
-          <Sidebar />
-          <div className="flex-1 flex flex-col overflow-hidden">
-            {children}
-          </div>
-        </Providers>
+        <AuthProvider>
+          <Providers>
+            <Sidebar />
+            <div className="flex-1 flex flex-col overflow-hidden">
+              {children}
+            </div>
+          </Providers>
+        </AuthProvider>
       </body>
     </html>
   );

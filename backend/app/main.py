@@ -53,6 +53,7 @@ except ImportError:
 from fastapi.middleware.cors import CORSMiddleware
 
 from .core.config import settings
+from .api.auth import router as auth_router
 from .api.analyze import router as analyze_router
 from .api.portfolio import router as portfolio_router
 from .api.stream import router as stream_router
@@ -209,6 +210,7 @@ async def on_shutdown() -> None:
 
 
 # ── Routes ────────────────────────────────────────────────────────────────────
+app.include_router(auth_router)
 app.include_router(analyze_router)
 app.include_router(portfolio_router)
 app.include_router(stream_router)
