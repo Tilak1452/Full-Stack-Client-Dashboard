@@ -22,18 +22,44 @@ async def get_stock_full(symbol: str):
 @router.get("/{symbol}/history")
 async def get_stock_history(
     symbol: str,
-    period: str = Query(default="1mo", description="yfinance period: 1d, 5d, 1mo, 3mo, 6mo, 1y, 5y"),
-    interval: str = Query(default="1d", description="yfinance interval: 1m, 5m, 1h, 1d, 1wk")
+    period: str = Query(default="6mo", description="yfinance period: 5d, 15d, 60d, 6mo, 2y"),
+    interval: str = Query(default="1d", description="yfinance interval: 5m, 15m, 60m, 1d"),
+    include_indicators: bool = Query(default=False, description="Include all 8 technical indicators per candle"),
 ):
     """
-    Returns OHLCV historical candle data only, for charting.
+    Returns OHLCV historical candle data.
+    When include_indicators=True, also returns enriched candles with RSI, MACD, Bollinger, etc.
     """
     symbol = symbol.upper().strip()
     try:
-        # stock_service.get_historical_data is synchronous according to the actual implementation.
-        candles = stock_service.get_historical_data(symbol, period=period, interval=interval)
-        return {"symbol": symbol, "period": period, "interval": interval, "candles": candles.get("data", [])}
+        result = stock_service.get_historical_data(
+            symbol, period=period, interval=interval, include_indicators=include_indicators
+        )
+        # For backward compat: enriched responses already have 'candles' key
+        if include_indicators and "candles" in result:
+            return result
+        # Basic response: rename 'data' to 'candles' for frontend consistency
+        return {"symbol": symbol, "period": period, "interval": interval, "candles": result.get("data", [])}
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to fetch history: {str(e)}")
+
+
+@router.get("/{symbol}/fundamentals")
+async def get_stock_fundamentals(symbol: str):
+    """
+    Returns fundamental data: PE, PB, ROE, quarterly financials,
+    shareholding pattern, and earnings calendar.
+
+    Fetches 4 yfinance data sources in parallel using asyncio.gather.
+    Expected latency: ~2.0–3.5s.
+    """
+    symbol = symbol.upper().strip()
+    try:
+        data = await stock_service.get_fundamentals(symbol)
+        return data
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to fetch fundamentals: {str(e)}")

@@ -64,14 +64,17 @@ export default function DashboardPage() {
   const movers = moversData?.movers ?? [];
   const newsPreview = newsResponse?.articles ?? [];
 
-  const [watchlistSymbols] = useState<string[]>(() => {
-    if (typeof window === 'undefined') return [];
+  const [watchlistSymbols, setWatchlistSymbols] = useState<string[]>([]);
+
+  // Load watchlist from localStorage AFTER hydration (client-only)
+  React.useEffect(() => {
     try {
-      return JSON.parse(localStorage.getItem('finsight_watchlist') ?? '[]');
+      const saved = localStorage.getItem('finsight_watchlist');
+      if (saved) setWatchlistSymbols(JSON.parse(saved));
     } catch {
-      return [];
+      // ignore parse errors
     }
-  });
+  }, []);
 
   const { data: watchlistPrices = {} } = useQuery({
     queryKey: ['live-prices', watchlistSymbols],
