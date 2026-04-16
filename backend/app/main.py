@@ -160,18 +160,51 @@ async def global_exception_handler(
 # ── Startup / Shutdown ────────────────────────────────────────────────────────
 from .services.alert_service import start_scheduler, stop_scheduler
 
+# Price update background job (updates holdings every 5 min)
+_price_scheduler = None
+
+def _start_price_updater():
+    """Start the background job that refreshes holding prices every 5 minutes."""
+    global _price_scheduler
+    try:
+        from apscheduler.schedulers.background import BackgroundScheduler
+        from .services.price_update_job import update_all_holdings_prices
+
+        _price_scheduler = BackgroundScheduler()
+        _price_scheduler.add_job(
+            update_all_holdings_prices,
+            "interval",
+            minutes=5,
+            id="update_holdings_prices",
+            replace_existing=True,
+        )
+        _price_scheduler.start()
+        logger.info("📈 Holdings price updater started — polling every 300s")
+    except Exception as e:
+        logger.warning("Holdings price updater failed to start: %s", e)
+
+
+def _stop_price_updater():
+    global _price_scheduler
+    if _price_scheduler:
+        _price_scheduler.shutdown(wait=False)
+        logger.info("📈 Holdings price updater stopped")
+
+
 @app.on_event("startup")
 async def on_startup() -> None:
     logger.info("🚀 %s starting up", settings.app_name)
     validate_db_connection()  # Fail fast if DB is unreachable
     Base.metadata.create_all(bind=engine)  # Auto-create all registered tables
     start_scheduler()
+    _start_price_updater()
     logger.info("🗃️ Tables created/verified")
 
 
 @app.on_event("shutdown")
 async def on_shutdown() -> None:
     stop_scheduler()
+    _stop_price_updater()
     logger.info("🛑 %s shutting down", settings.app_name)
 
 

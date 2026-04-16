@@ -4,10 +4,11 @@ import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { TopBar } from '@/components/TopBar';
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
-import { portfolioHistory, aiInsightsData } from '@/lib/mock';
+import { aiInsightsData } from '@/lib/mock';
 import { marketApi } from '@/lib/market.api';
 import { newsApi } from '@/lib/news.api';
 import { stockApi } from '@/lib/stock.api';
+import { portfolioApi } from '@/lib/portfolio.api';
 import { formatTime } from '@/lib/utils';
 import Link from 'next/link';
 
@@ -40,6 +41,47 @@ const mockSpark = [100, 105, 102, 108, 107];
 
 export default function DashboardPage() {
   const [tf, setTf] = useState('6M');
+
+  // ── Real portfolio data ─────────────────────────────────────────
+  const { data: portfolios = [] } = useQuery({
+    queryKey: ['portfolios'],
+    queryFn: portfolioApi.list,
+    staleTime: 60_000,
+  });
+
+  const portfolioId = portfolios.length > 0 ? portfolios[0]?.id : null;
+
+  const { data: portfolioSummary } = useQuery({
+    queryKey: ['portfolio-summary', portfolioId],
+    queryFn: () => portfolioApi.getSummary(portfolioId!),
+    enabled: portfolioId !== null,
+    staleTime: 60_000,
+    refetchInterval: 5 * 60_000, // Refresh every 5 min to match background job
+  });
+
+  // Build chart data from real holdings
+  const portfolioChartData = React.useMemo(() => {
+    if (!portfolioSummary?.holdings || portfolioSummary.holdings.length === 0) {
+      return [{ m: 'Now', v: 0 }];
+    }
+    // Show each holding as a data point with its current value contribution
+    const holdings = portfolioSummary.holdings;
+    const totalValue = portfolioSummary.total_current_value ?? portfolioSummary.total_invested ?? 0;
+    const totalInvested = portfolioSummary.total_invested ?? 0;
+
+    // Create a simple historical-looking chart: invested → current
+    const points = [
+      { m: 'Invested', v: totalInvested },
+      { m: 'Current', v: totalValue },
+    ];
+    return points;
+  }, [portfolioSummary]);
+
+  const totalPortfolioValue = portfolioSummary?.total_current_value ?? portfolioSummary?.total_invested ?? 0;
+  const totalInvested = portfolioSummary?.total_invested ?? 0;
+  const totalPLPct = portfolioSummary?.total_unrealized_pl_pct ?? 0;
+  const totalPL = portfolioSummary?.total_unrealized_pl ?? 0;
+  const isUp = totalPL >= 0;
 
   const { data: indicesData } = useQuery({
     queryKey: ['market-indices'],
@@ -143,33 +185,47 @@ export default function DashboardPage() {
               <div>
                 <div className="text-[11.5px] text-muted mb-1.5">Portfolio value</div>
                 <div className="text-[28px] font-semibold tracking-[-0.04em] leading-none">
-                  ₹6,53,480
-                  <span className="text-[13.5px] text-green ml-2.5 font-medium">+18.2% YTD</span>
+                  {totalPortfolioValue > 0
+                    ? `₹${totalPortfolioValue.toLocaleString('en-IN', {maximumFractionDigits: 2})}`
+                    : '₹0'
+                  }
+                  {totalPortfolioValue > 0 && (
+                    <span className={`text-[13.5px] ml-2.5 font-medium ${isUp ? 'text-green' : 'text-red'}`}>
+                      {isUp ? '+' : ''}{totalPLPct.toFixed(2)}%
+                    </span>
+                  )}
                 </div>
+                {totalPortfolioValue > 0 && (
+                  <div className={`text-[12px] mt-1 ${isUp ? 'text-green' : 'text-red'}`}>
+                    {isUp ? '+' : ''}₹{totalPL.toLocaleString('en-IN', {maximumFractionDigits: 2})} unrealized
+                  </div>
+                )}
               </div>
-              <div className="flex gap-[3px]">
-                {['1M', '3M', '6M', '1Y', 'ALL'].map(t => (
-                  <button key={t} onClick={() => setTf(t)} className={`px-[11px] py-1.5 rounded-lg border-none cursor-pointer text-[11.5px] font-medium transition-all duration-150 ${tf === t ? 'bg-lime text-black' : 'bg-transparent text-muted'}`}>
-                    {t}
-                  </button>
-                ))}
-              </div>
+              <Link href="/portfolio" className="text-[11px] text-muted hover:text-lime no-underline bg-card2 border border-border rounded-lg px-3 py-1.5">
+                View portfolio →
+              </Link>
             </div>
             <div className="h-[170px]">
+              {portfolioSummary && portfolioSummary.holdings.length > 0 ? (
               <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={portfolioHistory}>
+                <AreaChart data={portfolioChartData}>
                   <defs>
                     <linearGradient id="lgLime" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#C8FF00" stopOpacity={0.25} />
-                      <stop offset="95%" stopColor="#C8FF00" stopOpacity={0} />
+                      <stop offset="5%" stopColor={isUp ? '#C8FF00' : '#F87171'} stopOpacity={0.25} />
+                      <stop offset="95%" stopColor={isUp ? '#C8FF00' : '#F87171'} stopOpacity={0} />
                     </linearGradient>
                   </defs>
                   <XAxis dataKey="m" tick={{ fill: '#636B7A', fontSize: 11 }} axisLine={false} tickLine={false} />
-                  <YAxis tick={{ fill: '#636B7A', fontSize: 11 }} axisLine={false} tickLine={false} domain={['dataMin - 0.4', 'dataMax + 0.2']} />
-                  <Tooltip content={<ChartTip />} />
-                  <Area dataKey="v" stroke="#C8FF00" strokeWidth={2} fill="url(#lgLime)" dot={false} />
+                  <YAxis tick={{ fill: '#636B7A', fontSize: 11 }} axisLine={false} tickLine={false} domain={['dataMin * 0.95', 'dataMax * 1.05']} />
+                  <Tooltip content={<ChartTip prefix="₹" mult={1} />} />
+                  <Area dataKey="v" stroke={isUp ? '#C8FF00' : '#F87171'} strokeWidth={2} fill="url(#lgLime)" dot={false} />
                 </AreaChart>
               </ResponsiveContainer>
+              ) : (
+                <div className="h-full flex items-center justify-center text-muted text-[13px]">
+                  {portfolioSummary ? 'No holdings yet — add stocks from the Stock Analysis page' : 'Loading portfolio...'}
+                </div>
+              )}
             </div>
           </div>
 

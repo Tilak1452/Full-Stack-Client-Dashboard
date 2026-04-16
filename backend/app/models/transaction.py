@@ -5,11 +5,12 @@ Responsibilities:
 1. Records every individual buy or sell event for a stock symbol inside a portfolio.
 2. Acts as an immutable audit trail — transactions should never be updated, only appended.
 3. Linked to a parent Portfolio via a foreign key.
+4. Stores total_amount and realized_pl for tax reporting.
 """
 
 import enum
 from datetime import datetime
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 
 from sqlalchemy import Enum as SAEnum, String, Float, ForeignKey, DateTime
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -52,6 +53,8 @@ class Transaction(Base):
     - transaction_type: Enum restricted to 'buy' or 'sell'.
     - quantity: Number of shares involved in this transaction (float).
     - price: The per-share price at the time of the transaction (float).
+    - total_amount: quantity × price (denormalized for performance).
+    - realized_pl: Realized P&L for SELL transactions (FIFO method).
     - timestamp: Auto-set by the DB server at insert time.
     """
     __tablename__ = "transactions"
@@ -60,8 +63,6 @@ class Transaction(Base):
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
 
     # ── Foreign Key ────────────────────────────────────────────────────────
-    # ondelete="CASCADE" → Database deletes all transactions if the parent
-    # Portfolio row is deleted. Enforces referential integrity at DB level.
     portfolio_id: Mapped[int] = mapped_column(
         ForeignKey("portfolios.id", ondelete="CASCADE"),
         nullable=False,
@@ -71,12 +72,10 @@ class Transaction(Base):
     symbol: Mapped[str] = mapped_column(
         String(20),
         nullable=False,
-        index=True,  # indexed for "show all AAPL transactions" type queries
+        index=True,
     )
 
     # ── Enum Column ────────────────────────────────────────────────────────
-    # SAEnum maps the Python TransactionType enum to a DB-level Enum.
-    # native_enum=False stores as VARCHAR — avoids PostgreSQL CREATE TYPE issues on Supabase.
     transaction_type: Mapped[TransactionType] = mapped_column(
         SAEnum(TransactionType, name="transaction_type_enum", native_enum=False),
         nullable=False,
@@ -85,10 +84,11 @@ class Transaction(Base):
     quantity: Mapped[float] = mapped_column(Float, nullable=False)
     price: Mapped[float] = mapped_column(Float, nullable=False)
 
+    # ── New: Calculated fields ─────────────────────────────────────────────
+    total_amount: Mapped[Optional[float]] = mapped_column(Float, nullable=True)
+    realized_pl: Mapped[Optional[float]] = mapped_column(Float, nullable=True)
+
     # ── Auto Timestamp ─────────────────────────────────────────────────────
-    # server_default=func.now() → The DB server sets this at INSERT time.
-    # This is more reliable than setting it in Python, because DB time is
-    # consistent even across multiple app servers or timezone differences.
     timestamp: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         server_default=func.now(),

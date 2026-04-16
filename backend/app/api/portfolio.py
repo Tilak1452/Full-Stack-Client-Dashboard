@@ -21,9 +21,11 @@ from ..schemas.portfolio import (
     CreatePortfolioRequest,
     AddHoldingRequest,
     RecordTransactionRequest,
+    SellHoldingRequest,
     PortfolioResponse,
     PortfolioSummaryResponse,
     TransactionResponse,
+    SellResponse,
     HoldingSummary,
 )
 from ..services import portfolio_service
@@ -84,7 +86,7 @@ def add_holding(
     db: Session = Depends(get_db),
 ) -> PortfolioResponse:
     """
-    Adds a new holding or updates quantity + average price if the symbol exists.
+    Adds a new holding or updates quantity + weighted average cost if the symbol exists.
     Returns the full updated portfolio summary.
     Returns 404 if the portfolio doesn't exist.
     """
@@ -117,9 +119,10 @@ def record_transaction(
 ) -> TransactionResponse:
     """
     Records a buy or sell transaction.
-    For BUY: adds to or creates the holding.
-    For SELL: reduces the holding quantity. Returns 422 if overselling.
+    For BUY: adds to or creates the holding (weighted average cost).
+    For SELL: reduces the holding quantity, calculates FIFO realized P&L.
     Returns 404 if the portfolio doesn't exist.
+    Returns 422 if overselling.
     """
     logger.info(
         "POST /portfolios/%s/transactions | type=%s | symbol=%s | qty=%s",
@@ -140,7 +143,59 @@ def record_transaction(
         transaction_type=txn.transaction_type.value,
         quantity=txn.quantity,
         price=txn.price,
+        total_amount=txn.total_amount,
+        realized_pl=txn.realized_pl,
         timestamp=txn.timestamp,
+    )
+
+
+# ── 4. Sell Holding (dedicated endpoint) ──────────────────────────────────────
+
+@router.post(
+    "/{portfolio_id}/holdings/{symbol}/sell",
+    response_model=SellResponse,
+    status_code=status.HTTP_200_OK,
+    summary="Sell shares of a holding",
+)
+def sell_holding(
+    portfolio_id: int,
+    symbol: str,
+    payload: SellHoldingRequest,
+    db: Session = Depends(get_db),
+) -> SellResponse:
+    """
+    Sells shares from a holding.
+    Calculates realized P&L using FIFO method.
+    Returns 422 if overselling.
+    """
+    symbol = symbol.upper().strip()
+    logger.info(
+        "POST /portfolios/%s/holdings/%s/sell | qty=%s | price=%s",
+        portfolio_id, symbol, payload.quantity, payload.price,
+    )
+    txn = portfolio_service.record_transaction(
+        db=db,
+        portfolio_id=portfolio_id,
+        symbol=symbol,
+        transaction_type="sell",
+        quantity=payload.quantity,
+        price=payload.price,
+    )
+
+    # Check remaining quantity
+    from ..models.holding import Holding
+    remaining_holding = (
+        db.query(Holding)
+        .filter(Holding.portfolio_id == portfolio_id, Holding.symbol == symbol)
+        .first()
+    )
+    remaining_qty = remaining_holding.quantity if remaining_holding else 0.0
+
+    return SellResponse(
+        status="success",
+        message=f"Sold {payload.quantity} shares of {symbol}",
+        realized_pl=txn.realized_pl or 0.0,
+        remaining_quantity=remaining_qty,
     )
 
 
@@ -153,10 +208,20 @@ def _build_portfolio_response(portfolio) -> PortfolioResponse:
     """
     holdings = [
         HoldingSummary(
+            id=h.id,
             symbol=h.symbol,
             quantity=h.quantity,
             average_price=h.average_price,
             total_invested=round(h.quantity * h.average_price, 2),
+            cost_basis=h.cost_basis,
+            current_price=h.current_price,
+            current_value=h.current_value,
+            unrealized_pl=h.unrealized_pl,
+            unrealized_pl_pct=h.unrealized_pl_pct,
+            realized_pl=h.realized_pl or 0.0,
+            realized_pl_pct=h.realized_pl_pct or 0.0,
+            first_purchase_date=h.first_purchase_date,
+            last_price_update=h.last_price_update,
         )
         for h in portfolio.holdings
     ]
@@ -168,32 +233,27 @@ def _build_portfolio_response(portfolio) -> PortfolioResponse:
     )
 
 
-# ── 4. Portfolio Summary ──────────────────────────────────────────────────────────
+# ── 5. Portfolio Summary ──────────────────────────────────────────────────────
 
 @router.get(
     "/{portfolio_id}/summary",
     response_model=PortfolioSummaryResponse,
     status_code=200,
-    summary="Fetch aggregated portfolio summary",
+    summary="Fetch aggregated portfolio summary with P&L",
 )
 def get_portfolio_summary(
     portfolio_id: int,
     db: Session = Depends(get_db),
 ) -> PortfolioSummaryResponse:
     """
-    Returns an aggregated summary of the portfolio:
-    - All holdings with per-holding totals.
-    - total_invested: Sum of cost basis across all positions.
-    - total_holdings: Number of distinct stock positions.
-    - market_value: None (placeholder until Stock Service is integrated in Task 3).
-
-    Returns 404 if the portfolio doesn't exist.
+    Returns an aggregated summary of the portfolio with all pre-calculated P&L.
+    Frontend just displays — no manual calculations needed.
     """
     logger.info("GET /portfolios/%s/summary", portfolio_id)
     data = portfolio_service.get_portfolio_summary(db=db, portfolio_id=portfolio_id)
     return PortfolioSummaryResponse(**data)
 
-# ── 5. Optimize Portfolio (MPT) ──────────────────────────────────────────────────
+# ── 6. Optimize Portfolio (MPT) ──────────────────────────────────────────────
 
 @router.get(
     "/{portfolio_id}/optimize",
@@ -212,4 +272,3 @@ def optimize_user_portfolio(
         return {"status": "error", "message": "At least 2 active holdings required to optimize."}
         
     return optimize_portfolio(symbols)
-
