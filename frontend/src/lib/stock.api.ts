@@ -9,6 +9,69 @@ export interface HistoricalCandle {
   volume: number;
 }
 
+export interface EnrichedCandle {
+  timestamp: string;
+  open: number;
+  high: number;
+  low: number;
+  close: number;
+  volume: number;
+  rsi: number;
+  sma: number;
+  ema: number;
+  macd: number;
+  macd_signal: number;
+  macd_hist: number;
+  bb_upper: number;
+  bb_middle: number;
+  bb_lower: number;
+  stoch_k: number;
+  stoch_d: number;
+  atr: number;
+  mfi: number;
+}
+
+export interface LatestIndicators {
+  rsi: number;
+  sma: number;
+  ema: number;
+  macd: number;
+  macd_signal: number;
+  macd_hist: number;
+  bb_upper: number;
+  bb_middle: number;
+  bb_lower: number;
+  stoch_k: number;
+  stoch_d: number;
+  atr: number;
+  mfi: number;
+}
+
+export interface PivotPoints {
+  pivot: number | null;
+  s1: number | null;
+  s2: number | null;
+  r1: number | null;
+  r2: number | null;
+}
+
+export interface TechnicalSummary {
+  verdict: 'BULLISH' | 'BEARISH' | 'NEUTRAL';
+  bullish: number;
+  bearish: number;
+  neutral: number;
+}
+
+export interface EnrichedHistoryResponse {
+  symbol: string;
+  period: string;
+  interval: string;
+  candles: EnrichedCandle[];
+  latest_indicators: LatestIndicators;
+  pivot_points: PivotPoints;
+  summary: TechnicalSummary;
+}
+
 export interface FullStockData {
   symbol: string;
   current_price: number;
@@ -34,16 +97,76 @@ export interface StockHistoryResponse {
   candles: HistoricalCandle[];
 }
 
+// Fundamentals types
+export interface FundamentalsOverview {
+  pe_ratio: number | null;
+  pb_ratio: number | null;
+  roe: number | null;
+  dividend_yield: number | null;
+  market_cap: number | null;
+  day_high: number | null;
+  day_low: number | null;
+  '52_week_high': number | null;
+  '52_week_low': number | null;
+  beta: number | null;
+  book_value: number | null;
+  earnings_per_share: number | null;
+}
+
+export interface QuarterlyFinancial {
+  period: string;
+  total_revenue: number | null;
+  net_income: number | null;
+}
+
+export interface ShareholdingData {
+  pct_held_by_institutions: number | null;
+  pct_held_by_insiders: number | null;
+  float_shares_pct: number | null;
+  number_of_institutions: number | null;
+}
+
+export interface EarningsCalendar {
+  next_earnings_date: string | null;
+  earnings_low: number | null;
+  earnings_high: number | null;
+  revenue_low: number | null;
+  revenue_high: number | null;
+}
+
+export interface FundamentalsResponse {
+  symbol: string;
+  overview: FundamentalsOverview;
+  quarterly_financials: QuarterlyFinancial[];
+  annual_financials: QuarterlyFinancial[];
+  shareholding: ShareholdingData;
+  calendar: EarningsCalendar;
+}
+
 export const stockApi = {
   getFullData: (symbol: string): Promise<FullStockData> =>
     apiFetch<FullStockData>(`/api/v1/stock/${encodeURIComponent(symbol)}`),
 
   getHistory: (
     symbol: string,
-    period: '1d' | '5d' | '1mo' | '3mo' | '6mo' | '1y' | '5y' = '1mo',
-    interval: '1m' | '5m' | '1h' | '1d' | '1wk' = '1d'
+    period: string = '1mo',
+    interval: string = '1d'
   ): Promise<StockHistoryResponse> =>
     apiFetch<StockHistoryResponse>(
       `/api/v1/stock/${encodeURIComponent(symbol)}/history?period=${period}&interval=${interval}`
+    ),
+
+  getHistoryWithIndicators: (
+    symbol: string,
+    interval: string,
+    period: string
+  ): Promise<EnrichedHistoryResponse> =>
+    apiFetch<EnrichedHistoryResponse>(
+      `/api/v1/stock/${encodeURIComponent(symbol)}/history?interval=${interval}&period=${period}&include_indicators=true`
+    ),
+
+  getFundamentals: (symbol: string): Promise<FundamentalsResponse> =>
+    apiFetch<FundamentalsResponse>(
+      `/api/v1/stock/${encodeURIComponent(symbol)}/fundamentals`
     ),
 };

@@ -174,9 +174,10 @@ class StockService:
         symbol: str,
         period: str = "1mo",
         interval: str = "1d",
+        include_indicators: bool = False,
     ) -> dict:
         """Routes through circuit breaker, then retries on failure."""
-        return self._cb.call(self._fetch_historical_data, symbol, period, interval)
+        return self._cb.call(self._fetch_historical_data, symbol, period, interval, include_indicators)
 
     @_stock_retry  # Retries up to 3 times on RuntimeError with exponential backoff
     def _fetch_historical_data(
@@ -184,43 +185,34 @@ class StockService:
         symbol: str,
         period: str = "1mo",
         interval: str = "1d",
+        include_indicators: bool = False,
     ) -> dict:
         """
         Fetches historical OHLC (Open, High, Low, Close) + Volume data.
+
+        When include_indicators=True, also computes 8 technical indicators,
+        pivot points, and a bullish/bearish summary score.
 
         Args:
             symbol:   Stock ticker (e.g., "AAPL", "RELIANCE.NS").
             period:   Time range — "1d", "5d", "1mo", "3mo", "6mo", "1y", "5y".
             interval: Candle size — "1m", "5m", "15m", "1h", "1d", "1wk", "1mo".
+            include_indicators: If True, enrich candles with all 8 indicators.
 
         Returns:
-            {
-                "symbol": "AAPL",
-                "period": "1mo",
-                "interval": "1d",
-                "currency": "USD",
-                "num_candles": 22,
-                "data": [
-                    {
-                        "date": "2026-01-15",
-                        "open": 173.10,
-                        "high": 175.80,
-                        "low": 172.50,
-                        "close": 174.90,
-                        "volume": 52000000,
-                    },
-                    ...
-                ]
-            }
+            Base dict with OHLCV candles, plus (when indicators=True):
+            latest_indicators, pivot_points, summary.
 
         Raises:
             ValueError: If the symbol has no historical data.
             RuntimeError: If yFinance request fails.
         """
+        from .indicators import compute_all_indicators, compute_pivot_points, compute_summary
+
         symbol = symbol.upper().strip()
         logger.info(
-            "Fetching historical data | symbol=%s | period=%s | interval=%s",
-            symbol, period, interval,
+            "Fetching historical data | symbol=%s | period=%s | interval=%s | indicators=%s",
+            symbol, period, interval, include_indicators,
         )
 
         try:
@@ -233,8 +225,91 @@ class StockService:
                     f"with period='{period}' and interval='{interval}'."
                 )
 
-            # Convert DataFrame rows to a clean list of dicts
-            # We avoid leaking pandas types (Timestamp, float64) into the response
+            currency = "N/A"
+            try:
+                currency = getattr(ticker.fast_info, "currency", "N/A")
+            except Exception:
+                pass
+
+            # ── Enriched response (with indicators) ──
+            if include_indicators:
+                try:
+                    enriched_df = compute_all_indicators(df)
+
+                    if enriched_df.empty:
+                        raise ValueError("Not enough data after indicator warmup.")
+
+                    # Build candle records with indicator columns
+                    records = []
+                    for timestamp, row in enriched_df.iterrows():
+                        records.append({
+                            "timestamp": timestamp.strftime("%Y-%m-%d %H:%M:%S"),
+                            "open": round(float(row.get("Open", 0)), 4),
+                            "high": round(float(row.get("High", 0)), 4),
+                            "low": round(float(row.get("Low", 0)), 4),
+                            "close": round(float(row.get("Close", 0)), 4),
+                            "volume": int(row.get("Volume", 0)),
+                            "rsi": round(float(row.get("RSI_14", 0)), 2),
+                            "sma": round(float(row.get("SMA_20", 0)), 2),
+                            "ema": round(float(row.get("EMA_20", 0)), 2),
+                            "macd": round(float(row.get("MACD_12_26_9", 0)), 2),
+                            "macd_signal": round(float(row.get("MACDs_12_26_9", 0)), 2),
+                            "macd_hist": round(float(row.get("MACDh_12_26_9", 0)), 2),
+                            "bb_upper": round(float(row.get("BBU_20", 0)), 2),
+                            "bb_middle": round(float(row.get("BBM_20", 0)), 2),
+                            "bb_lower": round(float(row.get("BBL_20", 0)), 2),
+                            "stoch_k": round(float(row.get("STOCHk_14_3", 0)), 2),
+                            "stoch_d": round(float(row.get("STOCHd_14_3", 0)), 2),
+                            "atr": round(float(row.get("ATR_14", 0)), 2),
+                            "mfi": round(float(row.get("MFI_14", 0)), 2),
+                        })
+
+                    # Extract latest indicator snapshot
+                    last_row = enriched_df.iloc[-1]
+                    latest_indicators = {
+                        "rsi": round(float(last_row.get("RSI_14", 0)), 2),
+                        "sma": round(float(last_row.get("SMA_20", 0)), 2),
+                        "ema": round(float(last_row.get("EMA_20", 0)), 2),
+                        "macd": round(float(last_row.get("MACD_12_26_9", 0)), 2),
+                        "macd_signal": round(float(last_row.get("MACDs_12_26_9", 0)), 2),
+                        "macd_hist": round(float(last_row.get("MACDh_12_26_9", 0)), 2),
+                        "bb_upper": round(float(last_row.get("BBU_20", 0)), 2),
+                        "bb_middle": round(float(last_row.get("BBM_20", 0)), 2),
+                        "bb_lower": round(float(last_row.get("BBL_20", 0)), 2),
+                        "stoch_k": round(float(last_row.get("STOCHk_14_3", 0)), 2),
+                        "stoch_d": round(float(last_row.get("STOCHd_14_3", 0)), 2),
+                        "atr": round(float(last_row.get("ATR_14", 0)), 2),
+                        "mfi": round(float(last_row.get("MFI_14", 0)), 2),
+                    }
+
+                    current_price = float(last_row.get("Close", 0))
+                    pivot_points = compute_pivot_points(enriched_df)
+                    summary = compute_summary(last_row, current_price)
+
+                    result = {
+                        "symbol": symbol,
+                        "period": period,
+                        "interval": interval,
+                        "currency": currency,
+                        "num_candles": len(records),
+                        "candles": records,
+                        "latest_indicators": latest_indicators,
+                        "pivot_points": pivot_points,
+                        "summary": summary,
+                    }
+                    logger.info(
+                        "Enriched history fetched | symbol=%s | candles=%d", symbol, len(records)
+                    )
+                    return result
+
+                except Exception as ind_exc:
+                    logger.warning(
+                        "Indicator computation failed, returning raw candles | symbol=%s | error=%s",
+                        symbol, str(ind_exc)
+                    )
+                    # Fall through to raw candle response below
+
+            # ── Basic response (no indicators) ──
             records = []
             for timestamp, row in df.iterrows():
                 records.append({
@@ -245,12 +320,6 @@ class StockService:
                     "close": round(float(row.get("Close", 0)), 4),
                     "volume": int(row.get("Volume", 0)),
                 })
-
-            currency = "N/A"
-            try:
-                currency = getattr(ticker.fast_info, "currency", "N/A")
-            except Exception:
-                pass
 
             result = {
                 "symbol": symbol,
@@ -351,6 +420,133 @@ class StockService:
         cache.set(cache_key, cache_payload, ttl_seconds=120)
 
         return result
+
+
+    # ── 4. Fundamentals (Phase 2) ──────────────────────────────────────────────
+
+    async def get_fundamentals(self, symbol: str) -> dict:
+        """
+        Fetches fundamental data for the Fundamental tab.
+
+        Uses asyncio.gather + run_in_executor to parallelize 4 blocking yfinance calls.
+        Returns a structured dict with overview, quarterly/annual financials,
+        shareholding, and earnings calendar.
+        """
+        import asyncio
+        from concurrent.futures import ThreadPoolExecutor
+
+        symbol = symbol.upper().strip()
+        logger.info("Fetching fundamentals | symbol=%s", symbol)
+
+        ticker = yf.Ticker(symbol)
+        loop = asyncio.get_event_loop()
+
+        with ThreadPoolExecutor(max_workers=4) as pool:
+            info_future = loop.run_in_executor(pool, lambda: ticker.info)
+            qfin_future = loop.run_in_executor(pool, lambda: ticker.quarterly_financials)
+            holders_future = loop.run_in_executor(pool, lambda: ticker.major_holders)
+            calendar_future = loop.run_in_executor(pool, lambda: ticker.calendar)
+
+            info, qfin, holders, calendar = await asyncio.gather(
+                info_future, qfin_future, holders_future, calendar_future,
+                return_exceptions=True
+            )
+
+        # ── Parse ticker.info ──
+        if isinstance(info, Exception) or not isinstance(info, dict):
+            info = {}
+
+        overview = {
+            "pe_ratio": info.get("trailingPE"),
+            "pb_ratio": info.get("priceToBook"),
+            "roe": info.get("returnOnEquity"),
+            "dividend_yield": info.get("dividendYield"),
+            "market_cap": info.get("marketCap"),
+            "day_high": info.get("dayHigh"),
+            "day_low": info.get("dayLow"),
+            "52_week_high": info.get("fiftyTwoWeekHigh"),
+            "52_week_low": info.get("fiftyTwoWeekLow"),
+            "beta": info.get("beta"),
+            "book_value": info.get("bookValue"),
+            "earnings_per_share": info.get("trailingEps"),
+        }
+
+        # ── Parse quarterly financials ──
+        quarterly_financials = []
+        if not isinstance(qfin, Exception) and hasattr(qfin, 'columns'):
+            try:
+                for col in qfin.columns:
+                    period_label = col.strftime("%b %Y") if hasattr(col, 'strftime') else str(col)
+                    revenue = qfin[col].get("Total Revenue")
+                    net_income = qfin[col].get("Net Income")
+                    quarterly_financials.append({
+                        "period": period_label,
+                        "total_revenue": float(revenue) if revenue is not None else None,
+                        "net_income": float(net_income) if net_income is not None else None,
+                    })
+            except Exception as e:
+                logger.warning("Failed to parse quarterly financials | %s", e)
+
+        # ── Parse shareholding ──
+        shareholding = {
+            "pct_held_by_institutions": None,
+            "pct_held_by_insiders": None,
+            "float_shares_pct": None,
+            "number_of_institutions": None,
+        }
+        if not isinstance(holders, Exception) and hasattr(holders, 'iloc'):
+            try:
+                for _, row_data in holders.iterrows():
+                    label = str(row_data.iloc[1]).lower() if len(row_data) > 1 else ""
+                    val = row_data.iloc[0]
+                    if 'institution' in label and 'held' in label:
+                        shareholding["pct_held_by_institutions"] = float(val) if val else None
+                    elif 'insider' in label and 'held' in label:
+                        shareholding["pct_held_by_insiders"] = float(val) if val else None
+                    elif 'float' in label:
+                        shareholding["float_shares_pct"] = float(val) if val else None
+                    elif 'institution' in label and 'count' in label:
+                        shareholding["number_of_institutions"] = int(val) if val else None
+            except Exception as e:
+                logger.warning("Failed to parse holders | %s", e)
+
+        # Also get from info dict as a more reliable fallback
+        if shareholding["pct_held_by_institutions"] is None:
+            shareholding["pct_held_by_institutions"] = info.get("heldPercentInstitutions")
+        if shareholding["pct_held_by_insiders"] is None:
+            shareholding["pct_held_by_insiders"] = info.get("heldPercentInsiders")
+        shareholding["number_of_institutions"] = shareholding["number_of_institutions"] or info.get("floatShares")
+
+        # ── Parse calendar ──
+        cal_data = {
+            "next_earnings_date": None,
+            "earnings_low": None,
+            "earnings_high": None,
+            "revenue_low": None,
+            "revenue_high": None,
+        }
+        if not isinstance(calendar, Exception) and calendar is not None:
+            try:
+                if isinstance(calendar, dict):
+                    earnings_dates = calendar.get("Earnings Date", [])
+                    if earnings_dates:
+                        next_date = earnings_dates[0]
+                        cal_data["next_earnings_date"] = next_date.strftime("%Y-%m-%d") if hasattr(next_date, 'strftime') else str(next_date)
+                    cal_data["earnings_low"] = calendar.get("Earnings Low")
+                    cal_data["earnings_high"] = calendar.get("Earnings High")
+                    cal_data["revenue_low"] = calendar.get("Revenue Low")
+                    cal_data["revenue_high"] = calendar.get("Revenue High")
+            except Exception as e:
+                logger.warning("Failed to parse calendar | %s", e)
+
+        return {
+            "symbol": symbol,
+            "overview": overview,
+            "quarterly_financials": quarterly_financials,
+            "annual_financials": [],  # Skipping annual for now — quarterly is primary
+            "shareholding": shareholding,
+            "calendar": cal_data,
+        }
 
 
 # ── Module-level singleton ────────────────────────────────────────────────────

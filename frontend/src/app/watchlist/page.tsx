@@ -2,15 +2,29 @@
 
 import React, { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { useRouter } from 'next/navigation';
 import { TopBar } from '@/components/TopBar';
 import { IcSearch, IcPlus, IcTrash } from '@/components/Icons';
 import { stockApi } from '@/lib/stock.api';
 
 const WATCHLIST_KEY = 'finsight_watchlist';
 
+/** Derive the exchange badge text from a Yahoo-format symbol */
+function getExchangeBadge(sym: string): string {
+  if (sym.endsWith('.NS')) return 'NSE';
+  if (sym.endsWith('.BO')) return 'BSE';
+  return '';
+}
+
+/** Strip the exchange suffix to get a clean ticker name */
+function getCleanTicker(sym: string): string {
+  return sym.replace(/\.(NS|BO)$/i, '');
+}
+
 export default function WatchlistPage() {
   const [symbols, setSymbols] = useState<string[]>([]);
   const [newSym, setNewSym] = useState('');
+  const router = useRouter();
 
   // Initial load from localStorage
   useEffect(() => {
@@ -63,16 +77,22 @@ export default function WatchlistPage() {
 
   const watchlistRows = symbols.map(sym => {
     const data = priceData[sym];
-    const up = data ? data.current_price >= data.previous_close : true;
-    const diff = data ? data.current_price - data.previous_close : 0;
-    const chgPct = data && data.previous_close > 0 ? (diff / data.previous_close) * 100 : 0;
-    
+    const currentPrice = data?.current_price ?? null;
+    const previousClose = data?.previous_close ?? 0;
+    const up = currentPrice !== null ? currentPrice >= previousClose : true;
+    const diff = currentPrice !== null ? currentPrice - previousClose : 0;
+    const chgPct = previousClose > 0 && currentPrice !== null
+      ? (diff / previousClose) * 100
+      : 0;
+
     return {
       sym,
-      name: data ? data.exchange : '—',
-      price: data ? data.current_price.toLocaleString('en-IN', { maximumFractionDigits: 2 }) : '—',
-      chg: data ? `${up ? '+' : ''}${chgPct.toFixed(2)}%` : '—',
-      up
+      ticker: getCleanTicker(sym),
+      exchange: getExchangeBadge(sym),
+      price: currentPrice,
+      diff: Math.abs(diff),
+      chgPct: Math.abs(chgPct),
+      up,
     };
   });
 
@@ -81,6 +101,7 @@ export default function WatchlistPage() {
       <TopBar title="Watchlist" />
       <div className="flex-1 overflow-y-auto p-5 md:p-[22px] flex flex-col gap-3.5">
         
+        {/* Add symbol input */}
         <div className="bg-card border border-border rounded-2xl p-4 flex gap-2.5 mb-1">
           <div className="flex items-center gap-2 bg-card2 border border-border rounded-[10px] px-3.5 py-2 flex-1 max-w-[320px]">
             <IcSearch c="#636B7A" />
@@ -100,55 +121,71 @@ export default function WatchlistPage() {
           </button>
         </div>
 
-        <div className="bg-card border border-border rounded-2xl p-5 overflow-x-auto">
-          <table className="w-full border-collapse min-w-[600px] whitespace-nowrap">
-            <thead>
-              <tr>
-                {['Symbol', 'Exchange', 'Price', 'Change', 'Action'].map(h => (
-                  <th key={h} className="text-left text-[10.5px] text-muted font-medium pb-3 px-2.5 tracking-[0.04em]">{h}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {watchlistRows.map((s) => (
-                <tr key={s.sym} className="border-t border-border group hover:bg-card2/30 transition-colors">
-                  <td className="p-3 px-2.5">
-                    <div className="flex items-center gap-2.5">
-                      <div className="w-[34px] h-[34px] rounded-[9px] bg-dim flex items-center justify-center text-[9px] font-bold text-muted uppercase">
-                        {s.sym.slice(0, 4)}
-                      </div>
-                      <div className="text-[13.5px] font-semibold">{s.sym}</div>
-                    </div>
-                  </td>
-                  <td className="p-3 px-2.5 text-[12.5px] text-muted">{s.name}</td>
-                  <td className="p-3 px-2.5 text-sm font-medium">₹{s.price}</td>
-                  <td className="p-3 px-2.5">
-                    <span className={`text-[12.5px] font-semibold px-2.5 py-1 rounded-md ${
-                      s.price === '—' ? 'text-muted bg-dim' : s.up ? 'text-green bg-green/10' : 'text-red bg-red/10'
-                    }`}>
-                      {s.chg}
-                    </span>
-                  </td>
-                  <td className="p-3 px-2.5">
-                    <button 
-                      onClick={() => handleRemove(s.sym)} 
-                      className="flex items-center gap-1 bg-red/10 border-none rounded-md px-2 py-1.5 cursor-pointer text-[11.5px] text-red hover:bg-red/20 transition-colors"
-                    >
-                      <IcTrash c="#f87171" s={13} />
-                      Remove
-                    </button>
-                  </td>
-                </tr>
-              ))}
-              {symbols.length === 0 && (
-                <tr>
-                  <td colSpan={5} className="p-10 text-center text-muted text-sm">
-                    Your watchlist is empty. Add a symbol above to get started.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+        {/* Watchlist card */}
+        <div className="bg-card border border-border rounded-2xl overflow-hidden">
+          {/* Header */}
+          <div className="px-5 py-3 border-b border-border">
+            <span className="text-[13px] text-muted font-medium">Default ({symbols.length})</span>
+          </div>
+
+          {/* Rows */}
+          {watchlistRows.length === 0 && (
+            <div className="px-5 py-12 text-center text-muted text-sm">
+              Your watchlist is empty. Add a symbol above or use the <span className="text-lime">"Add to watchlist"</span> button on any stock analysis page.
+            </div>
+          )}
+
+          {watchlistRows.map((row) => (
+            <div
+              key={row.sym}
+              onClick={() => router.push(`/stock/${row.sym}`)}
+              className="group flex items-center px-5 py-3.5 border-b border-border last:border-b-0 cursor-pointer hover:bg-card2/40 transition-colors"
+            >
+              {/* Left: Ticker + Exchange badge */}
+              <div className="flex items-center gap-2 min-w-[180px]">
+                <span className="text-[14px] font-semibold text-text">{row.ticker}</span>
+                {row.exchange && (
+                  <span className="text-[9px] font-bold text-muted bg-dim rounded px-1.5 py-0.5 tracking-wider uppercase">
+                    {row.exchange}
+                  </span>
+                )}
+              </div>
+
+              {/* Middle: Fluctuation amount */}
+              <div className="min-w-[80px] text-right">
+                <span className={`text-[13px] font-medium ${row.price === null ? 'text-muted' : row.up ? 'text-green' : 'text-red'}`}>
+                  {row.price !== null ? row.diff.toFixed(2) : '—'}
+                </span>
+              </div>
+
+              {/* Middle: Percentage + Arrow */}
+              <div className="min-w-[100px] text-right">
+                <span className={`text-[13px] font-semibold ${row.price === null ? 'text-muted' : row.up ? 'text-green' : 'text-red'}`}>
+                  {row.price !== null ? `${row.chgPct.toFixed(2)}%` : '—'}
+                  {row.price !== null && (
+                    <span className="ml-1.5 text-[11px]">{row.up ? '▲' : '▼'}</span>
+                  )}
+                </span>
+              </div>
+
+              {/* Right: Current price */}
+              <div className="flex-1 text-right">
+                <span className={`text-[14px] font-semibold ${row.price === null ? 'text-muted' : row.up ? 'text-green' : 'text-red'}`}>
+                  {row.price !== null ? row.price.toLocaleString('en-IN', { maximumFractionDigits: 2 }) : '—'}
+                </span>
+              </div>
+
+              {/* Action: Remove (visible on hover only) */}
+              <div className="ml-4 opacity-0 group-hover:opacity-100 transition-opacity">
+                <button 
+                  onClick={(e) => { e.stopPropagation(); handleRemove(row.sym); }}
+                  className="flex items-center gap-1 bg-red/10 border-none rounded-md px-2 py-1.5 cursor-pointer text-[11px] text-red hover:bg-red/20 transition-colors"
+                >
+                  <IcTrash c="#f87171" s={12} />
+                </button>
+              </div>
+            </div>
+          ))}
         </div>
 
       </div>

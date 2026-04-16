@@ -1,14 +1,28 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useParams, useRouter } from 'next/navigation';
-import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
+import TradingViewWidget from '@/components/TradingViewWidget';
+import TechnicalTab from '@/components/TechnicalTab';
+import FundamentalTab from '@/components/FundamentalTab';
 import { IcSearch } from '@/components/Icons';
 import { TopBar } from '@/components/TopBar';
 import { stockApi } from '@/lib/stock.api';
 import { aiApi } from '@/lib/ai.api';
 import { useWebSocketPrice } from '@/lib/useWebSocketPrice';
+
+const WATCHLIST_KEY = 'finsight_watchlist';
+
+const INTERVALS = [
+  { label: '5m',      interval: '5m',  period: '5d'  },
+  { label: '15m',     interval: '15m', period: '15d' },
+  { label: '1h',      interval: '60m', period: '60d' },
+  { label: '1d 1mo',  interval: '1d',  period: '6mo' },
+  { label: '1d 1yr',  interval: '1d',  period: '2y'  },
+] as const;
+
+type IntervalOption = typeof INTERVALS[number];
 
 function formatMarketCap(val: number | null | undefined): string {
   if (val == null) return 'N/A';
@@ -25,14 +39,41 @@ export default function StockPage() {
   const symbol = decodedSymbol ? decodedSymbol.toUpperCase().trim() : 'RELIANCE.NS';
   const [sym, setSym] = useState(symbol);
   
-  type Timeframe = '1M' | '3M' | '6M' | '1Y' | 'ALL';
-  const [tf, setTf] = useState<Timeframe>('1M');
   const [showAiPanel, setShowAiPanel] = useState(false);
+  const [inWatchlist, setInWatchlist] = useState(false);
+  const [activeTab, setActiveTab] = useState<'technical' | 'fundamental'>('technical');
+  const [activeInterval, setActiveInterval] = useState<IntervalOption>(INTERVALS[3]); // default: 1d 1mo
   const router = useRouter();
 
-  const periodMap = {
-    '1M': '1mo', '3M': '3mo', '6M': '6mo', '1Y': '1y', 'ALL': '5y'
-  } as const;
+  // Check if current symbol is already in watchlist
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(WATCHLIST_KEY);
+      if (saved) {
+        const list: string[] = JSON.parse(saved);
+        setInWatchlist(list.includes(symbol));
+      }
+    } catch (e) {
+      console.error('Failed to read watchlist', e);
+    }
+  }, [symbol]);
+
+  const handleWatchlistToggle = useCallback(() => {
+    try {
+      const saved = localStorage.getItem(WATCHLIST_KEY);
+      let list: string[] = saved ? JSON.parse(saved) : [];
+      if (list.includes(symbol)) {
+        list = list.filter(s => s !== symbol);
+        setInWatchlist(false);
+      } else {
+        list.push(symbol);
+        setInWatchlist(true);
+      }
+      localStorage.setItem(WATCHLIST_KEY, JSON.stringify(list));
+    } catch (e) {
+      console.error('Failed to update watchlist', e);
+    }
+  }, [symbol]);
 
   const handleSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' && sym.trim()) {
@@ -40,16 +81,7 @@ export default function StockPage() {
     }
   };
 
-  const ChartTip = ({ active, payload, label, prefix = '₹', mult = 1 }: any) => {
-    if (!active || !payload?.length) return null;
-    return (
-      <div className="bg-[#1A1D26] border border-border rounded-[10px] px-3.5 py-2.5">
-        <div className="text-muted text-[11px] mb-1">{label}</div>
-        <div className="text-lime font-semibold text-[15px]">{prefix}{(payload[0].value * mult).toLocaleString('en-IN', {maximumFractionDigits: 2})}</div>
-      </div>
-    );
-  };
-
+  // Core stock data (price + basic indicators)
   const { data: stockData, isLoading: stockLoading, error: stockError, refetch: refetchStock } = useQuery({
     queryKey: ['stock', symbol],
     queryFn: () => stockApi.getFullData(symbol),
@@ -57,13 +89,7 @@ export default function StockPage() {
     staleTime: 60_000,
   });
 
-  const { data: historyData, isLoading: historyLoading } = useQuery({
-    queryKey: ['stock-history', symbol, periodMap[tf]],
-    queryFn: () => stockApi.getHistory(symbol, periodMap[tf], '1d'),
-    enabled: symbol.length > 0,
-    staleTime: 5 * 60_000,
-  });
-
+  // AI analysis (fired manually)
   const { data: aiAnalysis, isLoading: aiLoading, refetch: fetchAi } = useQuery({
     queryKey: ['stock-analysis', symbol],
     queryFn: () => aiApi.analyze(
@@ -71,6 +97,22 @@ export default function StockPage() {
     ),
     enabled: false,
     staleTime: 10 * 60_000,
+  });
+
+  // Technical data with full 8 indicators (fires when technical tab is active)
+  const { data: technicalData, isLoading: techLoading } = useQuery({
+    queryKey: ['stock-history-indicators', symbol, activeInterval.interval, activeInterval.period],
+    queryFn: () => stockApi.getHistoryWithIndicators(symbol, activeInterval.interval, activeInterval.period),
+    staleTime: 30_000,
+    enabled: activeTab === 'technical' && symbol.length > 0,
+  });
+
+  // Fundamentals (lazy-loaded on first tab click)
+  const { data: fundamentals, isLoading: fundLoading } = useQuery({
+    queryKey: ['stock-fundamentals', symbol],
+    queryFn: () => stockApi.getFundamentals(symbol),
+    enabled: activeTab === 'fundamental' && symbol.length > 0,
+    staleTime: 5 * 60_000,
   });
 
   const { price: livePrice } = useWebSocketPrice(symbol);
@@ -82,25 +124,6 @@ export default function StockPage() {
     : '0.00';
   const up = currentPrice !== null ? currentPrice >= previousClose : true;
 
-  const chartData = (historyData?.candles ?? []).map((candle: any) => {
-    const d = new Date(candle.date);
-    return {
-      d: `${d.getDate()} ${d.toLocaleString('default', { month: 'short' })}`,
-      v: candle.close,
-    };
-  });
-
-  const metrics = stockData ? [
-    { label: 'Market Cap',   val: formatMarketCap(stockData.market_cap) },
-    { label: 'P/E Ratio',    val: stockData.pe_ratio?.toFixed(2) ?? 'N/A' },
-    { label: 'Day High',     val: stockData.day_high ? `₹${stockData.day_high.toFixed(2)}` : 'N/A' },
-    { label: 'Day Low',      val: stockData.day_low ? `₹${stockData.day_low.toFixed(2)}` : 'N/A' },
-    { label: 'RSI (14)',     val: stockData.rsi?.toFixed(1) ?? 'N/A' },
-    { label: 'SMA (20)',     val: stockData.sma?.toFixed(2) ?? 'N/A' },
-    { label: 'EMA (20)',     val: stockData.ema?.toFixed(2) ?? 'N/A' },
-    { label: 'Exchange',     val: stockData.exchange ?? 'N/A' },
-  ] : [];
-
   const handleAnalyzeClick = () => {
     setShowAiPanel(!showAiPanel);
     if (!showAiPanel && !aiAnalysis) {
@@ -108,9 +131,7 @@ export default function StockPage() {
     }
   };
 
-  const isLoading = stockLoading || historyLoading;
-
-  if (isLoading) {
+  if (stockLoading) {
     return (
       <div className="flex-1 flex flex-col overflow-hidden">
         <TopBar title="Stock Analysis" />
@@ -165,15 +186,23 @@ export default function StockPage() {
             Analyze
           </button>
           <div className="ml-auto flex gap-2">
-            {['Compare', 'Add to watchlist'].map(a => (
-              <button key={a} className="bg-card2 border border-border rounded-[9px] px-3.5 py-2 text-xs text-muted cursor-pointer hover:text-text">
-                {a}
-              </button>
-            ))}
+            <button className="bg-card2 border border-border rounded-[9px] px-3.5 py-2 text-xs text-muted cursor-pointer hover:text-text">
+              Compare
+            </button>
+            <button 
+              onClick={handleWatchlistToggle}
+              className={`border rounded-[9px] px-3.5 py-2 text-xs cursor-pointer transition-all duration-200 ${
+                inWatchlist 
+                  ? 'bg-green/10 border-green/30 text-green' 
+                  : 'bg-card2 border-border text-muted hover:text-text'
+              }`}
+            >
+              {inWatchlist ? '✓ In watchlist' : 'Add to watchlist'}
+            </button>
           </div>
         </div>
 
-        {/* Price header */}
+        {/* Price header + TradingView chart */}
         <div className="grid grid-cols-1 gap-3.5">
           <div className="bg-card border border-border rounded-2xl p-5">
             <div className="flex items-end gap-4 mb-[18px]">
@@ -185,98 +214,82 @@ export default function StockPage() {
                   <span className="text-[13px] text-muted">today</span>
                 </div>
               </div>
-              <div className="flex gap-1 ml-auto">
-                {(['1M', '3M', '6M', '1Y', 'ALL'] as Timeframe[]).map(t => (
-                  <button key={t} onClick={() => setTf(t)} className={`px-[11px] py-1.5 rounded-lg border-none cursor-pointer text-[11.5px] font-medium transition-all duration-150 ${tf === t ? 'bg-lime text-black' : 'bg-transparent text-muted'}`}>
-                    {t}
-                  </button>
-                ))}
-              </div>
             </div>
-            <div className="h-[200px]">
-              <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={chartData}>
-                  <defs>
-                    <linearGradient id="lgStock" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#C8FF00" stopOpacity={0.2} />
-                      <stop offset="95%" stopColor="#C8FF00" stopOpacity={0} />
-                    </linearGradient>
-                  </defs>
-                  <XAxis dataKey="d" tick={{ fill: '#636B7A', fontSize: 10.5 }} axisLine={false} tickLine={false} />
-                  <YAxis tick={{ fill: '#636B7A', fontSize: 10.5 }} axisLine={false} tickLine={false} domain={['dataMin - 20', 'dataMax + 20']} />
-                  <Tooltip content={<ChartTip prefix="₹" mult={1} />} />
-                  <Area dataKey="v" stroke="#C8FF00" strokeWidth={2} fill="url(#lgStock)" dot={false} />
-                </AreaChart>
-              </ResponsiveContainer>
+            <div className="h-[500px] w-full rounded-xl overflow-hidden border border-border">
+              <TradingViewWidget symbol={symbol} />
             </div>
           </div>
         </div>
 
-        {/* Metrics + AI */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
-          {/* Key metrics */}
-          <div className="bg-card border border-border rounded-2xl p-5">
-            <div className="text-sm font-semibold mb-3.5">Key financials</div>
-            <div className="grid grid-cols-2 gap-2.5">
-              {metrics.map(m => (
-                <div key={m.label} className="bg-card2 rounded-[10px] px-3.5 py-3">
-                  <div className="text-[10.5px] text-muted mb-[5px] tracking-[0.04em]">{m.label}</div>
-                  <div className="text-base font-semibold">{m.val}</div>
-                </div>
-              ))}
-            </div>
+        {/* ═══ Tab Toggle: Technical / Fundamental ═══ */}
+        <div className="bg-card border border-border rounded-2xl p-5">
+          {/* Tab Bar */}
+          <div className="flex gap-1 mb-5 bg-card2 rounded-xl p-1 w-fit">
+            {(['technical', 'fundamental'] as const).map(tab => (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                className={`px-5 py-2 rounded-lg text-[13px] font-semibold cursor-pointer transition-all duration-200 border-none capitalize ${
+                  activeTab === tab
+                    ? 'bg-lime text-black'
+                    : 'bg-transparent text-muted hover:text-text'
+                }`}
+              >
+                {tab}
+              </button>
+            ))}
           </div>
 
-          {/* Technical indicators */}
-          <div className="bg-card border border-border rounded-2xl p-5">
-            <div className="text-sm font-semibold mb-3.5">Technical indicators</div>
-            <div className="flex flex-col gap-2.5">
-              {[
-                { name: 'RSI (14)', val: stockData?.rsi ? stockData.rsi.toFixed(1) : 'N/A', note: stockData?.rsi && stockData.rsi > 70 ? 'Overbought' : stockData?.rsi && stockData.rsi < 30 ? 'Oversold' : 'Neutral zone', color: '#FBBF24', pct: stockData?.rsi ? stockData.rsi : 0 },
-                { name: 'MA 20',    val: stockData?.sma ? `₹${stockData.sma.toFixed(2)}` : 'N/A', note: currentPrice && stockData?.sma && currentPrice > stockData.sma ? 'Price above MA — bullish' : 'Price below MA — bearish', color: '#4ADE80', pct: 100 },
-                { name: 'EMA 20',   val: stockData?.ema ? `₹${stockData.ema.toFixed(2)}` : 'N/A', note: '', color: '#4ADE80', pct: 100 },
-              ].map(ind => (
-                <div key={ind.name}>
-                  <div className="flex justify-between mb-1">
-                    <span className="text-[12.5px] font-medium">{ind.name}</span>
-                    <span className="text-[12px] font-semibold" style={{ color: ind.color }}>{ind.val}</span>
-                  </div>
-                  <div className="h-1 bg-dim rounded overflow-hidden">
-                    <div className="h-full rounded" style={{ width: `${Math.min(100, ind.pct)}%`, backgroundColor: ind.color }} />
-                  </div>
-                  {ind.note && <div className="text-[10.5px] text-muted mt-1">{ind.note}</div>}
-                </div>
-              ))}
-            </div>
+          {/* Tab Content */}
+          {activeTab === 'technical' && (
+            <TechnicalTab
+              data={technicalData}
+              isLoading={techLoading}
+              currentPrice={currentPrice ?? 0}
+              intervals={INTERVALS}
+              activeInterval={activeInterval}
+              onIntervalChange={setActiveInterval}
+            />
+          )}
 
-            <button 
-              onClick={handleAnalyzeClick} 
-              className="mt-3.5 w-full bg-lime-dim border border-lime/20 text-lime rounded-[10px] p-2.5 text-[13px] cursor-pointer font-medium hover:opacity-80 transition-opacity flex justify-center disabled:opacity-50 disabled:cursor-not-allowed"
-              disabled={aiLoading}
-            >
-              {aiLoading ? 'Generating Analysis...' : showAiPanel ? 'Hide AI Analysis Report' : 'Generate AI Analysis Report'}
-            </button>
-            
-            {showAiPanel && aiAnalysis && (
-              <div className="mt-3 bg-card2 rounded-[11px] p-3.5 border border-border">
-                <div className="text-[11px] text-muted leading-[1.7]">
-                   <strong className={`text-[12px] ${aiAnalysis.verdict === 'BULLISH' ? 'text-lime' : aiAnalysis.verdict === 'BEARISH' ? 'text-red' : 'text-amber'}`}>
-                      {symbol.split('.')[0]} — {aiAnalysis.verdict} (Confidence: {aiAnalysis.confidence}%)
-                   </strong>
-                   <br />
-                   {aiAnalysis.reasoning_summary}
-                   <br/><br/>
-                   <strong>Risk:</strong> {aiAnalysis.risk_assessment}
-                </div>
+          {activeTab === 'fundamental' && (
+            <FundamentalTab
+              data={fundamentals}
+              isLoading={fundLoading}
+            />
+          )}
+        </div>
+
+        {/* AI Analysis Button */}
+        <div className="bg-card border border-border rounded-2xl p-5">
+          <button 
+            onClick={handleAnalyzeClick} 
+            className="w-full bg-lime-dim border border-lime/20 text-lime rounded-[10px] p-2.5 text-[13px] cursor-pointer font-medium hover:opacity-80 transition-opacity flex justify-center disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={aiLoading}
+          >
+            {aiLoading ? 'Generating Analysis...' : showAiPanel ? 'Hide AI Analysis Report' : 'Generate AI Analysis Report'}
+          </button>
+          
+          {showAiPanel && aiAnalysis && (
+            <div className="mt-3 bg-card2 rounded-[11px] p-3.5 border border-border">
+              <div className="text-[11px] text-muted leading-[1.7]">
+                 <strong className={`text-[12px] ${aiAnalysis.verdict === 'BULLISH' ? 'text-lime' : aiAnalysis.verdict === 'BEARISH' ? 'text-red' : 'text-amber'}`}>
+                    {symbol.split('.')[0]} — {aiAnalysis.verdict} (Confidence: {aiAnalysis.confidence}%)
+                 </strong>
+                 <br />
+                 {aiAnalysis.reasoning_summary}
+                 <br/><br/>
+                 <strong>Risk:</strong> {aiAnalysis.risk_assessment}
               </div>
-            )}
-            {showAiPanel && !aiAnalysis && !aiLoading && (
-              <div className="mt-3 text-red text-center text-sm p-3">Failed to load AI Analysis.</div>
-            )}
-          </div>
+            </div>
+          )}
+          {showAiPanel && !aiAnalysis && !aiLoading && (
+            <div className="mt-3 text-red text-center text-sm p-3">Failed to load AI Analysis.</div>
+          )}
         </div>
 
       </div>
     </div>
   );
 }
+
