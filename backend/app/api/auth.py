@@ -10,7 +10,7 @@ from app.schemas.auth import RegisterRequest, LoginRequest, AuthResponse, UserPu
 from app.services.auth_service import register_user, login_user
 from app.models.user import User
 
-router = APIRouter(prefix="/auth", tags=["Authentication"])
+router = APIRouter(prefix="/api/v1/auth", tags=["Authentication"])
 
 
 @router.post(

@@ -6,7 +6,7 @@ from ..ai.document_loader import DocumentProcessor
 from ..ai.vector_store_chroma import ChromaVectorStore
 from ..ai.vector_store_pinecone import PineconeVectorStoreImpl
 
-router = APIRouter(prefix="/rag", tags=["RAG"])
+router = APIRouter(prefix="/api/v1/rag", tags=["RAG"])
 logger = logging.getLogger("rag")
 
 # Initialize components

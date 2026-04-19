@@ -75,32 +75,32 @@ export interface MptOptimizationResult {
 
 export const portfolioApi = {
   list: (): Promise<PortfolioListItem[]> =>
-    apiFetch<PortfolioListItem[]>('/portfolios/'),
+    apiFetch<PortfolioListItem[]>('/api/v1/portfolios/'),
 
   create: (payload: CreatePortfolioPayload): Promise<PortfolioListItem> =>
-    apiFetch<PortfolioListItem>('/portfolios/', {
+    apiFetch<PortfolioListItem>('/api/v1/portfolios/', {
       method: 'POST',
       body: JSON.stringify(payload),
     }),
 
   getSummary: (id: number): Promise<PortfolioSummary> =>
-    apiFetch<PortfolioSummary>(`/portfolios/${id}/summary`),
+    apiFetch<PortfolioSummary>(`/api/v1/portfolios/${id}/summary`),
 
   addHolding: (id: number, payload: AddHoldingPayload) =>
-    apiFetch(`/portfolios/${id}/holdings`, {
+    apiFetch(`/api/v1/portfolios/${id}/holdings`, {
       method: 'POST',
       body: JSON.stringify(payload),
     }),
 
   recordTransaction: (id: number, payload: RecordTransactionPayload) =>
-    apiFetch(`/portfolios/${id}/transactions`, {
+    apiFetch(`/api/v1/portfolios/${id}/transactions`, {
       method: 'POST',
       body: JSON.stringify(payload),
     }),
 
   /** Buy shares — records a BUY transaction and updates holding */
   buyHolding: (portfolioId: number, symbol: string, quantity: number, price: number) =>
-    apiFetch(`/portfolios/${portfolioId}/transactions`, {
+    apiFetch(`/api/v1/portfolios/${portfolioId}/transactions`, {
       method: 'POST',
       body: JSON.stringify({
         symbol,
@@ -112,11 +112,11 @@ export const portfolioApi = {
 
   /** Sell shares — calculates FIFO realized P&L */
   sellHolding: (portfolioId: number, symbol: string, payload: SellHoldingPayload): Promise<SellResponse> =>
-    apiFetch<SellResponse>(`/portfolios/${portfolioId}/holdings/${encodeURIComponent(symbol)}/sell`, {
+    apiFetch<SellResponse>(`/api/v1/portfolios/${portfolioId}/holdings/${encodeURIComponent(symbol)}/sell`, {
       method: 'POST',
       body: JSON.stringify(payload),
     }),
 
   optimize: (id: number): Promise<MptOptimizationResult> =>
-    apiFetch<MptOptimizationResult>(`/portfolios/${id}/optimize`),
+    apiFetch<MptOptimizationResult>(`/api/v1/portfolios/${id}/optimize`),
 };

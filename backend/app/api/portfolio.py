@@ -33,7 +33,7 @@ from ..services.mpt_service import optimize_portfolio
 
 logger = logging.getLogger(__name__)
 
-router = APIRouter(prefix="/portfolios", tags=["portfolio"])
+router = APIRouter(prefix="/api/v1/portfolios", tags=["portfolio"])
 
 
 # ── 1. Create Portfolio ───────────────────────────────────────────────────────

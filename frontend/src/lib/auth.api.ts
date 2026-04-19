@@ -15,22 +15,22 @@ interface AuthResponse {
 
 export const authApi = {
   register: (name: string, email: string, password: string) =>
-    apiFetch<AuthResponse>("/auth/register", {
+    apiFetch<AuthResponse>("/api/v1/auth/register", {
       method: "POST",
       body: JSON.stringify({ name, email, password }),
     }),
 
   login: (email: string, password: string) =>
-    apiFetch<AuthResponse>("/auth/login", {
+    apiFetch<AuthResponse>("/api/v1/auth/login", {
       method: "POST",
       body: JSON.stringify({ email, password }),
     }),
 
   me: () =>
-    apiFetch<UserPublic>("/auth/me"),
+    apiFetch<UserPublic>("/api/v1/auth/me"),
 
   logout: () =>
-    apiFetch<{ message: string }>("/auth/logout", { method: "POST" }),
+    apiFetch<{ message: string }>("/api/v1/auth/logout", { method: "POST" }),
 };
 
 /** Call on every app startup to restore session from localStorage */
