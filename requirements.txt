@@ -72,3 +72,12 @@ slowapi==0.1.9
 # Observability
 langsmith==0.7.30
 structlog==25.5.0
+
+# Authentication
+python-jose[cryptography]==3.5.0
+passlib[bcrypt]==1.7.4
+email-validator==2.3.0
+bcrypt==3.2.0
+
+# LangGraph Agent Pipeline
+langgraph==1.1.6
