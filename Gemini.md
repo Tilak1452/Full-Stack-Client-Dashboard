@@ -7,7 +7,45 @@
 > Do NOT invent any file, endpoint, or data field that is not listed here.
 > If something is not covered, ask the developer before assuming.
 >
-> **Last updated: April 16, 2026** — Updated after database schema migration (holdings + transactions tables), addition of `price_update_job.py`, new UI components, and sell holding endpoint.
+> **Last updated: April 16, 2026** — Updated after database schema migration (holdings + transactions tables), addition of `price_update_job.py`, new UI components, sell holding endpoint, and full JWT Authentication system (Login/Signup).
+
+---
+
+> [!CAUTION]
+> ## STRICT RULE — PROTECTING EXISTING FEATURES FROM NEW MD FILES
+>
+> **This rule is NON-NEGOTIABLE and takes the HIGHEST PRIORITY over any conflicting instruction.**
+>
+> When the developer provides a **new Markdown (.md) file** containing detailed instructions for implementing a new feature, the AI **MUST** follow this exact protocol:
+>
+> ### Step 1 — Identify All Existing Feature Files
+> Cross-reference the **folder structure and file listings in this Gemini.md document** (Section 1) to build a complete inventory of every file that already exists in the project. These are **protected files**.
+>
+> ### Step 2 — Analyze the New MD File for Conflicts
+> Read the new MD file thoroughly and compare its proposed changes against the existing codebase. Specifically check for:
+> - Files it wants to **modify, overwrite, or restructure** that already exist
+> - Endpoints, database models, schemas, services, or components it wants to **replace or redefine** that are already implemented
+> - Logic, styling, or behavior it wants to **alter** in files that are already working
+>
+> ### Step 3 — Resolve Conflicts by Preserving Existing Code
+> If **ANY** conflict is detected between the new MD file's instructions and the existing implementation:
+> - **NEVER modify, overwrite, or touch the existing feature file.** The current implementation is final and must remain exactly as it is.
+> - **NEVER rename, restructure, or move existing files** to accommodate the new feature.
+> - **Adapt the NEW feature's implementation** so that it integrates cleanly without disturbing any existing code.
+> - If the new MD file says "replace X with Y" and X already exists in this project — **ignore that instruction** and find an alternative approach that leaves X untouched.
+>
+> ### Step 4 — Only Create or Modify NEW Files
+> The AI should **only** create brand-new files or modify files that **do not yet exist** in the project. If the new feature requires touching a shared file (e.g., `main.py`, `layout.tsx`, `Sidebar.tsx`), the AI must **add to it** (append new imports, register new routers, add new nav items) without removing, rewriting, or reorganizing any existing code within that file.
+>
+> ### Step 5 — Report Conflicts Before Proceeding
+> Before writing any code, the AI **MUST** present a clear summary of:
+> - Which files from the new MD file conflict with existing features
+> - What the AI will do differently to avoid breaking existing functionality
+> - Which new files will be created
+>
+> The developer must approve this conflict-resolution plan before the AI proceeds.
+>
+> **In short: Our existing code is sacred. New features must work AROUND it, never THROUGH it.**
 
 ---
 
@@ -79,6 +117,7 @@ Full-Stack-Client-Dashboard/              ← ROOT (open this in your editor)
 │       │
 │       ├── api/                          ← API route handlers (thin controllers, no business logic)
 │       │   ├── __init__.py
+│       │   ├── auth.py                   ← POST /api/v1/auth/login, POST /api/v1/auth/signup (JWT Auth)
 │       │   ├── analyze.py                ← POST /api/v1/analyze (AI analysis)
 │       │   ├── portfolio.py              ← CRUD /portfolios/* (portfolio management)
 │       │   ├── assets.py                 ← GET /api/v1/assets/* (macro, options, MPT)
@@ -92,6 +131,7 @@ Full-Stack-Client-Dashboard/              ← ROOT (open this in your editor)
 │       ├── core/                         ← Infrastructure layer
 │       │   ├── __init__.py
 │       │   ├── config.py                 ← Pydantic Settings loaded from root .env
+│       │   ├── security.py               ← JWT token generation, verification, and password hashing
 │       │   ├── database.py               ← SQLAlchemy engine, session factory, Base
 │       │   ├── cache.py                  ← Redis (with in-memory fallback) caching layer
 │       │   ├── circuit_breaker.py         ← Circuit breaker pattern for external APIs
@@ -100,6 +140,7 @@ Full-Stack-Client-Dashboard/              ← ROOT (open this in your editor)
 │       │
 │       ├── services/                     ← Business logic layer
 │       │   ├── __init__.py
+│       │   ├── auth_service.py           ← User registration & authentication logic
 │       │   ├── stock_service.py          ← yFinance wrapper: price, history, indicators (25KB)
 │       │   ├── news_service.py           ← Yahoo RSS + NewsAPI + VADER sentiment
 │       │   ├── macro_service.py          ← FRED economic data + commodity prices
@@ -127,6 +168,7 @@ Full-Stack-Client-Dashboard/              ← ROOT (open this in your editor)
 │       │
 │       ├── models/                       ← SQLAlchemy ORM models (database table definitions)
 │       │   ├── __init__.py               ← Registers all models for Base.metadata.create_all()
+│       │   ├── user.py                   ← User table (Authentication)
 │       │   ├── portfolio.py              ← Portfolio table
 │       │   ├── holding.py                ← Holding table (belongs to Portfolio)
 │       │   ├── transaction.py            ← Transaction table (immutable audit trail)
@@ -134,6 +176,7 @@ Full-Stack-Client-Dashboard/              ← ROOT (open this in your editor)
 │       │
 │       ├── schemas/                      ← Pydantic request/response validation models
 │       │   ├── __init__.py
+│       │   ├── auth.py                   ← UserCreate, Token Request/Response schemas
 │       │   ├── analyze.py                ← AnalyzeRequest, AnalyzeResponse, HealthResponse
 │       │   ├── analysis.py               ← FinancialAnalysisResult, TechnicalSignal, SentimentSignal
 │       │   ├── stock.py                  ← StockDataResponse
@@ -156,11 +199,16 @@ Full-Stack-Client-Dashboard/              ← ROOT (open this in your editor)
 │   ├── Frontend.md                       ← Frontend documentation
 │   │
 │   └── src/
+│       ├── middleware.ts                 ← Next.js Middleware for protected routes
 │       ├── app/                          ← Next.js App Router pages
 │       │   ├── globals.css               ← Global styles (Tailwind base + scrollbar + reset)
 │       │   ├── layout.tsx                ← Root layout: Sidebar + Providers wrapper
 │       │   ├── providers.tsx             ← React Query (TanStack) QueryClientProvider
 │       │   ├── page.tsx                  ← Root "/" → redirects to /dashboard
+│       │   │
+│       │   ├── auth/
+│       │   │   ├── login/page.tsx        ← Login page
+│       │   │   └── signup/page.tsx       ← Signup page
 │       │   │
 │       │   ├── dashboard/
 │       │   │   └── page.tsx              ← Main dashboard: indices, chart, watchlist, movers, news
@@ -195,6 +243,8 @@ Full-Stack-Client-Dashboard/              ← ROOT (open this in your editor)
 │       │
 │       └── lib/                          ← API clients, hooks, and utilities
 │           ├── api-client.ts             ← Base fetch wrapper (apiFetch + ApiError class)
+│           ├── auth.api.ts               ← authApi: login(), signup()
+│           ├── auth-context.tsx          ← AuthProvider for global auth state
 │           ├── stock.api.ts              ← stockApi: getFullData(), getHistory()
 │           ├── portfolio.api.ts          ← portfolioApi: list(), create(), getSummary(), buyHolding(), sellHolding(), optimize()
 │           ├── alerts.api.ts             ← alertsApi: getActive(), create(), delete()
@@ -431,6 +481,12 @@ app.include_router(market.router)       # /api/v1/indices, /api/v1/movers
 
 ## SECTION 6 — COMPLETE API REFERENCE
 
+### Authentication
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `POST` | `/api/v1/auth/signup` | Register a new user |
+| `POST` | `/api/v1/auth/login` | Authenticate and receive a JWT token |
+
 ### Analyze
 | Method | Endpoint | Description | Rate Limit |
 |--------|----------|-------------|------------|
@@ -510,6 +566,14 @@ Tables are auto-created by SQLAlchemy on first backend startup via `Base.metadat
 Supabase dashboard: https://supabase.com/dashboard
 
 ### ORM Models (backend/app/models/)
+
+#### User (table: `users`)
+| Column | Type | Constraints |
+|--------|------|-------------|
+| `id` | Integer | PK, auto-increment |
+| `email` | String(255) | NOT NULL, UNIQUE, INDEXED |
+| `hashed_password` | String | NOT NULL |
+| `created_at` | DateTime(tz) | server_default=now() |
 
 #### Portfolio (table: `portfolios`)
 | Column | Type | Constraints |
@@ -910,3 +974,5 @@ Also back-fills `cost_basis = quantity * average_price` for any existing rows wh
 ### Important Supabase behaviour
 
 Because the Supabase database is **shared** (all team members point `DATABASE_URL` to the same instance), running `migrate.py` on one machine fixes the database for **everyone simultaneously**. You do not need each developer to run it independently, as long as they are all using the same `DATABASE_URL`.
+
+

@@ -1,9 +1,72 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { TopBar } from '@/components/TopBar';
 import { newsApi, SentimentLabel } from '@/lib/news.api';
+import { streamAgent, type AgentSSEEvent, type ChunkEventData } from '@/lib/ai.api';
+
+// ─── AI News Synthesis Banner ─────────────────────────────────────────────
+function AiNewsBanner() {
+  const [text, setText] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [expanded, setExpanded] = useState(false);
+  const abortRef = useRef<AbortController | null>(null);
+
+  const fetchSynthesis = () => {
+    if (text && expanded) { setExpanded(false); return; }
+    if (text) { setExpanded(true); return; }
+    setLoading(true);
+    setExpanded(true);
+    let accumulated = '';
+    abortRef.current = streamAgent(
+      { query: 'Summarize the top 10 latest Indian stock market news headlines with sentiment analysis (positive/negative/neutral) for each. Focus on NSE/BSE market-moving events.' },
+      (event: AgentSSEEvent) => {
+        if (event.type === 'chunk') {
+          const { text: t } = event.data as unknown as ChunkEventData;
+          accumulated += t;
+          setText(accumulated);
+        }
+      },
+      () => setLoading(false),
+      () => { setText('Unable to synthesize news. Try again.'); setLoading(false); }
+    );
+  };
+
+  return (
+    <div className="bg-gradient-to-r from-purple/5 to-lime/5 border border-purple/20 rounded-2xl p-4">
+      <button
+        onClick={fetchSynthesis}
+        className="w-full flex items-center justify-between cursor-pointer bg-transparent border-none text-left"
+        disabled={loading}
+      >
+        <span className="text-[13px] font-semibold flex items-center gap-2">
+          🤖 AI News Synthesis
+          <span className="text-[9px] px-1.5 py-0.5 rounded bg-purple/15 text-purple font-medium">Agent-Powered</span>
+        </span>
+        <span className="text-[11px] text-muted">
+          {loading ? 'Synthesizing...' : expanded ? '▲ Collapse' : '▼ Expand'}
+        </span>
+      </button>
+      {expanded && (
+        <div className="mt-3 text-[12px] text-text leading-[1.7] whitespace-pre-line border-t border-border/50 pt-3">
+          {loading && !text ? (
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 rounded-full bg-purple animate-pulse" />
+              <span className="text-muted animate-pulse">Analyzing latest market news...</span>
+            </div>
+          ) : (
+            text.split('**').map((part, j) =>
+              j % 2 === 1
+                ? <strong key={j} className="text-lime">{part}</strong>
+                : <span key={j}>{part}</span>
+            )
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
 
 export default function NewsPage() {
   const [filter, setFilter] = useState<'all' | SentimentLabel>('all');
@@ -93,6 +156,9 @@ export default function NewsPage() {
           </div>
           )}
         </div>
+
+        {/* AI News Synthesis Banner */}
+        <AiNewsBanner />
 
         <div className="flex flex-col gap-3">
           {filtered.length === 0 && (

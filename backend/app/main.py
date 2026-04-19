@@ -61,6 +61,7 @@ from .api.rag import router as rag_router
 from .api.assets import router as assets_router
 from .api.alerts import router as alerts_router
 from .api import stock, news, market
+from .api.agent import router as agent_router
 from .schemas.analyze import HealthResponse
 from .core.database import validate_db_connection, engine, Base
 from .core.telemetry import performance_metrics_middleware
@@ -220,6 +221,7 @@ app.include_router(alerts_router)
 app.include_router(stock.router)
 app.include_router(news.router)
 app.include_router(market.router)
+app.include_router(agent_router)    # /api/v1/agent/*
 
 # ── Health Check ──────────────────────────────────────────────────────────────
 @app.get("/health", response_model=HealthResponse, tags=["system"])

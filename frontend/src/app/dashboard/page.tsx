@@ -1,12 +1,13 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { TopBar } from '@/components/TopBar';
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
-import { aiInsightsData } from '@/lib/mock';
+import AIInsights from '@/components/AIInsights';
 import { marketApi } from '@/lib/market.api';
 import { newsApi } from '@/lib/news.api';
+import { streamAgent, type AgentSSEEvent, type ChunkEventData } from '@/lib/ai.api';
 import { stockApi } from '@/lib/stock.api';
 import { portfolioApi } from '@/lib/portfolio.api';
 import { formatTime } from '@/lib/utils';
@@ -38,6 +39,49 @@ function ChartTip({ active, payload, label, prefix = '₹', mult = 100000 }: any
 }
 
 const mockSpark = [100, 105, 102, 108, 107];
+
+// ─── AI News Brief: agent-powered latest news synthesis ───────────────────
+function DashboardNewsBrief() {
+  const [text, setText] = useState('');
+  const [loading, setLoading] = useState(true);
+  const abortRef = useRef<AbortController | null>(null);
+
+  useEffect(() => {
+    let accumulated = '';
+    abortRef.current = streamAgent(
+      { query: 'Give me the latest Indian stock market news brief. Summarize the top 5 market-moving headlines happening right now with sentiment for each.' },
+      (event: AgentSSEEvent) => {
+        if (event.type === 'chunk') {
+          const { text: t } = event.data as unknown as ChunkEventData;
+          accumulated += t;
+          setText(accumulated);
+        }
+      },
+      () => setLoading(false),
+      () => { setText('Unable to load AI news brief. Please refresh.'); setLoading(false); }
+    );
+    return () => { abortRef.current?.abort(); };
+  }, []);
+
+  if (loading && !text) {
+    return (
+      <div className="flex items-center gap-2 p-3">
+        <div className="w-2 h-2 rounded-full bg-purple animate-pulse" />
+        <span className="text-[12px] text-muted animate-pulse">Synthesizing latest market news...</span>
+      </div>
+    );
+  }
+
+  return (
+    <div className="text-[12px] text-text leading-[1.7] whitespace-pre-line">
+      {text.split('**').map((part, j) =>
+        j % 2 === 1
+          ? <strong key={j} className="text-lime">{part}</strong>
+          : <span key={j}>{part}</span>
+      )}
+    </div>
+  );
+}
 
 export default function DashboardPage() {
   const [tf, setTf] = useState('6M');
@@ -229,24 +273,8 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          <div className="bg-card border border-border rounded-2xl p-5 flex flex-col gap-2.5">
-            <div className="flex justify-between items-center bg-card2 border border-border px-3 py-2 rounded-xl mb-1 -mx-2 -mt-2">
-              <div className="text-sm font-semibold">AI Insights</div>
-              <div className="text-[10px] bg-lime/10 text-lime px-2 py-1 rounded-md font-semibold tracking-wide">LIVE</div>
-            </div>
-            {aiInsightsData.map((ins, i) => (
-              <div key={i} className="bg-card2 rounded-[11px] p-[11px_13px] border border-border">
-                <div className="flex items-center gap-2 mb-1.5">
-                  <div className="w-[22px] h-[22px] rounded-md flex items-center justify-center text-[11px] font-bold" style={{ background: `${ins.color}22`, color: ins.color }}>{ins.icon}</div>
-                  <span className="text-[12.5px] font-semibold">{ins.title}</span>
-                </div>
-                <p className="text-[11.5px] text-muted m-0 leading-[1.6]">{ins.body}</p>
-              </div>
-            ))}
-            <Link href="/ai-research" className="mt-auto bg-lime-dim border border-lime/20 text-lime rounded-[10px] p-2.5 text-[12.5px] cursor-pointer font-medium text-center no-underline hover:opacity-80">
-              Ask AI Research Agent →
-            </Link>
-          </div>
+          <AIInsights />
+
         </div>
 
         {/* Bottom row */}
@@ -300,28 +328,13 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          {/* News preview */}
+          {/* AI News Brief — agent-powered latest news synthesis */}
           <div className="bg-card border border-border rounded-2xl p-5">
             <div className="flex justify-between items-center mb-3.5">
-              <div className="text-sm font-semibold">Market news</div>
-              <Link href="/news" className="text-[11px] text-muted hover:text-lime no-underline">View all</Link>
+              <div className="text-sm font-semibold flex items-center gap-2">🗞️ AI News Brief <span className="text-[9px] px-1.5 py-0.5 rounded bg-purple/15 text-purple font-medium">LIVE</span></div>
+              <Link href="/news" className="text-[11px] text-muted hover:text-lime no-underline">RSS feed →</Link>
             </div>
-            {newsPreview.length === 0 ? (
-               <div className="text-center p-4 text-muted text-[12px]">Loading news...</div>
-            ) : (
-            <div className="flex flex-col gap-[11px]">
-              {newsPreview.map((n, i) => (
-                <div key={i} className={`pb-2.5 cursor-pointer hover:opacity-80 ${i < 3 ? 'border-b border-border' : ''}`} onClick={() => window.open(n.url, '_blank')}>
-                  <div className="flex gap-[6px] items-center mb-[5px]">
-                    <span className="text-[10px] bg-dim text-muted px-1.5 py-0.5 rounded-[5px] font-medium">{n.source}</span>
-                    <span className={`text-[10px] ${n.sentiment === 'positive' ? 'text-green' : n.sentiment === 'negative' ? 'text-red' : 'text-muted'}`}>● {n.sentiment}</span>
-                    <span className="text-[10px] text-muted ml-auto">{formatTime(n.published_at)}</span>
-                  </div>
-                  <div className="text-[12px] text-text leading-[1.5]">{n.title}</div>
-                </div>
-              ))}
-            </div>
-            )}
+            <DashboardNewsBrief />
           </div>
         </div>
 

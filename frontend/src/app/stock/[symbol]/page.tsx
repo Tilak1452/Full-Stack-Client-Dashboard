@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useParams, useRouter } from 'next/navigation';
 import TradingViewWidget from '@/components/TradingViewWidget';
@@ -10,7 +10,7 @@ import { AddToPortfolioModal } from '@/components/AddToPortfolioModal';
 import { IcSearch } from '@/components/Icons';
 import { TopBar } from '@/components/TopBar';
 import { stockApi } from '@/lib/stock.api';
-import { aiApi } from '@/lib/ai.api';
+import { aiApi, streamAgent, type AgentSSEEvent, type ChunkEventData, type ModelEventData, type ClassifiedEventData } from '@/lib/ai.api';
 import { useWebSocketPrice } from '@/lib/useWebSocketPrice';
 
 const WATCHLIST_KEY = 'finsight_watchlist';
@@ -46,6 +46,14 @@ export default function StockPage() {
   const [activeInterval, setActiveInterval] = useState<IntervalOption>(INTERVALS[3]); // default: 1d 1mo
   const [showAddModal, setShowAddModal] = useState(false);
   const router = useRouter();
+
+  // ─── NEW: Agent streaming state ──────────────────────────────────
+  const [agentText, setAgentText] = useState('');
+  const [agentLoading, setAgentLoading] = useState(false);
+  const [agentModel, setAgentModel] = useState('');
+  const [agentCategory, setAgentCategory] = useState('');
+  const [showAgentPanel, setShowAgentPanel] = useState(false);
+  const agentAbortRef = useRef<AbortController | null>(null);
 
   // Check if current symbol is already in watchlist
   useEffect(() => {
@@ -253,7 +261,7 @@ export default function StockPage() {
               currentPrice={currentPrice ?? 0}
               intervals={INTERVALS}
               activeInterval={activeInterval}
-              onIntervalChange={setActiveInterval}
+              onIntervalChange={(opt) => setActiveInterval(opt as IntervalOption)}
             />
           )}
 
@@ -265,7 +273,7 @@ export default function StockPage() {
           )}
         </div>
 
-        {/* AI Analysis Button */}
+        {/* AI Analysis Button (Legacy) */}
         <div className="bg-card border border-border rounded-2xl p-5">
           <button 
             onClick={handleAnalyzeClick} 
@@ -290,6 +298,75 @@ export default function StockPage() {
           )}
           {showAiPanel && !aiAnalysis && !aiLoading && (
             <div className="mt-3 text-red text-center text-sm p-3">Failed to load AI Analysis.</div>
+          )}
+
+          {/* ─── NEW: Full Agent Analysis (Streaming) ─── */}
+          <button
+            onClick={() => {
+              if (showAgentPanel && agentText) {
+                setShowAgentPanel(false);
+                return;
+              }
+              if (agentAbortRef.current) agentAbortRef.current.abort();
+              setAgentText('');
+              setAgentModel('');
+              setAgentCategory('');
+              setAgentLoading(true);
+              setShowAgentPanel(true);
+              agentAbortRef.current = streamAgent(
+                { query: `Give me a full trading analysis of ${symbol} with entry, stop loss, targets, and risk assessment.`, symbol },
+                (event: AgentSSEEvent) => {
+                  if (event.type === 'chunk') {
+                    const { text } = event.data as unknown as ChunkEventData;
+                    setAgentText(prev => prev + text);
+                  } else if (event.type === 'model') {
+                    setAgentModel((event.data as unknown as ModelEventData).model);
+                  } else if (event.type === 'classified') {
+                    setAgentCategory((event.data as unknown as ClassifiedEventData).category);
+                  } else if (event.type === 'error') {
+                    setAgentText(`❌ ${(event.data as { message: string }).message}`);
+                  }
+                },
+                () => setAgentLoading(false),
+                (err) => { setAgentText(`❌ ${err.message}`); setAgentLoading(false); }
+              );
+            }}
+            className="w-full mt-2 bg-gradient-to-r from-purple/20 to-lime/10 border border-purple/30 text-purple rounded-[10px] p-2.5 text-[13px] cursor-pointer font-medium hover:opacity-80 transition-opacity flex justify-center items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={agentLoading}
+          >
+            {agentLoading ? '🤖 Running Agent Analysis...' : showAgentPanel && agentText ? 'Hide Agent Analysis' : '🤖 Run Full Agent Analysis'}
+          </button>
+
+          {showAgentPanel && (
+            <div className="mt-3 bg-card2 rounded-[11px] p-3.5 border border-border">
+              {/* Category + Model badges */}
+              {(agentCategory || agentModel) && (
+                <div className="flex items-center gap-2 mb-2">
+                  {agentCategory && (
+                    <span className="text-[10px] px-2 py-0.5 rounded-md font-semibold tracking-wide uppercase bg-purple/15 text-purple">
+                      {agentCategory}{agentCategory === 'stock' ? ` — ${symbol}` : ''}
+                    </span>
+                  )}
+                  {agentModel && (
+                    <span className="text-[10px] text-muted">
+                      {agentModel === 'super' ? '🚀 Nemotron Super' : '⚡ Nemotron Nano'}
+                    </span>
+                  )}
+                </div>
+              )}
+              {/* Agent response */}
+              <div className="text-[11.5px] text-text leading-[1.75] whitespace-pre-line">
+                {agentLoading && !agentText ? (
+                  <span className="text-muted animate-pulse">Analysing {symbol.split('.')[0]}...</span>
+                ) : (
+                  agentText.split('**').map((part, j) =>
+                    j % 2 === 1
+                      ? <strong key={j} className="text-lime">{part}</strong>
+                      : <span key={j}>{part}</span>
+                  )
+                )}
+              </div>
+            </div>
           )}
         </div>
 
