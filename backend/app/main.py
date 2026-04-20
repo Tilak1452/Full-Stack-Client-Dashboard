@@ -134,6 +134,15 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+@app.middleware("http")
+async def do_path_rewrite_middleware(request: Request, call_next):
+    # DigitalOcean App Platform strips the HTTP route prefix (e.g., '/api') 
+    # before passing the request to the container. 
+    # This rewrites '/v1/...' back to '/api/v1/...' so FastAPI can match it.
+    if request.scope.get("path", "").startswith("/v1/"):
+        request.scope["path"] = "/api" + request.scope["path"]
+    return await call_next(request)
+
 app.middleware("http")(performance_metrics_middleware)
 
 # ── Middleware: Global Error Handler ──────────────────────────────────────────
