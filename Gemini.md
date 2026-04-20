@@ -7,7 +7,7 @@
 > Do NOT invent any file, endpoint, or data field that is not listed here.
 > If something is not covered, ask the developer before assuming.
 >
-> **Last updated: April 16, 2026** — Updated after database schema migration (holdings + transactions tables), addition of `price_update_job.py`, new UI components, sell holding endpoint, and full JWT Authentication system (Login/Signup).
+> **Last updated: April 20, 2026** — Migrated to Supabase Auth (GoTrue). Frontend directly calls Supabase for login/signup. Backend `get_current_user` now verifies Supabase JWTs. Removed custom JWT creation and DB password hashing. Added Supabase SDK client and pure ASGI path rewrite middleware for DigitalOcean deployed routing.
 
 ---
 
@@ -117,7 +117,7 @@ Full-Stack-Client-Dashboard/              ← ROOT (open this in your editor)
 │       │
 │       ├── api/                          ← API route handlers (thin controllers, no business logic)
 │       │   ├── __init__.py
-│       │   ├── auth.py                   ← POST /api/v1/auth/login, POST /api/v1/auth/signup (JWT Auth)
+│       │   ├── auth.py                   ← GET /api/v1/auth/me (Returns user info from verified Supabase JWT)
 │       │   ├── analyze.py                ← POST /api/v1/analyze (AI analysis)
 │       │   ├── portfolio.py              ← CRUD /portfolios/* (portfolio management)
 │       │   ├── assets.py                 ← GET /api/v1/assets/* (macro, options, MPT)
@@ -131,7 +131,7 @@ Full-Stack-Client-Dashboard/              ← ROOT (open this in your editor)
 │       ├── core/                         ← Infrastructure layer
 │       │   ├── __init__.py
 │       │   ├── config.py                 ← Pydantic Settings loaded from root .env
-│       │   ├── security.py               ← JWT token generation, verification, and password hashing
+│       │   ├── security.py               ← Supabase JWT verification (decode_access_token)
 │       │   ├── database.py               ← SQLAlchemy engine, session factory, Base
 │       │   ├── cache.py                  ← Redis (with in-memory fallback) caching layer
 │       │   ├── circuit_breaker.py         ← Circuit breaker pattern for external APIs
@@ -140,7 +140,7 @@ Full-Stack-Client-Dashboard/              ← ROOT (open this in your editor)
 │       │
 │       ├── services/                     ← Business logic layer
 │       │   ├── __init__.py
-│       │   ├── auth_service.py           ← User registration & authentication logic
+│       │   ├── auth_service.py           ← Stub file (Authentication logic moved to Supabase)
 │       │   ├── stock_service.py          ← yFinance wrapper: price, history, indicators (25KB)
 │       │   ├── news_service.py           ← Yahoo RSS + NewsAPI + VADER sentiment
 │       │   ├── macro_service.py          ← FRED economic data + commodity prices
@@ -243,7 +243,8 @@ Full-Stack-Client-Dashboard/              ← ROOT (open this in your editor)
 │       │
 │       └── lib/                          ← API clients, hooks, and utilities
 │           ├── api-client.ts             ← Base fetch wrapper (apiFetch + ApiError class)
-│           ├── auth.api.ts               ← authApi: login(), signup()
+│           ├── auth.api.ts               ← authApi: login(), register(), logout() via Supabase
+│           ├── supabase.ts               ← Supabase JS client instance
 │           ├── auth-context.tsx          ← AuthProvider for global auth state
 │           ├── stock.api.ts              ← stockApi: getFullData(), getHistory()
 │           ├── portfolio.api.ts          ← portfolioApi: list(), create(), getSummary(), buyHolding(), sellHolding(), optimize()
@@ -341,6 +342,9 @@ A safe template with empty values is committed as `.env.example`. New developers
 # Supabase PostgreSQL connection string (required)
 DATABASE_URL=postgresql+psycopg2://postgres:[YOUR-PASSWORD]@db.xxxxxxxxxxxx.supabase.co:5432/postgres
 
+# Supabase Auth Secret (required for verifying backend API calls)
+SUPABASE_JWT_SECRET=your_jwt_secret_from_api_settings
+
 # At least ONE LLM key is required (Groq is free)
 GROQ_API_KEY=
 OPENAI_API_KEY=
@@ -368,6 +372,8 @@ File: `frontend/.env.local`
 ```env
 NEXT_PUBLIC_API_URL=http://localhost:8000
 NEXT_PUBLIC_WS_URL=ws://localhost:8000
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_public_key
 ```
 
 The `NEXT_PUBLIC_` prefix is mandatory — without it, Next.js will not expose these to the browser.
@@ -484,8 +490,7 @@ app.include_router(market.router)       # /api/v1/indices, /api/v1/movers
 ### Authentication
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| `POST` | `/api/v1/auth/signup` | Register a new user |
-| `POST` | `/api/v1/auth/login` | Authenticate and receive a JWT token |
+| `GET` | `/api/v1/auth/me` | Validates Supabase JWT and returns user details |
 
 ### Analyze
 | Method | Endpoint | Description | Rate Limit |
@@ -746,6 +751,7 @@ export async function apiFetch<T>(endpoint: string, options?: RequestInit): Prom
 | Module | Object | Methods |
 |--------|--------|---------|
 | `stock.api.ts` | `stockApi` | `getFullData(symbol)`, `getHistory(symbol, period, interval)` |
+| `auth.api.ts` | `authApi` | Maps to Supabase Auth (`login`, `register`, `logout`, `getUser`) |
 | `portfolio.api.ts` | `portfolioApi` | `list()`, `create(payload)`, `getSummary(id)`, `addHolding(id, payload)`, `recordTransaction(id, payload)`, `buyHolding(portfolioId, symbol, qty, price)`, `sellHolding(portfolioId, symbol, payload)`, `optimize(id)` |
 | `alerts.api.ts` | `alertsApi` | `getActive()`, `getNotifications()`, `create(payload)`, `delete(id)` |
 | `ai.api.ts` | `aiApi` | `analyze(question)` |
