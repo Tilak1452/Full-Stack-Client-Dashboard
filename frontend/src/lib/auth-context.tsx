@@ -1,10 +1,17 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
-import { getStoredUser, clearAuthStorage } from "./auth.api";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from "react";
+import { supabase } from "./supabase";
+import { clearAuthStorage } from "./auth.api";
 
-interface UserPublic {
-  id: number;
+export interface UserPublic {
+  id: string;    // UUID string from Supabase
   name: string;
   email: string;
   is_active: boolean;
@@ -22,28 +29,57 @@ const AuthContext = createContext<AuthContextValue | null>(null);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUserState] = useState<UserPublic | null>(null);
 
-  // Restore session from localStorage on mount
+  // ── Restore session from Supabase on mount ────────────────────────────────
   useEffect(() => {
-    const stored = getStoredUser();
-    if (stored) setUserState(stored);
+    // Immediately check if there's a live Supabase session
+    supabase.auth.getSession().then(({ data }) => {
+      if (data.session?.user) {
+        const u = data.session.user;
+        setUserState({
+          id: u.id,
+          name: u.user_metadata?.name ?? u.email!.split("@")[0],
+          email: u.email!,
+          is_active: true,
+        });
+      }
+    });
+
+    // Listen for auth state changes (login, logout, token refresh)
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session?.user) {
+        const u = session.user;
+        setUserState({
+          id: u.id,
+          name: u.user_metadata?.name ?? u.email!.split("@")[0],
+          email: u.email!,
+          is_active: true,
+        });
+      } else {
+        setUserState(null);
+      }
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
 
   const setUser = (u: UserPublic | null) => {
     setUserState(u);
-    if (u) {
-      sessionStorage.setItem("finsight_user", JSON.stringify(u));
-    }
   };
 
-  const logout = () => {
+  const logout = async () => {
     setUserState(null);
     clearAuthStorage();
     document.cookie = "finsight_token=; path=/; max-age=0";
+    await supabase.auth.signOut();
     window.location.href = "/auth/login";
   };
 
   return (
-    <AuthContext.Provider value={{ user, setUser, logout, isAuthenticated: !!user }}>
+    <AuthContext.Provider
+      value={{ user, setUser, logout, isAuthenticated: !!user }}
+    >
       {children}
     </AuthContext.Provider>
   );

@@ -1,53 +1,43 @@
 """
-JWT creation, verification, and password hashing utilities.
-All auth logic that doesn't need a DB session lives here.
+security.py — Supabase Auth edition
+
+The backend no longer creates or hashes passwords. Its only job is to
+VERIFY the JWT that Supabase issues to the frontend after login.
+
+Supabase JWTs are standard HS256 tokens signed with the project's
+JWT secret (SUPABASE_JWT_SECRET). The payload includes:
+  - sub:           user UUID (string)
+  - email:         user's email
+  - role:          "authenticated"
+  - user_metadata: { name: "..." } (set at sign-up)
+  - exp:           expiry timestamp
 """
 
-from datetime import datetime, timedelta, timezone
 from typing import Optional
-
 from jose import JWTError, jwt
-from passlib.context import CryptContext
-
 from app.core.config import settings
-
-# ── Password hashing ──────────────────────────────────────────────────────────
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
-
-def hash_password(plain_password: str) -> str:
-    """Returns bcrypt hash of the given plain-text password."""
-    return pwd_context.hash(plain_password)
-
-
-def verify_password(plain_password: str, hashed_password: str) -> bool:
-    """Returns True if plain_password matches the stored bcrypt hash."""
-    return pwd_context.verify(plain_password, hashed_password)
-
-
-# ── JWT token handling ────────────────────────────────────────────────────────
-def create_access_token(
-    data: dict,
-    expires_delta: Optional[timedelta] = None
-) -> str:
-    """
-    Creates a signed JWT with a default 7-day expiry.
-    `data` must include a 'sub' key (typically the user's email or id).
-    """
-    to_encode = data.copy()
-    expire = datetime.now(timezone.utc) + (
-        expires_delta or timedelta(days=settings.jwt_expire_days)
-    )
-    to_encode.update({"exp": expire})
-    return jwt.encode(to_encode, settings.jwt_secret, algorithm=settings.jwt_algorithm)
 
 
 def decode_access_token(token: str) -> Optional[dict]:
     """
-    Decodes and validates a JWT.
-    Returns the payload dict on success, None on failure.
+    Decodes and verifies a Supabase-issued JWT.
+
+    Uses the SUPABASE_JWT_SECRET (HS256) and checks that the audience
+    claim is 'authenticated', which is what Supabase sets for all
+    logged-in user tokens (as opposed to 'anon' for the anon key).
+
+    Returns the payload dict on success, None on any failure.
     """
+    if not settings.supabase_jwt_secret:
+        # Safety guard: if someone accidentally deploys without the secret,
+        # all auth will fail loudly rather than silently accepting any token.
+        return None
     try:
-        return jwt.decode(token, settings.jwt_secret, algorithms=[settings.jwt_algorithm])
+        return jwt.decode(
+            token,
+            settings.supabase_jwt_secret,
+            algorithms=["HS256"],
+            audience="authenticated",
+        )
     except JWTError:
         return None

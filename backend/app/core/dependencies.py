@@ -33,11 +33,16 @@ Design decisions:
 import logging
 from typing import Generator
 
+from fastapi import Depends, HTTPException, status
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from sqlalchemy.orm import Session
 
 from .database import SessionLocal
+from .security import decode_access_token
 
 logger = logging.getLogger(__name__)
+
+bearer_scheme = HTTPBearer(auto_error=False)
 
 
 def get_db() -> Generator[Session, None, None]:
@@ -60,48 +65,32 @@ def get_db() -> Generator[Session, None, None]:
     logger.debug("DB session opened")
     try:
         yield db
-        # ── Commit ────────────────────────────────────────────────────────
-        # Reached only if the route handler completed WITHOUT raising an error.
-        # Flushes all pending ORM changes to the DB and makes them permanent.
         db.commit()
         logger.debug("DB session committed")
     except Exception as exc:
-        # ── Rollback ──────────────────────────────────────────────────────
-        # Triggered by ANY exception: DB IntegrityError, HTTPException, etc.
-        # Undoes all changes made in this session since the last commit.
-        # This prevents partial writes from corrupting the database.
         db.rollback()
         logger.warning("DB session rolled back | reason: %s", str(exc))
-        raise  # Re-raise so FastAPI's exception handlers still process it
+        raise
     finally:
-        # ── Close ─────────────────────────────────────────────────────────
-        # Always runs — success or failure.
-        # Returns the connection back to the connection pool.
-        # Prevents connection exhaustion under high load.
         db.close()
         logger.debug("DB session closed")
-
-from fastapi import Depends, HTTPException, status
-from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-
-from app.core.security import decode_access_token
-from app.models.user import User
-
-bearer_scheme = HTTPBearer(auto_error=False)
 
 
 def get_current_user(
     credentials: HTTPAuthorizationCredentials = Depends(bearer_scheme),
-    db: Session = Depends(get_db),
-) -> User:
+) -> dict:
     """
-    FastAPI dependency that extracts and validates the JWT from the
+    FastAPI dependency that extracts and validates a Supabase JWT from the
     Authorization: Bearer <token> header.
+
+    Returns a plain dict with user info extracted from the token payload.
+    No database query required — Supabase embeds all necessary info in the JWT.
 
     Usage in any route:
         @router.get("/protected")
-        def protected_route(current_user: User = Depends(get_current_user)):
-            ...
+        def protected_route(current_user: dict = Depends(get_current_user)):
+            user_id = current_user["id"]   # UUID string
+            email   = current_user["email"]
     """
     if not credentials:
         raise HTTPException(
@@ -118,11 +107,9 @@ def get_current_user(
             headers={"WWW-Authenticate": "Bearer"},
         )
 
-    user_id = int(payload.get("sub", 0))
-    user = db.query(User).filter(User.id == user_id, User.is_active == True).first()
-    if not user:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="User not found or deactivated.",
-        )
-    return user
+    return {
+        "id": payload.get("sub"),                                    # UUID string
+        "email": payload.get("email", ""),
+        "name": payload.get("user_metadata", {}).get("name", ""),
+        "is_active": True,
+    }

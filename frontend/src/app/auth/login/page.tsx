@@ -24,9 +24,10 @@ export default function LoginPage() {
     setLoading(true);
     try {
       const res = await authApi.login(form.email, form.password);
-      sessionStorage.setItem("finsight_token", res.access_token);
-      sessionStorage.setItem("finsight_user", JSON.stringify(res.user));
+      // Mirror the access_token into a cookie so Next.js middleware can read it
       document.cookie = `finsight_token=${res.access_token}; path=/; SameSite=Strict`;
+      localStorage.setItem("finsight_token", res.access_token);
+      localStorage.setItem("finsight_user", JSON.stringify(res.user));
       setUser(res.user);
       router.push("/dashboard");
     } catch (err: any) {

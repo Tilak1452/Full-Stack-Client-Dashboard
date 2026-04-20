@@ -32,10 +32,13 @@ class Settings(BaseSettings):
     # Caching
     redis_url: str = "redis://localhost:6379/0"
 
-    # JWT Authentication
+    # JWT Authentication (legacy custom JWT — kept for reference)
     jwt_secret: str = "CHANGE_THIS_TO_A_LONG_RANDOM_SECRET_IN_PRODUCTION"
     jwt_algorithm: str = "HS256"
     jwt_expire_days: int = 7
+
+    # Supabase Auth — JWT secret used to verify tokens issued by Supabase GoTrue
+    supabase_jwt_secret: str = ""
 
     # ─── NVIDIA Nemotron via OpenRouter (Agent Pipeline) ──────────────────────
     nvidia_nemotron_3_super_api_key: str = ""
