@@ -134,14 +134,21 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@app.middleware("http")
-async def do_path_rewrite_middleware(request: Request, call_next):
-    # DigitalOcean App Platform strips the HTTP route prefix (e.g., '/api') 
-    # before passing the request to the container. 
-    # This rewrites '/v1/...' back to '/api/v1/...' so FastAPI can match it.
-    if request.scope.get("path", "").startswith("/v1/"):
-        request.scope["path"] = "/api" + request.scope["path"]
-    return await call_next(request)
+class DOPathRewriteMiddleware:
+    """
+    Pure ASGI middleware to rewrite paths before Starlette's router processes them.
+    DigitalOcean App Platform strips '/api' from the HTTP route before forwarding.
+    This safely injects it back.
+    """
+    def __init__(self, app):
+        self.app = app
+
+    async def __call__(self, scope, receive, send):
+        if scope["type"] == "http" and scope["path"].startswith("/v1/"):
+            scope["path"] = "/api" + scope["path"]
+        await self.app(scope, receive, send)
+
+app.add_middleware(DOPathRewriteMiddleware)
 
 app.middleware("http")(performance_metrics_middleware)
 
