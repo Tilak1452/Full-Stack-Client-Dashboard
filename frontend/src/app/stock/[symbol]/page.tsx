@@ -12,8 +12,7 @@ import { TopBar } from '@/components/TopBar';
 import { stockApi } from '@/lib/stock.api';
 import { aiApi, streamAgent, type AgentSSEEvent, type ChunkEventData, type ModelEventData, type ClassifiedEventData } from '@/lib/ai.api';
 import { useWebSocketPrice } from '@/lib/useWebSocketPrice';
-
-const WATCHLIST_KEY = 'finsight_watchlist';
+import { useAuth } from '@/lib/auth-context';
 
 const INTERVALS = [
   { label: '5m',      interval: '5m',  period: '5d'  },
@@ -55,22 +54,29 @@ export default function StockPage() {
   const [showAgentPanel, setShowAgentPanel] = useState(false);
   const agentAbortRef = useRef<AbortController | null>(null);
 
+  const { user } = useAuth();
+  const watchlistKey = user ? `finsight_watchlist_${user.id}` : 'finsight_watchlist';
+
   // Check if current symbol is already in watchlist
   useEffect(() => {
+    if (!user) return;
     try {
-      const saved = localStorage.getItem(WATCHLIST_KEY);
+      const saved = localStorage.getItem(watchlistKey);
       if (saved) {
         const list: string[] = JSON.parse(saved);
         setInWatchlist(list.includes(symbol));
+      } else {
+        setInWatchlist(false);
       }
     } catch (e) {
       console.error('Failed to read watchlist', e);
     }
-  }, [symbol]);
+  }, [symbol, user, watchlistKey]);
 
   const handleWatchlistToggle = useCallback(() => {
+    if (!user) return;
     try {
-      const saved = localStorage.getItem(WATCHLIST_KEY);
+      const saved = localStorage.getItem(watchlistKey);
       let list: string[] = saved ? JSON.parse(saved) : [];
       if (list.includes(symbol)) {
         list = list.filter(s => s !== symbol);
@@ -79,11 +85,11 @@ export default function StockPage() {
         list.push(symbol);
         setInWatchlist(true);
       }
-      localStorage.setItem(WATCHLIST_KEY, JSON.stringify(list));
+      localStorage.setItem(watchlistKey, JSON.stringify(list));
     } catch (e) {
       console.error('Failed to update watchlist', e);
     }
-  }, [symbol]);
+  }, [symbol, user, watchlistKey]);
 
   const handleSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' && sym.trim()) {

@@ -11,6 +11,7 @@ import { streamAgent, type AgentSSEEvent, type ChunkEventData } from '@/lib/ai.a
 import { stockApi } from '@/lib/stock.api';
 import { portfolioApi } from '@/lib/portfolio.api';
 import { formatTime } from '@/lib/utils';
+import { useAuth } from '@/lib/auth-context';
 import Link from 'next/link';
 
 function Spark({ data, up }: { data: number[], up: boolean }) {
@@ -85,6 +86,7 @@ function DashboardNewsBrief() {
 
 export default function DashboardPage() {
   const [tf, setTf] = useState('6M');
+  const { user } = useAuth();
 
   // ── Real portfolio data ─────────────────────────────────────────
   const { data: portfolios = [] } = useQuery({
@@ -154,13 +156,16 @@ export default function DashboardPage() {
 
   // Load watchlist from localStorage AFTER hydration (client-only)
   React.useEffect(() => {
+    if (!user) return;
     try {
-      const saved = localStorage.getItem('finsight_watchlist');
+      const watchlistKey = `finsight_watchlist_${user.id}`;
+      const saved = localStorage.getItem(watchlistKey);
       if (saved) setWatchlistSymbols(JSON.parse(saved));
+      else setWatchlistSymbols([]);
     } catch {
       // ignore parse errors
     }
-  }, []);
+  }, [user]);
 
   const { data: watchlistPrices = {} } = useQuery({
     queryKey: ['live-prices', watchlistSymbols],

@@ -131,6 +131,7 @@ async def fetch_and_evaluate_alerts():
                     # Push to notification queue (UI polls this)
                     _notification_queue.append({
                         "id": alert.id,
+                        "user_id": alert.user_id,
                         "symbol": alert.symbol,
                         "condition": alert.condition.value,
                         "threshold": alert.threshold,
@@ -140,8 +141,8 @@ async def fetch_and_evaluate_alerts():
                         "message": msg,
                         "triggered_at": datetime.now(timezone.utc).isoformat()
                     })
-                    # Cap queue at 50
-                    if len(_notification_queue) > 50:
+                    # Cap queue at 500
+                    if len(_notification_queue) > 500:
                         _notification_queue.pop(0)
 
             db.commit()
@@ -184,25 +185,27 @@ async def generate_market_summary_job():
         logger.error("Market summary job failed: %s", e)
 
 
-def get_recent_alerts() -> List[Dict[str, Any]]:
-    """Returns the last 10 triggered alert notifications for the UI."""
-    return list(reversed(_notification_queue[-10:]))
+def get_recent_alerts(user_id: str) -> List[Dict[str, Any]]:
+    """Returns the last 10 triggered alert notifications for the UI for a specific user."""
+    user_notifications = [n for n in reversed(_notification_queue) if n.get("user_id") == user_id]
+    return user_notifications[:10]
 
 
-def get_all_active_alerts() -> List[Alert]:
-    """DB read for all active alert rules."""
+def get_all_active_alerts(user_id: str) -> List[Alert]:
+    """DB read for all active alert rules for a specific user."""
     db = SessionLocal()
     try:
-        return db.query(Alert).filter(Alert.status == AlertStatus.ACTIVE).all()
+        return db.query(Alert).filter(Alert.status == AlertStatus.ACTIVE, Alert.user_id == user_id).all()
     finally:
         db.close()
 
 
-def create_alert(symbol: str, condition: str, threshold: float) -> Alert:
+def create_alert(symbol: str, condition: str, threshold: float, user_id: str) -> Alert:
     """API endpoint helper to create a new alert rule in the DB."""
     db = SessionLocal()
     try:
         alert = Alert(
+            user_id=user_id,
             symbol=symbol.upper(),
             condition=AlertCondition(condition),
             threshold=threshold,
@@ -216,10 +219,10 @@ def create_alert(symbol: str, condition: str, threshold: float) -> Alert:
         db.close()
 
 
-def delete_alert(alert_id: int) -> bool:
+def delete_alert(alert_id: int, user_id: str) -> bool:
     db = SessionLocal()
     try:
-        alert = db.query(Alert).filter(Alert.id == alert_id).first()
+        alert = db.query(Alert).filter(Alert.id == alert_id, Alert.user_id == user_id).first()
         if alert:
             db.delete(alert)
             db.commit()

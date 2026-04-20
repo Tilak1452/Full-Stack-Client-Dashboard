@@ -16,7 +16,7 @@ from typing import List
 from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
 
-from ..core.dependencies import get_db
+from ..core.dependencies import get_db, get_current_user
 from ..schemas.portfolio import (
     CreatePortfolioRequest,
     AddHoldingRequest,
@@ -44,12 +44,15 @@ router = APIRouter(prefix="/api/v1/portfolios", tags=["portfolio"])
     status_code=status.HTTP_200_OK,
     summary="Get all portfolios",
 )
-def get_all_portfolios(db: Session = Depends(get_db)) -> List[PortfolioResponse]:
+def get_all_portfolios(
+    db: Session = Depends(get_db),
+    current_user: dict = Depends(get_current_user)
+) -> List[PortfolioResponse]:
     """
-    Returns a list of all portfolios.
+    Returns a list of all portfolios for the current user.
     """
-    logger.info("GET /portfolios")
-    portfolios = portfolio_service.get_all_portfolios(db=db)
+    logger.info("GET /portfolios | user_id='%s'", current_user["id"])
+    portfolios = portfolio_service.get_all_portfolios(db=db, user_id=current_user["id"])
     return [_build_portfolio_response(p) for p in portfolios]
 
 
@@ -62,13 +65,14 @@ def get_all_portfolios(db: Session = Depends(get_db)) -> List[PortfolioResponse]
 def create_portfolio(
     payload: CreatePortfolioRequest,
     db: Session = Depends(get_db),
+    current_user: dict = Depends(get_current_user)
 ) -> PortfolioResponse:
     """
-    Creates a new portfolio with the given name.
-    Returns 409 Conflict if the name already exists.
+    Creates a new portfolio with the given name for the user.
+    Returns 409 Conflict if the name already exists for this user.
     """
-    logger.info("POST /portfolios | name='%s'", payload.name)
-    portfolio = portfolio_service.create_portfolio(db=db, name=payload.name)
+    logger.info("POST /portfolios | user_id='%s' | name='%s'", current_user["id"], payload.name)
+    portfolio = portfolio_service.create_portfolio(db=db, user_id=current_user["id"], name=payload.name)
     return _build_portfolio_response(portfolio)
 
 
@@ -84,18 +88,20 @@ def add_holding(
     portfolio_id: int,
     payload: AddHoldingRequest,
     db: Session = Depends(get_db),
+    current_user: dict = Depends(get_current_user)
 ) -> PortfolioResponse:
     """
     Adds a new holding or updates quantity + weighted average cost if the symbol exists.
     Returns the full updated portfolio summary.
-    Returns 404 if the portfolio doesn't exist.
+    Returns 404 if the portfolio doesn't exist for the user.
     """
     logger.info(
-        "POST /portfolios/%s/holdings | symbol=%s | qty=%s",
-        portfolio_id, payload.symbol, payload.quantity,
+        "POST /portfolios/%s/holdings | user_id=%s | symbol=%s | qty=%s",
+        portfolio_id, current_user["id"], payload.symbol, payload.quantity,
     )
     portfolio = portfolio_service.add_holding(
         db=db,
+        user_id=current_user["id"],
         portfolio_id=portfolio_id,
         symbol=payload.symbol,
         quantity=payload.quantity,
@@ -116,20 +122,22 @@ def record_transaction(
     portfolio_id: int,
     payload: RecordTransactionRequest,
     db: Session = Depends(get_db),
+    current_user: dict = Depends(get_current_user)
 ) -> TransactionResponse:
     """
-    Records a buy or sell transaction.
+    Records a buy or sell transaction limit.
     For BUY: adds to or creates the holding (weighted average cost).
     For SELL: reduces the holding quantity, calculates FIFO realized P&L.
     Returns 404 if the portfolio doesn't exist.
     Returns 422 if overselling.
     """
     logger.info(
-        "POST /portfolios/%s/transactions | type=%s | symbol=%s | qty=%s",
-        portfolio_id, payload.transaction_type, payload.symbol, payload.quantity,
+        "POST /portfolios/%s/transactions | user_id=%s | type=%s | symbol=%s | qty=%s",
+        portfolio_id, current_user["id"], payload.transaction_type, payload.symbol, payload.quantity,
     )
     txn = portfolio_service.record_transaction(
         db=db,
+        user_id=current_user["id"],
         portfolio_id=portfolio_id,
         symbol=payload.symbol,
         transaction_type=payload.transaction_type,
@@ -162,6 +170,7 @@ def sell_holding(
     symbol: str,
     payload: SellHoldingRequest,
     db: Session = Depends(get_db),
+    current_user: dict = Depends(get_current_user)
 ) -> SellResponse:
     """
     Sells shares from a holding.
@@ -170,11 +179,12 @@ def sell_holding(
     """
     symbol = symbol.upper().strip()
     logger.info(
-        "POST /portfolios/%s/holdings/%s/sell | qty=%s | price=%s",
-        portfolio_id, symbol, payload.quantity, payload.price,
+        "POST /portfolios/%s/holdings/%s/sell | user_id=%s | qty=%s | price=%s",
+        portfolio_id, symbol, current_user["id"], payload.quantity, payload.price,
     )
     txn = portfolio_service.record_transaction(
         db=db,
+        user_id=current_user["id"],
         portfolio_id=portfolio_id,
         symbol=symbol,
         transaction_type="sell",
@@ -244,13 +254,14 @@ def _build_portfolio_response(portfolio) -> PortfolioResponse:
 def get_portfolio_summary(
     portfolio_id: int,
     db: Session = Depends(get_db),
+    current_user: dict = Depends(get_current_user)
 ) -> PortfolioSummaryResponse:
     """
     Returns an aggregated summary of the portfolio with all pre-calculated P&L.
     Frontend just displays — no manual calculations needed.
     """
-    logger.info("GET /portfolios/%s/summary", portfolio_id)
-    data = portfolio_service.get_portfolio_summary(db=db, portfolio_id=portfolio_id)
+    logger.info("GET /portfolios/%s/summary | user_id=%s", portfolio_id, current_user["id"])
+    data = portfolio_service.get_portfolio_summary(db=db, user_id=current_user["id"], portfolio_id=portfolio_id)
     return PortfolioSummaryResponse(**data)
 
 # ── 6. Optimize Portfolio (MPT) ──────────────────────────────────────────────
@@ -263,9 +274,10 @@ def get_portfolio_summary(
 def optimize_user_portfolio(
     portfolio_id: int,
     db: Session = Depends(get_db),
+    current_user: dict = Depends(get_current_user)
 ):
-    logger.info("GET /portfolios/%s/optimize", portfolio_id)
-    portfolio = portfolio_service._get_portfolio_or_404(db, portfolio_id)
+    logger.info("GET /portfolios/%s/optimize | user_id=%s", portfolio_id, current_user["id"])
+    portfolio = portfolio_service._get_portfolio_or_404(db, current_user["id"], portfolio_id)
     
     symbols = [h.symbol for h in portfolio.holdings if h.quantity > 0]
     if len(symbols) < 2:

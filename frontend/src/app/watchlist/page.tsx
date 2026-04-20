@@ -6,8 +6,7 @@ import { useRouter } from 'next/navigation';
 import { TopBar } from '@/components/TopBar';
 import { IcSearch, IcPlus, IcTrash } from '@/components/Icons';
 import { stockApi } from '@/lib/stock.api';
-
-const WATCHLIST_KEY = 'finsight_watchlist';
+import { useAuth } from '@/lib/auth-context';
 
 /** Derive the exchange badge text from a Yahoo-format symbol */
 function getExchangeBadge(sym: string): string {
@@ -25,21 +24,28 @@ export default function WatchlistPage() {
   const [symbols, setSymbols] = useState<string[]>([]);
   const [newSym, setNewSym] = useState('');
   const router = useRouter();
+  const { user } = useAuth();
+
+  const watchlistKey = user ? `finsight_watchlist_${user.id}` : 'finsight_watchlist';
 
   // Initial load from localStorage
   useEffect(() => {
+    if (!user) return;
     try {
-      const saved = localStorage.getItem(WATCHLIST_KEY);
+      const saved = localStorage.getItem(watchlistKey);
       if (saved) setSymbols(JSON.parse(saved));
+      else setSymbols([]);
     } catch (e) {
       console.error('Failed to load watchlist', e);
     }
-  }, []);
+  }, [user, watchlistKey]);
 
   // Update localStorage when symbols change
   const saveSymbols = (updated: string[]) => {
     setSymbols(updated);
-    localStorage.setItem(WATCHLIST_KEY, JSON.stringify(updated));
+    if (user) {
+      localStorage.setItem(watchlistKey, JSON.stringify(updated));
+    }
   };
 
   const handleAdd = () => {

@@ -584,7 +584,8 @@ Supabase dashboard: https://supabase.com/dashboard
 | Column | Type | Constraints |
 |--------|------|-------------|
 | `id` | Integer | PK, auto-increment |
-| `name` | String(255) | NOT NULL, UNIQUE, INDEXED |
+| `user_id` | String(255) | NOT NULL, INDEXED (Supabase UUID) |
+| `name` | String(255) | NOT NULL, INDEXED |
 | `created_at` | DateTime(tz) | server_default=now() |
 
 Relationships: `holdings` (one-to-many, cascade delete), `transactions` (one-to-many, cascade delete)
@@ -626,6 +627,7 @@ Relationships: `holdings` (one-to-many, cascade delete), `transactions` (one-to-
 | Column | Type | Constraints |
 |--------|------|-------------|
 | `id` | Integer | PK, INDEXED |
+| `user_id` | String(255) | NOT NULL, INDEXED (Supabase UUID) |
 | `symbol` | String | NOT NULL, INDEXED |
 | `condition` | Enum(AlertCondition) | NOT NULL |
 | `threshold` | Float | NOT NULL |

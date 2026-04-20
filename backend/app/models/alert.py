@@ -28,6 +28,7 @@ class Alert(Base):
     __table_args__ = {"extend_existing": True}
 
     id          = Column(Integer, primary_key=True, index=True)
+    user_id     = Column(String(255), nullable=False, index=True)
     symbol      = Column(String, nullable=False, index=True)
     condition   = Column(SAEnum(AlertCondition, name='alertcondition', native_enum=False), nullable=False)
     threshold   = Column(Float, nullable=False)

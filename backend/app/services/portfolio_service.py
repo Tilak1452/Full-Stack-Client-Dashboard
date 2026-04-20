@@ -27,12 +27,15 @@ logger = logging.getLogger(__name__)
 
 # ── Helper ────────────────────────────────────────────────────────────────────
 
-def _get_portfolio_or_404(db: Session, portfolio_id: int) -> Portfolio:
+def _get_portfolio_or_404(db: Session, user_id: str, portfolio_id: int) -> Portfolio:
     """
     Fetches a Portfolio by ID or raises HTTP 404.
     Centralizes the lookup so every endpoint uses the same error response.
     """
-    portfolio = db.query(Portfolio).filter(Portfolio.id == portfolio_id).first()
+    portfolio = db.query(Portfolio).filter(
+        Portfolio.id == portfolio_id, 
+        Portfolio.user_id == user_id
+    ).first()
     if not portfolio:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -43,14 +46,14 @@ def _get_portfolio_or_404(db: Session, portfolio_id: int) -> Portfolio:
 
 # ── Service Functions ─────────────────────────────────────────────────────────
 
-def create_portfolio(db: Session, name: str) -> Portfolio:
+def create_portfolio(db: Session, user_id: str, name: str) -> Portfolio:
     """
     Creates a new Portfolio row in the database.
 
     Raises:
         HTTPException 409: If a portfolio with the same name already exists.
     """
-    existing = db.query(Portfolio).filter(Portfolio.name == name).first()
+    existing = db.query(Portfolio).filter(Portfolio.user_id == user_id, Portfolio.name == name).first()
     if existing:
         logger.warning("Duplicate portfolio name attempted: '%s'", name)
         raise HTTPException(
@@ -58,24 +61,24 @@ def create_portfolio(db: Session, name: str) -> Portfolio:
             detail=f"A portfolio named '{name}' already exists.",
         )
 
-    portfolio = Portfolio(name=name)
+    portfolio = Portfolio(name=name, user_id=user_id)
     db.add(portfolio)
     db.flush()
     logger.info("Portfolio created | id=%s | name='%s'", portfolio.id, portfolio.name)
     return portfolio
 
 
-def get_all_portfolios(db: Session) -> list[Portfolio]:
+def get_all_portfolios(db: Session, user_id: str) -> list[Portfolio]:
     """
-    Returns a list of all portfolios.
+    Returns a list of all portfolios for a user.
     """
-    portfolios = db.query(Portfolio).all()
+    portfolios = db.query(Portfolio).filter(Portfolio.user_id == user_id).all()
     logger.info("Fetched all %d portfolios", len(portfolios))
     return portfolios
 
 
 def add_holding(
-    db: Session, portfolio_id: int, symbol: str, quantity: float, price: float
+    db: Session, user_id: str, portfolio_id: int, symbol: str, quantity: float, price: float
 ) -> Portfolio:
     """
     Adds or updates a Holding within a portfolio.
@@ -89,7 +92,7 @@ def add_holding(
 
     Returns the parent Portfolio (for building the response).
     """
-    portfolio = _get_portfolio_or_404(db, portfolio_id)
+    portfolio = _get_portfolio_or_404(db, user_id, portfolio_id)
 
     existing_holding: Optional[Holding] = (
         db.query(Holding)
@@ -132,6 +135,7 @@ def add_holding(
 
 def record_transaction(
     db: Session,
+    user_id: str,
     portfolio_id: int,
     symbol: str,
     transaction_type: str,
@@ -147,7 +151,7 @@ def record_transaction(
     Raises:
         HTTPException 422: If a SELL would result in negative quantity (oversell).
     """
-    portfolio = _get_portfolio_or_404(db, portfolio_id)
+    portfolio = _get_portfolio_or_404(db, user_id, portfolio_id)
 
     txn_enum = TransactionType(transaction_type)
 
@@ -289,14 +293,14 @@ def update_holding_prices(db: Session, holding_id: int, current_price: float) ->
     return holding
 
 
-def get_portfolio_summary(db: Session, portfolio_id: int) -> dict:
+def get_portfolio_summary(db: Session, user_id: str, portfolio_id: int) -> dict:
     """
     Aggregates portfolio data for the summary endpoint.
 
     Returns all holdings with pre-calculated P&L values.
     Frontend just displays — no manual calculations needed.
     """
-    portfolio = _get_portfolio_or_404(db, portfolio_id)
+    portfolio = _get_portfolio_or_404(db, user_id, portfolio_id)
     holdings = portfolio.holdings
 
     total_invested = 0.0
