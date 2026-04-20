@@ -31,7 +31,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const setUser = (u: UserPublic | null) => {
     setUserState(u);
     if (u) {
-      localStorage.setItem("finsight_user", JSON.stringify(u));
+      sessionStorage.setItem("finsight_user", JSON.stringify(u));
     }
   };
 

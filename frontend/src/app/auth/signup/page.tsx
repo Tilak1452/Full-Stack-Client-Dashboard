@@ -28,9 +28,9 @@ export default function SignUpPage() {
     setLoading(true);
     try {
       const res = await authApi.register(form.name, form.email, form.password);
-      localStorage.setItem("finsight_token", res.access_token);
-      localStorage.setItem("finsight_user", JSON.stringify(res.user));
-      document.cookie = `finsight_token=${res.access_token}; path=/; max-age=${7 * 24 * 3600}; SameSite=Strict`;
+      sessionStorage.setItem("finsight_token", res.access_token);
+      sessionStorage.setItem("finsight_user", JSON.stringify(res.user));
+      document.cookie = `finsight_token=${res.access_token}; path=/; SameSite=Strict`;
       setUser(res.user);
       router.push("/dashboard");
     } catch (err: any) {

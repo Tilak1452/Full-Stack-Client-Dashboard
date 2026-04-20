@@ -17,7 +17,7 @@ export async function apiFetch<T>(
   options: RequestInit = {}
 ): Promise<T> {
   const token = typeof window !== "undefined"
-    ? localStorage.getItem("finsight_token")
+    ? sessionStorage.getItem("finsight_token")
     : null;
 
   const headers: Record<string, string> = {
@@ -37,8 +37,8 @@ export async function apiFetch<T>(
   if (!response.ok) {
     // Auto-redirect on 401 (expired/invalid token)
     if (response.status === 401 && typeof window !== "undefined") {
-      localStorage.removeItem("finsight_token");
-      localStorage.removeItem("finsight_user");
+      sessionStorage.removeItem("finsight_token");
+      sessionStorage.removeItem("finsight_user");
       window.location.href = "/auth/login";
     }
     let detail = `HTTP ${response.status}`;

@@ -33,19 +33,19 @@ export const authApi = {
     apiFetch<{ message: string }>("/api/v1/auth/logout", { method: "POST" }),
 };
 
-/** Call on every app startup to restore session from localStorage */
+/** Call on every app startup to restore session from sessionStorage */
 export function getStoredToken(): string | null {
   if (typeof window === "undefined") return null;
-  return localStorage.getItem("finsight_token");
+  return sessionStorage.getItem("finsight_token");
 }
 
 export function getStoredUser(): UserPublic | null {
   if (typeof window === "undefined") return null;
-  const raw = localStorage.getItem("finsight_user");
+  const raw = sessionStorage.getItem("finsight_user");
   return raw ? JSON.parse(raw) : null;
 }
 
 export function clearAuthStorage(): void {
-  localStorage.removeItem("finsight_token");
-  localStorage.removeItem("finsight_user");
+  sessionStorage.removeItem("finsight_token");
+  sessionStorage.removeItem("finsight_user");
 }
