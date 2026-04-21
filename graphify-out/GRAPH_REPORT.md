@@ -1,12 +1,12 @@
 # Graph Report - D:\Full-Stack-Client-Dashboard  (2026-04-21)
 
 ## Corpus Check
-- 130 files · ~115,677 words
+- 130 files · ~171,650 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 695 nodes · 1242 edges · 82 communities detected
-- Extraction: 60% EXTRACTED · 40% INFERRED · 0% AMBIGUOUS · INFERRED: 502 edges (avg confidence: 0.61)
+- 695 nodes · 1243 edges · 82 communities detected
+- Extraction: 60% EXTRACTED · 40% INFERRED · 0% AMBIGUOUS · INFERRED: 503 edges (avg confidence: 0.61)
 - Token cost: 0 input · 0 output
 
 ## Community Hubs (Navigation)
@@ -106,8 +106,8 @@
 10. `Transaction` - 17 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `Alert Model (models/alert.py) SQLAlchemy model for persisting user-defined mark` --uses--> `Base`  [INFERRED]
-  D:\Full-Stack-Client-Dashboard\backend\app\models\alert.py → D:\Full-Stack-Client-Dashboard\backend\app\core\database.py
+- `Base` --uses--> `Alert Model (models/alert.py) SQLAlchemy model for persisting user-defined mark`  [INFERRED]
+  D:\Full-Stack-Client-Dashboard\backend\app\core\database.py → D:\Full-Stack-Client-Dashboard\backend\app\models\alert.py
 - `DOPathRewriteMiddleware` --uses--> `Base`  [INFERRED]
   D:\Full-Stack-Client-Dashboard\backend\app\main.py → D:\Full-Stack-Client-Dashboard\backend\app\core\database.py
 - `Application Entry Point (main.py)  This module serves as the central orchestra` --uses--> `Base`  [INFERRED]
@@ -573,7 +573,7 @@ _Questions this graph is uniquely positioned to answer:_
 - **Why does `build_fallback_verdict()` connect `Community 1` to `Community 0`?**
   _High betweenness centrality (0.040) - this node is a cross-community bridge._
 - **Why does `Base` connect `Community 2` to `Community 5`, `Community 6`, `Community 7`?**
-  _High betweenness centrality (0.038) - this node is a cross-community bridge._
+  _High betweenness centrality (0.037) - this node is a cross-community bridge._
 - **Are the 37 inferred relationships involving `str` (e.g. with `global_exception_handler()` and `classify_intent()`) actually correct?**
   _`str` has 37 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 33 inferred relationships involving `FinancialAnalysisResult` (e.g. with `AgentState` and `AnalystAgent`) actually correct?**

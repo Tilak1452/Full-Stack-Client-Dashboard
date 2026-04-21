@@ -32,15 +32,24 @@ def decode_access_token(token: str) -> Optional[dict]:
         return None
         
     try:
-        # Determine the algorithm and key format based on the secret's content
-        if secret.strip().startswith("{"):
+        # Strip any accidental single or double quotes (common in cloud environments)
+        clean_secret = secret.strip().strip("'").strip('"')
+        
+        # Determine the key format based on the secret's content
+        if clean_secret.startswith("{"):
             # It's a JWK (JSON Web Key) block for ES256 or RS256
-            key = json.loads(secret)
-            algorithms = [key.get("alg", "ES256")]
+            key = json.loads(clean_secret)
         else:
             # It's a standard Legacy HS256 secret string
-            key = secret
-            algorithms = ["HS256"]
+            key = clean_secret
+            
+        # Extract the token's header without verifying to see the ACTUAL algorithm Supabase used
+        unverified_header = jwt.get_unverified_header(token)
+        token_alg = unverified_header.get("alg")
+        print(f"DEBUG - Token Header Alg: {token_alg}")
+
+        # Allow the token's algorithm, plus our defaults just in case
+        algorithms = list(set([token_alg, "HS256", "ES256", "RS256"]))
 
         return jwt.decode(
             token,
