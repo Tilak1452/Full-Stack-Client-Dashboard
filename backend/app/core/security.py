@@ -13,31 +13,41 @@ JWT secret (SUPABASE_JWT_SECRET). The payload includes:
   - exp:           expiry timestamp
 """
 
+import json
 from typing import Optional
 from jose import JWTError, jwt
 from app.core.config import settings
 
-
 def decode_access_token(token: str) -> Optional[dict]:
     """
     Decodes and verifies a Supabase-issued JWT.
-
-    Uses the SUPABASE_JWT_SECRET (HS256) and checks that the audience
-    claim is 'authenticated', which is what Supabase sets for all
-    logged-in user tokens (as opposed to 'anon' for the anon key).
-
-    Returns the payload dict on success, None on any failure.
+    
+    Supports both:
+    - Legacy HS256 (using a plain string secret)
+    - Modern ES256 / RS256 (using a JSON Web Key - JWK string)
     """
-    if not settings.supabase_jwt_secret:
-        # Safety guard: if someone accidentally deploys without the secret,
-        # all auth will fail loudly rather than silently accepting any token.
+    secret = settings.supabase_jwt_secret
+    
+    if not secret:
         return None
+        
     try:
+        # Determine the algorithm and key format based on the secret's content
+        if secret.strip().startswith("{"):
+            # It's a JWK (JSON Web Key) block for ES256 or RS256
+            key = json.loads(secret)
+            algorithms = [key.get("alg", "ES256")]
+        else:
+            # It's a standard Legacy HS256 secret string
+            key = secret
+            algorithms = ["HS256"]
+
         return jwt.decode(
             token,
-            settings.supabase_jwt_secret,
-            algorithms=["HS256"],
+            key,
+            algorithms=algorithms,
             audience="authenticated",
         )
-    except JWTError:
+    except (JWTError, json.JSONDecodeError) as e:
+        print(f"JWT Verification Failed: {e}")
         return None
