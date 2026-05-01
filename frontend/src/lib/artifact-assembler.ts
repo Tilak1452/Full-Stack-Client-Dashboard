@@ -64,7 +64,8 @@ function hasMeaningfulTechnicals(s: SlotData): boolean {
 
 // Helper: Check if compare data has valid entries
 function hasMeaningfulCompare(s: SlotData): boolean {
-  if (!s.compare || !s.compare.peers || s.compare.peers.length === 0) return false;
+  const c = s.compare as any;
+  if (!c || !c.peers || c.peers.length === 0) return false;
   return true;
 }
 
