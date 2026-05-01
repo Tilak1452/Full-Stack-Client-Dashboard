@@ -14,7 +14,6 @@ import { HeroMetric }     from "./atoms/HeroMetric";
 import { MetricGrid }     from "./atoms/MetricGrid";
 import { SignalRow }      from "./atoms/SignalRow";
 import { MiniBarChart }   from "./atoms/MiniBarChart";
-import { ProgressBar }    from "./atoms/ProgressBar"; // Keeping old name for import if file isn't renamed
 import { ShareholdingProgress } from "./atoms/ProgressBar";
 import { NewsItem }       from "./atoms/NewsItem";
 import { VerdictBanner }  from "./atoms/VerdictBanner";

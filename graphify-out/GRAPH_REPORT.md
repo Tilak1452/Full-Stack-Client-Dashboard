@@ -1,12 +1,12 @@
-# Graph Report - D:\Full-Stack-Client-Dashboard  (2026-04-21)
+# Graph Report - D:\Full-Stack-Client-Dashboard  (2026-05-01)
 
 ## Corpus Check
-- 130 files · ~171,770 words
+- 157 files · ~221,995 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 695 nodes · 1244 edges · 82 communities detected
-- Extraction: 59% EXTRACTED · 41% INFERRED · 0% AMBIGUOUS · INFERRED: 504 edges (avg confidence: 0.61)
+- 849 nodes · 1408 edges · 129 communities detected
+- Extraction: 62% EXTRACTED · 38% INFERRED · 0% AMBIGUOUS · INFERRED: 537 edges (avg confidence: 0.62)
 - Token cost: 0 input · 0 output
 
 ## Community Hubs (Navigation)
@@ -92,18 +92,65 @@
 - [[_COMMUNITY_Community 79|Community 79]]
 - [[_COMMUNITY_Community 80|Community 80]]
 - [[_COMMUNITY_Community 81|Community 81]]
+- [[_COMMUNITY_Community 82|Community 82]]
+- [[_COMMUNITY_Community 83|Community 83]]
+- [[_COMMUNITY_Community 84|Community 84]]
+- [[_COMMUNITY_Community 85|Community 85]]
+- [[_COMMUNITY_Community 86|Community 86]]
+- [[_COMMUNITY_Community 87|Community 87]]
+- [[_COMMUNITY_Community 88|Community 88]]
+- [[_COMMUNITY_Community 89|Community 89]]
+- [[_COMMUNITY_Community 90|Community 90]]
+- [[_COMMUNITY_Community 91|Community 91]]
+- [[_COMMUNITY_Community 92|Community 92]]
+- [[_COMMUNITY_Community 93|Community 93]]
+- [[_COMMUNITY_Community 94|Community 94]]
+- [[_COMMUNITY_Community 95|Community 95]]
+- [[_COMMUNITY_Community 96|Community 96]]
+- [[_COMMUNITY_Community 97|Community 97]]
+- [[_COMMUNITY_Community 98|Community 98]]
+- [[_COMMUNITY_Community 99|Community 99]]
+- [[_COMMUNITY_Community 100|Community 100]]
+- [[_COMMUNITY_Community 101|Community 101]]
+- [[_COMMUNITY_Community 102|Community 102]]
+- [[_COMMUNITY_Community 103|Community 103]]
+- [[_COMMUNITY_Community 104|Community 104]]
+- [[_COMMUNITY_Community 105|Community 105]]
+- [[_COMMUNITY_Community 106|Community 106]]
+- [[_COMMUNITY_Community 107|Community 107]]
+- [[_COMMUNITY_Community 108|Community 108]]
+- [[_COMMUNITY_Community 109|Community 109]]
+- [[_COMMUNITY_Community 110|Community 110]]
+- [[_COMMUNITY_Community 111|Community 111]]
+- [[_COMMUNITY_Community 112|Community 112]]
+- [[_COMMUNITY_Community 113|Community 113]]
+- [[_COMMUNITY_Community 114|Community 114]]
+- [[_COMMUNITY_Community 115|Community 115]]
+- [[_COMMUNITY_Community 116|Community 116]]
+- [[_COMMUNITY_Community 117|Community 117]]
+- [[_COMMUNITY_Community 118|Community 118]]
+- [[_COMMUNITY_Community 119|Community 119]]
+- [[_COMMUNITY_Community 120|Community 120]]
+- [[_COMMUNITY_Community 121|Community 121]]
+- [[_COMMUNITY_Community 122|Community 122]]
+- [[_COMMUNITY_Community 123|Community 123]]
+- [[_COMMUNITY_Community 124|Community 124]]
+- [[_COMMUNITY_Community 125|Community 125]]
+- [[_COMMUNITY_Community 126|Community 126]]
+- [[_COMMUNITY_Community 127|Community 127]]
+- [[_COMMUNITY_Community 128|Community 128]]
 
 ## God Nodes (most connected - your core abstractions)
-1. `FinancialAnalysisResult` - 36 edges
+1. `FinancialAnalysisResult` - 33 edges
 2. `Holding` - 28 edges
-3. `Base` - 24 edges
+3. `Base` - 23 edges
 4. `Portfolio` - 22 edges
-5. `NewsResponse` - 22 edges
-6. `StockDataResponse` - 22 edges
-7. `NewsService` - 22 edges
-8. `StockService` - 22 edges
-9. `CircuitBreaker` - 20 edges
-10. `Transaction` - 17 edges
+5. `NewsService` - 22 edges
+6. `StockService` - 22 edges
+7. `CircuitBreaker` - 21 edges
+8. `NewsResponse` - 20 edges
+9. `StockDataResponse` - 20 edges
+10. `KeyManager` - 19 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `Base` --uses--> `Alert Model (models/alert.py) SQLAlchemy model for persisting user-defined mark`  [INFERRED]
@@ -121,115 +168,115 @@
 
 ### Community 0 - "Community 0"
 Cohesion: 0.04
-Nodes (88): _agent_stream_generator(), AgentRequest, _get_agent_graph(), invoke_agent(), Agent API Router (api/agent.py)  Exposes the FinSight LangGraph agent via:   - P, Split text into small word-based chunks for a streaming visual effect.     LangG, Format a Server-Sent Event string., SSE streaming endpoint — tokens arrive in real-time. (+80 more)
+Nodes (78): CircuitBreaker, CircuitBreakerOpenError, CircuitState, Circuit Breaker (core/circuit_breaker.py)  Implements the classic 3-state Circ, Called when a call succeeds. Resets failures and closes the circuit., Called when a call fails. Increments counter, trips to OPEN if threshold hit., Internal state transition with logging. Assumes lock is held., Returns current circuit breaker status as a dict (for health checks). (+70 more)
 
 ### Community 1 - "Community 1"
-Cohesion: 0.06
-Nodes (54): FinancialAnalysisResult, Analysis Schemas (schemas/analysis.py)  Strict Pydantic models for enforcing J, A technical indicator score mapped by the deterministic engine., A sentiment component evaluated cleanly by the NLP engine., The rigid Decision Intelligence Output.     The LLM aggregates signals into a f, SentimentSignal, TechnicalSignal, AgentState (+46 more)
+Cohesion: 0.04
+Nodes (73): all_on_cooldown(), analyze_stock(), audit_portfolio(), build_agent_graph(), _build_provider_llm(), classify_intent(), classify_query_complexity(), _determine_artifact_type() (+65 more)
 
 ### Community 2 - "Community 2"
-Cohesion: 0.11
-Nodes (36): Base, Base, Database Engine & Session Configuration (database.py)  Responsibilities: 1. C, Shared base class for all ORM models.      All future models must inherit from, DeclarativeBase, Holding, Holding Model (holding.py)  Responsibilities: 1. Represents a single stock po, SQLAlchemy model for the 'holdings' table.      A Holding represents how many (+28 more)
+Cohesion: 0.07
+Nodes (51): FinancialAnalysisResult, Analysis Schemas (schemas/analysis.py)  Strict Pydantic models for enforcing J, A technical indicator score mapped by the deterministic engine., A sentiment component evaluated cleanly by the NLP engine., The rigid Decision Intelligence Output.     The LLM aggregates signals into a f, SentimentSignal, TechnicalSignal, Financial Analyst Agent (ai/analyst.py) - LangGraph Edition  Responsible for t (+43 more)
 
 ### Community 3 - "Community 3"
-Cohesion: 0.08
-Nodes (34): get_market_indices(), get_top_movers(), Returns current price and daily change for the 4 Indian market indices.     Uses, Returns top 2 gainers and top 2 losers from a predefined basket of large cap Ind, NewsArticle, NewsResponse, News Schemas (schemas/news.py)  Pydantic models for normalizing news data from, Standardized news article format.     All providers must map their responses to (+26 more)
+Cohesion: 0.07
+Nodes (24): Fetch an item from cache., ParallelDataProvider, Phase 3 async parallel data fetcher for FinSight AI agent.      Uses asyncio.g, Priority order:           1. Twelve Data  — PRIMARY   (6 keys, 4,800 credits/da, Priority order:           1. Twelve Data  — PRIMARY   (official NSE/BSE exchang, FMP → Finnhub → Yahoo Finance, NewsAPI → Yahoo Finance RSS → Finnhub news, FMP → Finnhub → Twelve Data (+16 more)
 
 ### Community 4 - "Community 4"
-Cohesion: 0.07
-Nodes (22): ABC, DataProvider, DataProvider Interface (services/data_provider.py)  Defines the abstract contr, Abstract base class defining the minimum contract for any stock data source., Concrete DataProvider backed by yFinance (via StockService).      Delegates to, YFinanceProvider, DocumentProcessor, Document loader module for the Financial Research AI Agent. Handles ingestion o (+14 more)
+Cohesion: 0.06
+Nodes (42): streamAgent(), Alert, AlertCondition, AlertStatus, Alert Model (models/alert.py) SQLAlchemy model for persisting user-defined mark, create_alert(), _evaluate_condition(), fetch_and_evaluate_alerts() (+34 more)
 
 ### Community 5 - "Community 5"
-Cohesion: 0.15
-Nodes (37): BaseModel, optimize_portfolio(), Given a list of ticker symbols, fetches up to 5 years of historical data,     c, add_holding(), AddHoldingRequest, _build_portfolio_response(), create_portfolio(), CreatePortfolioRequest (+29 more)
+Cohesion: 0.12
+Nodes (35): Base, Base, Database Engine & Session Configuration (database.py)  Responsibilities: 1. C, Shared base class for all ORM models.      All future models must inherit from, DeclarativeBase, Holding, Holding Model (holding.py)  Responsibilities: 1. Represents a single stock po, SQLAlchemy model for the 'holdings' table.      A Holding represents how many (+27 more)
 
 ### Community 6 - "Community 6"
 Cohesion: 0.07
-Nodes (30): start_scheduler(), stop_scheduler(), AnalyzeRequest, AnalyzeResponse, HealthResponse, Schemas – Analyze Module (app/schemas/analyze.py)  This module defines the dat, me(), Request and response shapes for auth endpoints.  After migrating to Supabase Aut (+22 more)
+Nodes (22): ABC, DataProvider, DataProvider Interface (services/data_provider.py)  Defines the abstract contr, Abstract base class defining the minimum contract for any stock data source., Concrete DataProvider backed by yFinance (via StockService).      Delegates to, YFinanceProvider, DocumentProcessor, Document loader module for the Financial Research AI Agent. Handles ingestion o (+14 more)
 
 ### Community 7 - "Community 7"
-Cohesion: 0.09
-Nodes (33): Alert, AlertCondition, AlertStatus, Alert Model (models/alert.py) SQLAlchemy model for persisting user-defined mark, create_alert(), _evaluate_condition(), fetch_and_evaluate_alerts(), _fetch_market_data() (+25 more)
+Cohesion: 0.15
+Nodes (37): BaseModel, optimize_portfolio(), Given a list of ticker symbols, fetches up to 5 years of historical data,     c, add_holding(), AddHoldingRequest, _build_portfolio_response(), create_portfolio(), CreatePortfolioRequest (+29 more)
 
 ### Community 8 - "Community 8"
 Cohesion: 0.08
-Nodes (23): CircuitBreaker, CircuitBreakerOpenError, CircuitState, Circuit Breaker (core/circuit_breaker.py)  Implements the classic 3-state Circ, Called when a call succeeds. Resets failures and closes the circuit., Called when a call fails. Increments counter, trips to OPEN if threshold hit., Internal state transition with logging. Assumes lock is held., Returns current circuit breaker status as a dict (for health checks). (+15 more)
+Nodes (28): start_scheduler(), stop_scheduler(), analyze(), AnalyzeRequest, AnalyzeResponse, HealthResponse, Schemas – Analyze Module (app/schemas/analyze.py)  This module defines the dat, Accepts a financial question, categorizes it, fetches relevant data,     runs L (+20 more)
 
 ### Community 9 - "Community 9"
 Cohesion: 0.08
-Nodes (31): _atr_series(), _bollinger_bands(), calculate_all(), calculate_ema(), calculate_rsi(), calculate_sma(), compute_all_indicators(), compute_pivot_points() (+23 more)
+Nodes (33): _atr_series(), _bollinger_bands(), calculate_all(), calculate_ema(), calculate_rsi(), calculate_sma(), compute_all_indicators(), compute_pivot_points() (+25 more)
 
 ### Community 10 - "Community 10"
 Cohesion: 0.1
 Nodes (23): BlackScholesRequest, get_macro_data(), get_options_data(), mpt_optimize(), MPTRequest, price_option(), Returns 10Y Treasury yield, CPI inflation, and unemployment rate from FRED., Returns the nearest expiration options chain for a given symbol.     Includes to (+15 more)
 
 ### Community 11 - "Community 11"
-Cohesion: 0.19
-Nodes (12): categorize_query(), Categorization Service. Determines the intent of a user query: 'stock', 'news',, Classifies the user query using an LLM (mocked for now).     Falls back to 'gen, # TODO: Replace with actual LLM call in Task 12/4, # TODO: Import actual LLM client in Task 4, Unit Tests – Categorization Service  This module contains unit tests for the `, Ensure it doesn't crash on empty or weird input., test_categorize_fallback() (+4 more)
+Cohesion: 0.13
+Nodes (23): _agent_stream_generator(), AgentRequest, _get_agent_graph(), invoke_agent(), Agent API Router (api/agent.py)  Exposes the FinSight LangGraph agent via:   - P, Split text into small word-based chunks for a streaming visual effect.     LangG, Format a Server-Sent Event string., SSE streaming endpoint — tokens arrive in real-time. (+15 more)
 
 ### Community 12 - "Community 12"
 Cohesion: 0.14
-Nodes (0): 
+Nodes (8): BaseSettings, CacheService, A unified caching layer that attempts to use Redis.     If Redis is unavailable, Config, Application configuration — loaded from .env via python-dotenv. Extend this as, Settings, News Schemas (schemas/news.py)  Pydantic models for normalizing news data from, News Service (services/news_service.py)  Fetches, normalizes, and caches relev
 
 ### Community 13 - "Community 13"
-Cohesion: 0.22
-Nodes (8): get_current_user(), get_db(), FastAPI Dependency Injection Layer (dependencies.py)  Responsibilities: 1. Provi, Dependency that provides a SQLAlchemy session with full transaction management., FastAPI dependency that extracts and validates a Supabase JWT from the     Autho, decode_access_token(), security.py — Supabase Auth edition  The backend no longer creates or hashes pas, Decodes and verifies a Supabase-issued JWT.      Uses the SUPABASE_JWT_SECRET (H
+Cohesion: 0.19
+Nodes (12): categorize_query(), Categorization Service. Determines the intent of a user query: 'stock', 'news',, Classifies the user query using an LLM (mocked for now).     Falls back to 'gen, # TODO: Replace with actual LLM call in Task 12/4, # TODO: Import actual LLM client in Task 4, Unit Tests – Categorization Service  This module contains unit tests for the `, Ensure it doesn't crash on empty or weird input., test_categorize_fallback() (+4 more)
 
 ### Community 14 - "Community 14"
-Cohesion: 0.22
-Nodes (8): Integration Tests – Health & Analyze Endpoints  This module contains integrati, Validation: empty question should return 422., Validation: missing 'question' field should return 422., Smoke test: verify /analyze returns a valid structured JSON response., test_analyze_rejects_empty_question(), test_analyze_rejects_missing_field(), test_analyze_stub_returns_valid_schema(), test_health_check()
+Cohesion: 0.14
+Nodes (0): 
 
 ### Community 15 - "Community 15"
 Cohesion: 0.22
-Nodes (4): useAuth(), LoginPage(), SignUpPage(), TopBar()
+Nodes (8): Integration Tests – Health & Analyze Endpoints  This module contains integrati, Validation: empty question should return 422., Validation: missing 'question' field should return 422., Smoke test: verify /analyze returns a valid structured JSON response., test_analyze_rejects_empty_question(), test_analyze_rejects_missing_field(), test_analyze_stub_returns_valid_schema(), test_health_check()
 
 ### Community 16 - "Community 16"
-Cohesion: 0.47
-Nodes (3): handleAdd(), handleRemove(), saveSymbols()
+Cohesion: 0.22
+Nodes (4): useAuth(), LoginPage(), SignUpPage(), TopBar()
 
 ### Community 17 - "Community 17"
-Cohesion: 0.33
+Cohesion: 0.22
 Nodes (0): 
 
 ### Community 18 - "Community 18"
-Cohesion: 0.4
-Nodes (2): streamAgent(), fetchSynthesis()
+Cohesion: 0.47
+Nodes (3): handleAdd(), handleRemove(), saveSymbols()
 
 ### Community 19 - "Community 19"
-Cohesion: 0.5
-Nodes (3): client(), Pytest Configuration – Test Client Setup (tests/conftest.py)  This module defi, Returns a synchronous test client for the FastAPI app.
+Cohesion: 0.33
+Nodes (0): 
 
 ### Community 20 - "Community 20"
-Cohesion: 0.5
+Cohesion: 0.4
 Nodes (0): 
 
 ### Community 21 - "Community 21"
-Cohesion: 0.5
-Nodes (1): ApiError
+Cohesion: 0.4
+Nodes (0): 
 
 ### Community 22 - "Community 22"
 Cohesion: 0.5
-Nodes (0): 
+Nodes (3): client(), Pytest Configuration – Test Client Setup (tests/conftest.py)  This module defi, Returns a synchronous test client for the FastAPI app.
 
 ### Community 23 - "Community 23"
-Cohesion: 0.67
+Cohesion: 0.5
 Nodes (0): 
 
 ### Community 24 - "Community 24"
-Cohesion: 0.67
-Nodes (0): 
+Cohesion: 0.5
+Nodes (1): ApiError
 
 ### Community 25 - "Community 25"
-Cohesion: 1.0
+Cohesion: 0.5
 Nodes (0): 
 
 ### Community 26 - "Community 26"
-Cohesion: 1.0
-Nodes (1): FinSight AI — Upgraded Prompt System All prompts include: - Failure protocol (pr
+Cohesion: 0.67
+Nodes (0): 
 
 ### Community 27 - "Community 27"
-Cohesion: 1.0
-Nodes (1): auth_service.py — stub kept to prevent any legacy import errors.  Authentication
+Cohesion: 0.67
+Nodes (0): 
 
 ### Community 28 - "Community 28"
 Cohesion: 1.0
@@ -237,7 +284,7 @@ Nodes (0):
 
 ### Community 29 - "Community 29"
 Cohesion: 1.0
-Nodes (0): 
+Nodes (1): FinSight AI — Upgraded Prompt System All prompts include: - Failure protocol (pr
 
 ### Community 30 - "Community 30"
 Cohesion: 1.0
@@ -317,11 +364,11 @@ Nodes (0):
 
 ### Community 49 - "Community 49"
 Cohesion: 1.0
-Nodes (1): Adds a list of Langchain documents to the vector store.
+Nodes (0): 
 
 ### Community 50 - "Community 50"
 Cohesion: 1.0
-Nodes (1): Retrieves the top k most similar documents to the query.         Optionally fil
+Nodes (0): 
 
 ### Community 51 - "Community 51"
 Cohesion: 1.0
@@ -345,7 +392,7 @@ Nodes (0):
 
 ### Community 56 - "Community 56"
 Cohesion: 1.0
-Nodes (1): Normalize symbol to uppercase for consistency.
+Nodes (0): 
 
 ### Community 57 - "Community 57"
 Cohesion: 1.0
@@ -357,15 +404,15 @@ Nodes (0):
 
 ### Community 59 - "Community 59"
 Cohesion: 1.0
-Nodes (1): Fetch the latest price and metadata for a stock symbol.          Args:
+Nodes (0): 
 
 ### Community 60 - "Community 60"
 Cohesion: 1.0
-Nodes (1): Fetch historical OHLC + volume data.          Args:             symbol:   Sto
+Nodes (0): 
 
 ### Community 61 - "Community 61"
 Cohesion: 1.0
-Nodes (0): 
+Nodes (1): True when every key in this pool is currently rate-limited.
 
 ### Community 62 - "Community 62"
 Cohesion: 1.0
@@ -377,11 +424,11 @@ Nodes (0):
 
 ### Community 64 - "Community 64"
 Cohesion: 1.0
-Nodes (0): 
+Nodes (1): Adds a list of Langchain documents to the vector store.
 
 ### Community 65 - "Community 65"
 Cohesion: 1.0
-Nodes (0): 
+Nodes (1): Retrieves the top k most similar documents to the query.         Optionally fil
 
 ### Community 66 - "Community 66"
 Cohesion: 1.0
@@ -397,7 +444,7 @@ Nodes (0):
 
 ### Community 69 - "Community 69"
 Cohesion: 1.0
-Nodes (0): 
+Nodes (1): Normalize symbol to uppercase for consistency.
 
 ### Community 70 - "Community 70"
 Cohesion: 1.0
@@ -405,11 +452,11 @@ Nodes (0):
 
 ### Community 71 - "Community 71"
 Cohesion: 1.0
-Nodes (0): 
+Nodes (1): Fetch the latest price and metadata for a stock symbol.          Args:
 
 ### Community 72 - "Community 72"
 Cohesion: 1.0
-Nodes (0): 
+Nodes (1): Fetch historical OHLC + volume data.          Args:             symbol:   Sto
 
 ### Community 73 - "Community 73"
 Cohesion: 1.0
@@ -447,138 +494,414 @@ Nodes (0):
 Cohesion: 1.0
 Nodes (0): 
 
+### Community 82 - "Community 82"
+Cohesion: 1.0
+Nodes (0): 
+
+### Community 83 - "Community 83"
+Cohesion: 1.0
+Nodes (0): 
+
+### Community 84 - "Community 84"
+Cohesion: 1.0
+Nodes (0): 
+
+### Community 85 - "Community 85"
+Cohesion: 1.0
+Nodes (0): 
+
+### Community 86 - "Community 86"
+Cohesion: 1.0
+Nodes (0): 
+
+### Community 87 - "Community 87"
+Cohesion: 1.0
+Nodes (0): 
+
+### Community 88 - "Community 88"
+Cohesion: 1.0
+Nodes (0): 
+
+### Community 89 - "Community 89"
+Cohesion: 1.0
+Nodes (0): 
+
+### Community 90 - "Community 90"
+Cohesion: 1.0
+Nodes (0): 
+
+### Community 91 - "Community 91"
+Cohesion: 1.0
+Nodes (0): 
+
+### Community 92 - "Community 92"
+Cohesion: 1.0
+Nodes (0): 
+
+### Community 93 - "Community 93"
+Cohesion: 1.0
+Nodes (0): 
+
+### Community 94 - "Community 94"
+Cohesion: 1.0
+Nodes (0): 
+
+### Community 95 - "Community 95"
+Cohesion: 1.0
+Nodes (0): 
+
+### Community 96 - "Community 96"
+Cohesion: 1.0
+Nodes (0): 
+
+### Community 97 - "Community 97"
+Cohesion: 1.0
+Nodes (0): 
+
+### Community 98 - "Community 98"
+Cohesion: 1.0
+Nodes (0): 
+
+### Community 99 - "Community 99"
+Cohesion: 1.0
+Nodes (0): 
+
+### Community 100 - "Community 100"
+Cohesion: 1.0
+Nodes (0): 
+
+### Community 101 - "Community 101"
+Cohesion: 1.0
+Nodes (0): 
+
+### Community 102 - "Community 102"
+Cohesion: 1.0
+Nodes (0): 
+
+### Community 103 - "Community 103"
+Cohesion: 1.0
+Nodes (0): 
+
+### Community 104 - "Community 104"
+Cohesion: 1.0
+Nodes (0): 
+
+### Community 105 - "Community 105"
+Cohesion: 1.0
+Nodes (0): 
+
+### Community 106 - "Community 106"
+Cohesion: 1.0
+Nodes (0): 
+
+### Community 107 - "Community 107"
+Cohesion: 1.0
+Nodes (0): 
+
+### Community 108 - "Community 108"
+Cohesion: 1.0
+Nodes (0): 
+
+### Community 109 - "Community 109"
+Cohesion: 1.0
+Nodes (0): 
+
+### Community 110 - "Community 110"
+Cohesion: 1.0
+Nodes (1): Complete state passed between all nodes in the graph.
+
+### Community 111 - "Community 111"
+Cohesion: 1.0
+Nodes (1): Returns a ChatOpenAI instance configured for OpenRouter.      - node_name select
+
+### Community 112 - "Community 112"
+Cohesion: 1.0
+Nodes (1): Classifies the user query into one of: stock, news, portfolio, general.     Sets
+
+### Community 113 - "Community 113"
+Cohesion: 1.0
+Nodes (1): Decides which branch to execute based on intent_category.     Returns the name o
+
+### Community 114 - "Community 114"
+Cohesion: 1.0
+Nodes (1): Calls stock data, setup detection, and market structure tools in sequence.     A
+
+### Community 115 - "Community 115"
+Cohesion: 1.0
+Nodes (1): Fetches general market news for synthesis.
+
+### Community 116 - "Community 116"
+Cohesion: 1.0
+Nodes (1): Placeholder for portfolio data gathering.     Returns empty portfolio structure
+
+### Community 117 - "Community 117"
+Cohesion: 1.0
+Nodes (1): Calls the Trading Coach prompt with all gathered stock data.     Uses dynamic pr
+
+### Community 118 - "Community 118"
+Cohesion: 1.0
+Nodes (1): Calls the News Synthesis prompt with gathered articles.     Automatically detect
+
+### Community 119 - "Community 119"
+Cohesion: 1.0
+Nodes (1): Calls the Portfolio Auditor prompt with gathered portfolio data.
+
+### Community 120 - "Community 120"
+Cohesion: 1.0
+Nodes (1): Calls the General Educator prompt.     Auto-detects response_mode (educational/a
+
+### Community 121 - "Community 121"
+Cohesion: 1.0
+Nodes (1): Handles screening/discovery queries where no specific stock is named.     Fetche
+
+### Community 122 - "Community 122"
+Cohesion: 1.0
+Nodes (1): Assembles the full LangGraph state machine and returns a compiled graph.
+
+### Community 123 - "Community 123"
+Cohesion: 1.0
+Nodes (1): Builds a fully dynamic analyst prompt. Every section is conditional —     only i
+
+### Community 124 - "Community 124"
+Cohesion: 1.0
+Nodes (1): Returns the specific LLM output instruction for each query mode.
+
+### Community 125 - "Community 125"
+Cohesion: 1.0
+Nodes (1): Builds a query-aware news synthesis prompt.      query_mode:         "narrative"
+
+### Community 126 - "Community 126"
+Cohesion: 1.0
+Nodes (1): Builds a query-aware prompt for the general educator node.     Automatically sel
+
+### Community 127 - "Community 127"
+Cohesion: 1.0
+Nodes (1): Returns latest financial news articles from Yahoo Finance RSS.     Each article
+
+### Community 128 - "Community 128"
+Cohesion: 1.0
+Nodes (1): auth_service.py — stub kept to prevent any legacy import errors.  Authentication
+
 ## Knowledge Gaps
-- **135 isolated node(s):** `FinSight AI — LangGraph Agent State Machine Flow: classify intent → route to app`, `Complete state passed between all nodes in the graph.`, `Returns a ChatOpenAI instance configured for OpenRouter.      - node_name select`, `Classifies the user query into one of: stock, news, portfolio, general.     Sets`, `Decides which branch to execute based on intent_category.     Returns the name o` (+130 more)
+- **192 isolated node(s):** `FinSight AI — LangGraph Agent State Machine Flow: classify intent → route to app`, `Complete state passed between all nodes in the graph.`, `Returns the appropriate artifact type string for the given intent.`, `Rule-based complexity classifier — zero API cost, runs in <1ms.     Complex keyw`, `Returns True for 429 / quota-exhausted / 503-high-demand errors.     503 UNAVAIL` (+187 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **Thin community `Community 25`** (2 nodes): `migrate.py`, `migrate()`
+- **Thin community `Community 28`** (2 nodes): `migrate.py`, `migrate()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 26`** (2 nodes): `prompts.py`, `FinSight AI — Upgraded Prompt System All prompts include: - Failure protocol (pr`
+- **Thin community `Community 29`** (2 nodes): `prompts.py`, `FinSight AI — Upgraded Prompt System All prompts include: - Failure protocol (pr`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 27`** (2 nodes): `auth_service.py — stub kept to prevent any legacy import errors.  Authentication`, `auth_service.py`
+- **Thin community `Community 30`** (2 nodes): `layout.tsx`, `RootLayout()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 28`** (2 nodes): `layout.tsx`, `RootLayout()`
+- **Thin community `Community 31`** (2 nodes): `page.tsx`, `LandingPage()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 29`** (2 nodes): `page.tsx`, `LandingPage()`
+- **Thin community `Community 32`** (2 nodes): `providers.tsx`, `Providers()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 30`** (2 nodes): `providers.tsx`, `Providers()`
+- **Thin community `Community 33`** (2 nodes): `page.tsx`, `Spark()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 31`** (2 nodes): `page.tsx`, `Spark()`
+- **Thin community `Community 34`** (2 nodes): `AppShell()`, `AppShell.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 32`** (2 nodes): `page.tsx`, `PortfolioPage()`
+- **Thin community `Community 35`** (2 nodes): `IndicatorCard.tsx`, `IndicatorCard()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 33`** (2 nodes): `AppShell()`, `AppShell.tsx`
+- **Thin community `Community 36`** (2 nodes): `ShareholdingDonut.tsx`, `DonutChart()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 34`** (2 nodes): `IndicatorCard.tsx`, `IndicatorCard()`
+- **Thin community `Community 37`** (2 nodes): `SupportResistanceBar.tsx`, `pct()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 35`** (2 nodes): `SupportResistanceBar.tsx`, `pct()`
+- **Thin community `Community 38`** (2 nodes): `TechnicalSummaryGauge.tsx`, `TechnicalSummaryGauge()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 36`** (2 nodes): `TechnicalSummaryGauge.tsx`, `TechnicalSummaryGauge()`
+- **Thin community `Community 39`** (2 nodes): `TechnicalTab.tsx`, `getIndicatorCards()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 37`** (2 nodes): `TechnicalTab.tsx`, `getIndicatorCards()`
+- **Thin community `Community 40`** (2 nodes): `TradingViewWidget.tsx`, `formatSymbol()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 38`** (2 nodes): `TradingViewWidget.tsx`, `formatSymbol()`
+- **Thin community `Community 41`** (2 nodes): `CompareColumns()`, `CompareColumns.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 39`** (2 nodes): `LandingFooter.tsx`, `LandingFooter()`
+- **Thin community `Community 42`** (2 nodes): `FundamentalGrid.tsx`, `FundamentalGrid()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 40`** (2 nodes): `NavBar.tsx`, `NavBar()`
+- **Thin community `Community 43`** (2 nodes): `MiniBarChart.tsx`, `MiniBarChart()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 41`** (2 nodes): `ProtocolSection.tsx`, `ProtocolSection()`
+- **Thin community `Community 44`** (2 nodes): `NewsItem.tsx`, `NewsItem()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 42`** (2 nodes): `TickerTape.tsx`, `TickerTape()`
+- **Thin community `Community 45`** (2 nodes): `PeerComparisonTable.tsx`, `getMetric()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 43`** (2 nodes): `TrustBar.tsx`, `TrustBar()`
+- **Thin community `Community 46`** (2 nodes): `ProgressBar.tsx`, `ShareholdingProgress()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 44`** (2 nodes): `useWebSocketPrice.ts`, `useWebSocketPrice()`
+- **Thin community `Community 47`** (2 nodes): `SegmentStrengthBars.tsx`, `getColors()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 45`** (1 nodes): `test_jwt.py`
+- **Thin community `Community 48`** (2 nodes): `VerdictBanner.tsx`, `VerdictBanner()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 46`** (1 nodes): `__init__.py`
+- **Thin community `Community 49`** (2 nodes): `VerdictCard.tsx`, `VerdictCard()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 47`** (1 nodes): `__init__.py`
+- **Thin community `Community 50`** (2 nodes): `Shimmer.tsx`, `Shimmer()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 48`** (1 nodes): `__init__.py`
+- **Thin community `Community 51`** (2 nodes): `SkeletonHeroPrice.tsx`, `SkeletonHeroPrice()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 49`** (1 nodes): `Adds a list of Langchain documents to the vector store.`
+- **Thin community `Community 52`** (2 nodes): `SkeletonNewsEvent.tsx`, `SkeletonNewsEvent()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 50`** (1 nodes): `Retrieves the top k most similar documents to the query.         Optionally fil`
+- **Thin community `Community 53`** (2 nodes): `LandingFooter.tsx`, `LandingFooter()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 51`** (1 nodes): `__init__.py`
+- **Thin community `Community 54`** (2 nodes): `NavBar.tsx`, `NavBar()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 52`** (1 nodes): `__init__.py`
+- **Thin community `Community 55`** (2 nodes): `ProtocolSection.tsx`, `ProtocolSection()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 53`** (1 nodes): `__init__.py`
+- **Thin community `Community 56`** (2 nodes): `TickerTape.tsx`, `TickerTape()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 54`** (1 nodes): `__init__.py`
+- **Thin community `Community 57`** (2 nodes): `TrustBar.tsx`, `TrustBar()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 55`** (1 nodes): `__init__.py`
+- **Thin community `Community 58`** (2 nodes): `useWebSocketPrice.ts`, `useWebSocketPrice()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 56`** (1 nodes): `Normalize symbol to uppercase for consistency.`
+- **Thin community `Community 59`** (1 nodes): `check_apis.py`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 57`** (1 nodes): `__init__.py`
+- **Thin community `Community 60`** (1 nodes): `__init__.py`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 58`** (1 nodes): `__init__.py`
-  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 59`** (1 nodes): `Fetch the latest price and metadata for a stock symbol.          Args:`
-  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 60`** (1 nodes): `Fetch historical OHLC + volume data.          Args:             symbol:   Sto`
-  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 61`** (1 nodes): `__init__.py`
+- **Thin community `Community 61`** (1 nodes): `True when every key in this pool is currently rate-limited.`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 - **Thin community `Community 62`** (1 nodes): `__init__.py`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 - **Thin community `Community 63`** (1 nodes): `__init__.py`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 64`** (1 nodes): `next-env.d.ts`
+- **Thin community `Community 64`** (1 nodes): `Adds a list of Langchain documents to the vector store.`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 65`** (1 nodes): `postcss.config.js`
+- **Thin community `Community 65`** (1 nodes): `Retrieves the top k most similar documents to the query.         Optionally fil`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 66`** (1 nodes): `tailwind.config.ts`
+- **Thin community `Community 66`** (1 nodes): `__init__.py`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 67`** (1 nodes): `page.tsx`
+- **Thin community `Community 67`** (1 nodes): `__init__.py`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 68`** (1 nodes): `page.tsx`
+- **Thin community `Community 68`** (1 nodes): `__init__.py`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 69`** (1 nodes): `AddToPortfolioModal.tsx`
+- **Thin community `Community 69`** (1 nodes): `Normalize symbol to uppercase for consistency.`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 70`** (1 nodes): `AIInsights.tsx`
+- **Thin community `Community 70`** (1 nodes): `__init__.py`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 71`** (1 nodes): `SellHoldingModal.tsx`
+- **Thin community `Community 71`** (1 nodes): `Fetch the latest price and metadata for a stock symbol.          Args:`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 72`** (1 nodes): `Sidebar.tsx`
+- **Thin community `Community 72`** (1 nodes): `Fetch historical OHLC + volume data.          Args:             symbol:   Sto`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 73`** (1 nodes): `FeatureGrid.tsx`
+- **Thin community `Community 73`** (1 nodes): `__init__.py`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 74`** (1 nodes): `HeroSection.tsx`
+- **Thin community `Community 74`** (1 nodes): `__init__.py`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 75`** (1 nodes): `alerts.api.ts`
+- **Thin community `Community 75`** (1 nodes): `next-env.d.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 76`** (1 nodes): `market.api.ts`
+- **Thin community `Community 76`** (1 nodes): `postcss.config.js`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 77`** (1 nodes): `mock.ts`
+- **Thin community `Community 77`** (1 nodes): `tailwind.config.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 78`** (1 nodes): `news.api.ts`
+- **Thin community `Community 78`** (1 nodes): `page.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 79`** (1 nodes): `portfolio.api.ts`
+- **Thin community `Community 79`** (1 nodes): `page.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 80`** (1 nodes): `stock.api.ts`
+- **Thin community `Community 80`** (1 nodes): `AddToPortfolioModal.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 81`** (1 nodes): `supabase.ts`
+- **Thin community `Community 81`** (1 nodes): `AIInsights.tsx`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 82`** (1 nodes): `SellHoldingModal.tsx`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 83`** (1 nodes): `Sidebar.tsx`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 84`** (1 nodes): `ArtifactRenderer.tsx`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 85`** (1 nodes): `ExpandableRiskPanel.tsx`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 86`** (1 nodes): `ExpandSection.tsx`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 87`** (1 nodes): `HeroMetric.tsx`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 88`** (1 nodes): `MetricGrid.tsx`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 89`** (1 nodes): `MiniPriceCard.tsx`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 90`** (1 nodes): `NewsFeed.tsx`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 91`** (1 nodes): `RevenueProfitChart.tsx`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 92`** (1 nodes): `SignalRow.tsx`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 93`** (1 nodes): `SupportResistanceBar.tsx`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 94`** (1 nodes): `TechnicalGauges.tsx`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 95`** (1 nodes): `SkeletonFinancialsTimeline.tsx`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 96`** (1 nodes): `SkeletonInvestmentThesis.tsx`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 97`** (1 nodes): `SkeletonTechnicalFocus.tsx`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 98`** (1 nodes): `SkeletonThreeWayCompare.tsx`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 99`** (1 nodes): `FeatureGrid.tsx`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 100`** (1 nodes): `HeroSection.tsx`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 101`** (1 nodes): `alerts.api.ts`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 102`** (1 nodes): `artifact-types.ts`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 103`** (1 nodes): `market.api.ts`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 104`** (1 nodes): `mock.ts`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 105`** (1 nodes): `news.api.ts`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 106`** (1 nodes): `portfolio.api.ts`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 107`** (1 nodes): `stock.api.ts`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 108`** (1 nodes): `supabase.ts`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 109`** (1 nodes): `artifact-types.ts`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 110`** (1 nodes): `Complete state passed between all nodes in the graph.`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 111`** (1 nodes): `Returns a ChatOpenAI instance configured for OpenRouter.      - node_name select`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 112`** (1 nodes): `Classifies the user query into one of: stock, news, portfolio, general.     Sets`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 113`** (1 nodes): `Decides which branch to execute based on intent_category.     Returns the name o`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 114`** (1 nodes): `Calls stock data, setup detection, and market structure tools in sequence.     A`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 115`** (1 nodes): `Fetches general market news for synthesis.`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 116`** (1 nodes): `Placeholder for portfolio data gathering.     Returns empty portfolio structure`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 117`** (1 nodes): `Calls the Trading Coach prompt with all gathered stock data.     Uses dynamic pr`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 118`** (1 nodes): `Calls the News Synthesis prompt with gathered articles.     Automatically detect`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 119`** (1 nodes): `Calls the Portfolio Auditor prompt with gathered portfolio data.`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 120`** (1 nodes): `Calls the General Educator prompt.     Auto-detects response_mode (educational/a`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 121`** (1 nodes): `Handles screening/discovery queries where no specific stock is named.     Fetche`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 122`** (1 nodes): `Assembles the full LangGraph state machine and returns a compiled graph.`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 123`** (1 nodes): `Builds a fully dynamic analyst prompt. Every section is conditional —     only i`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 124`** (1 nodes): `Returns the specific LLM output instruction for each query mode.`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 125`** (1 nodes): `Builds a query-aware news synthesis prompt.      query_mode:         "narrative"`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 126`** (1 nodes): `Builds a query-aware prompt for the general educator node.     Automatically sel`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 127`** (1 nodes): `Returns latest financial news articles from Yahoo Finance RSS.     Each article`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 128`** (1 nodes): `auth_service.py — stub kept to prevent any legacy import errors.  Authentication`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `FinancialAnalysisResult` connect `Community 1` to `Community 5`, `Community 6`?**
-  _High betweenness centrality (0.049) - this node is a cross-community bridge._
-- **Why does `build_fallback_verdict()` connect `Community 1` to `Community 0`?**
-  _High betweenness centrality (0.040) - this node is a cross-community bridge._
-- **Why does `Base` connect `Community 2` to `Community 5`, `Community 6`, `Community 7`?**
-  _High betweenness centrality (0.037) - this node is a cross-community bridge._
-- **Are the 37 inferred relationships involving `str` (e.g. with `global_exception_handler()` and `classify_intent()`) actually correct?**
-  _`str` has 37 INFERRED edges - model-reasoned connections that need verification._
-- **Are the 33 inferred relationships involving `FinancialAnalysisResult` (e.g. with `AgentState` and `AnalystAgent`) actually correct?**
-  _`FinancialAnalysisResult` has 33 INFERRED edges - model-reasoned connections that need verification._
+- **Why does `build_fallback_verdict()` connect `Community 2` to `Community 3`?**
+  _High betweenness centrality (0.051) - this node is a cross-community bridge._
+- **Why does `FinancialAnalysisResult` connect `Community 2` to `Community 8`, `Community 7`?**
+  _High betweenness centrality (0.047) - this node is a cross-community bridge._
+- **Why does `Base` connect `Community 5` to `Community 8`, `Community 4`, `Community 7`?**
+  _High betweenness centrality (0.028) - this node is a cross-community bridge._
+- **Are the 38 inferred relationships involving `str` (e.g. with `global_exception_handler()` and `_is_rate_limit_error()`) actually correct?**
+  _`str` has 38 INFERRED edges - model-reasoned connections that need verification._
+- **Are the 30 inferred relationships involving `FinancialAnalysisResult` (e.g. with `Hallucination Check (ai/hallucination_check.py)  Implements Task 6 – Guardrail` and `Extracts all numeric values from a free-text string.`) actually correct?**
+  _`FinancialAnalysisResult` has 30 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 24 inferred relationships involving `Holding` (e.g. with `Portfolio Pydantic Schemas (schemas/portfolio.py)  Responsibilities: - Define` and `Returns a list of all portfolios for the current user.`) actually correct?**
   _`Holding` has 24 INFERRED edges - model-reasoned connections that need verification._
-- **Are the 21 inferred relationships involving `Base` (e.g. with `DOPathRewriteMiddleware` and `Application Entry Point (main.py)  This module serves as the central orchestra`) actually correct?**
-  _`Base` has 21 INFERRED edges - model-reasoned connections that need verification._
+- **Are the 20 inferred relationships involving `Base` (e.g. with `DOPathRewriteMiddleware` and `Application Entry Point (main.py)  This module serves as the central orchestra`) actually correct?**
+  _`Base` has 20 INFERRED edges - model-reasoned connections that need verification._
