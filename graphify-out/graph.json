@@ -512,261 +512,261 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\agent\\graph.py",
       "source_location": "L44",
-      "id": "graph_rationale_44",
       "community": 11,
-      "norm_label": "complete state passed between all nodes in the graph."
+      "norm_label": "complete state passed between all nodes in the graph.",
+      "id": "graph_rationale_44"
     },
     {
       "label": "Returns the appropriate artifact type string for the given intent.",
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\agent\\graph.py",
       "source_location": "L99",
-      "id": "graph_rationale_99",
       "community": 1,
-      "norm_label": "returns the appropriate artifact type string for the given intent."
+      "norm_label": "returns the appropriate artifact type string for the given intent.",
+      "id": "graph_rationale_99"
     },
     {
       "label": "Rule-based complexity classifier \u2014 zero API cost, runs in <1ms.     Complex keyw",
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\agent\\graph.py",
       "source_location": "L267",
-      "id": "graph_rationale_267",
       "community": 1,
-      "norm_label": "rule-based complexity classifier \u2014 zero api cost, runs in <1ms.     complex keyw"
+      "norm_label": "rule-based complexity classifier \u2014 zero api cost, runs in <1ms.     complex keyw",
+      "id": "graph_rationale_267"
     },
     {
       "label": "Returns True for 429 / quota-exhausted / 503-high-demand errors.     503 UNAVAIL",
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\agent\\graph.py",
       "source_location": "L292",
-      "id": "graph_rationale_292",
       "community": 1,
-      "norm_label": "returns true for 429 / quota-exhausted / 503-high-demand errors.     503 unavail"
+      "norm_label": "returns true for 429 / quota-exhausted / 503-high-demand errors.     503 unavail",
+      "id": "graph_rationale_292"
     },
     {
       "label": "Returns True for temporary network / connection errors worth one retry.     Excl",
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\agent\\graph.py",
       "source_location": "L308",
-      "id": "graph_rationale_308",
       "community": 1,
-      "norm_label": "returns true for temporary network / connection errors worth one retry.     excl"
+      "norm_label": "returns true for temporary network / connection errors worth one retry.     excl",
+      "id": "graph_rationale_308"
     },
     {
       "label": "Returns True if the model returned a canned refusal/error phrase instead of",
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\agent\\graph.py",
       "source_location": "L335",
-      "id": "graph_rationale_335",
       "community": 1,
-      "norm_label": "returns true if the model returned a canned refusal/error phrase instead of"
+      "norm_label": "returns true if the model returned a canned refusal/error phrase instead of",
+      "id": "graph_rationale_335"
     },
     {
       "label": "Per-model timeout in seconds.     Free/light models get shorter timeouts so the",
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\agent\\graph.py",
       "source_location": "L357",
-      "id": "graph_rationale_357",
       "community": 1,
-      "norm_label": "per-model timeout in seconds.     free/light models get shorter timeouts so the"
+      "norm_label": "per-model timeout in seconds.     free/light models get shorter timeouts so the",
+      "id": "graph_rationale_357"
     },
     {
       "label": "Returns the correct LangChain LLM instance for the given provider.       google",
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\agent\\graph.py",
       "source_location": "L381",
-      "id": "graph_rationale_381",
       "community": 1,
-      "norm_label": "returns the correct langchain llm instance for the given provider.       google"
+      "norm_label": "returns the correct langchain llm instance for the given provider.       google",
+      "id": "graph_rationale_381"
     },
     {
       "label": "One logical provider in the fallback chain (e.g. 'Gemini 2.5 Flash').",
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\agent\\graph.py",
       "source_location": "L436",
-      "id": "graph_rationale_436",
       "community": 1,
-      "norm_label": "one logical provider in the fallback chain (e.g. 'gemini 2.5 flash')."
+      "norm_label": "one logical provider in the fallback chain (e.g. 'gemini 2.5 flash').",
+      "id": "graph_rationale_436"
     },
     {
       "label": "True when every key in this pool is currently rate-limited.",
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\agent\\graph.py",
       "source_location": "L445",
-      "id": "graph_rationale_445",
       "community": 61,
-      "norm_label": "true when every key in this pool is currently rate-limited."
+      "norm_label": "true when every key in this pool is currently rate-limited.",
+      "id": "graph_rationale_445"
     },
     {
       "label": "Tries each key in the pool in order.         Per key: one retry on transient err",
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\agent\\graph.py",
       "source_location": "L451",
-      "id": "graph_rationale_451",
       "community": 1,
-      "norm_label": "tries each key in the pool in order.         per key: one retry on transient err"
+      "norm_label": "tries each key in the pool in order.         per key: one retry on transient err",
+      "id": "graph_rationale_451"
     },
     {
       "label": "Robustly extract JSON from LLM response text.     Tries 4 strategies in order: d",
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\agent\\graph.py",
       "source_location": "L606",
-      "id": "graph_rationale_606",
       "community": 1,
-      "norm_label": "robustly extract json from llm response text.     tries 4 strategies in order: d"
+      "norm_label": "robustly extract json from llm response text.     tries 4 strategies in order: d",
+      "id": "graph_rationale_606"
     },
     {
       "label": "Walks the ProviderPool chain for the given complexity tier.     Each pool handle",
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\agent\\graph.py",
       "source_location": "L651",
-      "id": "graph_rationale_651",
       "community": 1,
-      "norm_label": "walks the providerpool chain for the given complexity tier.     each pool handle"
+      "norm_label": "walks the providerpool chain for the given complexity tier.     each pool handle",
+      "id": "graph_rationale_651"
     },
     {
       "label": "Regex-based fast-path Phase 2 classifier.     Returns a classification dict if c",
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\agent\\graph.py",
       "source_location": "L782",
-      "id": "graph_rationale_782",
       "community": 1,
-      "norm_label": "regex-based fast-path phase 2 classifier.     returns a classification dict if c"
+      "norm_label": "regex-based fast-path phase 2 classifier.     returns a classification dict if c",
+      "id": "graph_rationale_782"
     },
     {
       "label": "Phase 1: Rule-based complexity classification (zero API cost, <1ms).     Phase 2",
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\agent\\graph.py",
       "source_location": "L844",
-      "id": "graph_rationale_844",
       "community": 1,
-      "norm_label": "phase 1: rule-based complexity classification (zero api cost, <1ms).     phase 2"
+      "norm_label": "phase 1: rule-based complexity classification (zero api cost, <1ms).     phase 2",
+      "id": "graph_rationale_844"
     },
     {
       "label": "Decides which branch to execute based on intent_category.     Returns the name o",
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\agent\\graph.py",
       "source_location": "L956",
-      "id": "graph_rationale_956",
       "community": 1,
-      "norm_label": "decides which branch to execute based on intent_category.     returns the name o"
+      "norm_label": "decides which branch to execute based on intent_category.     returns the name o",
+      "id": "graph_rationale_956"
     },
     {
       "label": "Fetches general market news for synthesis.",
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\agent\\graph.py",
       "source_location": "L1105",
-      "id": "graph_rationale_1105",
       "community": 1,
-      "norm_label": "fetches general market news for synthesis."
+      "norm_label": "fetches general market news for synthesis.",
+      "id": "graph_rationale_1105"
     },
     {
       "label": "Placeholder for portfolio data gathering.     Returns empty portfolio structure",
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\agent\\graph.py",
       "source_location": "L1123",
-      "id": "graph_rationale_1123",
       "community": 1,
-      "norm_label": "placeholder for portfolio data gathering.     returns empty portfolio structure"
+      "norm_label": "placeholder for portfolio data gathering.     returns empty portfolio structure",
+      "id": "graph_rationale_1123"
     },
     {
       "label": "Calls the Trading Coach prompt with all gathered stock data.     Uses dynamic pr",
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\agent\\graph.py",
       "source_location": "L1144",
-      "id": "graph_rationale_1144",
       "community": 1,
-      "norm_label": "calls the trading coach prompt with all gathered stock data.     uses dynamic pr"
+      "norm_label": "calls the trading coach prompt with all gathered stock data.     uses dynamic pr",
+      "id": "graph_rationale_1144"
     },
     {
       "label": "Calls the News Synthesis prompt with gathered articles.     Uses 3-attempt fallb",
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\agent\\graph.py",
       "source_location": "L1196",
-      "id": "graph_rationale_1196",
       "community": 1,
-      "norm_label": "calls the news synthesis prompt with gathered articles.     uses 3-attempt fallb"
+      "norm_label": "calls the news synthesis prompt with gathered articles.     uses 3-attempt fallb",
+      "id": "graph_rationale_1196"
     },
     {
       "label": "Calls the Portfolio Auditor prompt with gathered portfolio data.     Uses 3-atte",
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\agent\\graph.py",
       "source_location": "L1228",
-      "id": "graph_rationale_1228",
       "community": 1,
-      "norm_label": "calls the portfolio auditor prompt with gathered portfolio data.     uses 3-atte"
+      "norm_label": "calls the portfolio auditor prompt with gathered portfolio data.     uses 3-atte",
+      "id": "graph_rationale_1228"
     },
     {
       "label": "Calls the General Educator prompt.     Uses 3-attempt fallback via _invoke_with_",
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\agent\\graph.py",
       "source_location": "L1257",
-      "id": "graph_rationale_1257",
       "community": 1,
-      "norm_label": "calls the general educator prompt.     uses 3-attempt fallback via _invoke_with_"
+      "norm_label": "calls the general educator prompt.     uses 3-attempt fallback via _invoke_with_",
+      "id": "graph_rationale_1257"
     },
     {
       "label": "Handles screening/discovery queries where no specific stock is named.     Market",
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\agent\\graph.py",
       "source_location": "L1291",
-      "id": "graph_rationale_1291",
       "community": 1,
-      "norm_label": "handles screening/discovery queries where no specific stock is named.     market"
+      "norm_label": "handles screening/discovery queries where no specific stock is named.     market",
+      "id": "graph_rationale_1291"
     },
     {
       "label": "Phase 4 specialist: Technical Analysis.     EXPLICIT MODEL: Gemini 2.5 Flash (fa",
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\agent\\graph.py",
       "source_location": "L1397",
-      "id": "graph_rationale_1397",
       "community": 1,
-      "norm_label": "phase 4 specialist: technical analysis.     explicit model: gemini 2.5 flash (fa"
+      "norm_label": "phase 4 specialist: technical analysis.     explicit model: gemini 2.5 flash (fa",
+      "id": "graph_rationale_1397"
     },
     {
       "label": "Phase 4 specialist: News Sentiment.     EXPLICIT MODEL: Gemini 2.5 Flash (fast +",
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\agent\\graph.py",
       "source_location": "L1475",
-      "id": "graph_rationale_1475",
       "community": 1,
-      "norm_label": "phase 4 specialist: news sentiment.     explicit model: gemini 2.5 flash (fast +"
+      "norm_label": "phase 4 specialist: news sentiment.     explicit model: gemini 2.5 flash (fast +",
+      "id": "graph_rationale_1475"
     },
     {
       "label": "Phase 4 specialist: Fundamental Analysis.     Gap #1 Fix: Bypasses the hanging Q",
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\agent\\graph.py",
       "source_location": "L1548",
-      "id": "graph_rationale_1548",
       "community": 1,
-      "norm_label": "phase 4 specialist: fundamental analysis.     gap #1 fix: bypasses the hanging q"
+      "norm_label": "phase 4 specialist: fundamental analysis.     gap #1 fix: bypasses the hanging q",
+      "id": "graph_rationale_1548"
     },
     {
       "label": "Phase 4 sequencer: Assembles verdict from 3 parallel drafts.     Runs AFTER all",
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\agent\\graph.py",
       "source_location": "L1635",
-      "id": "graph_rationale_1635",
       "community": 1,
-      "norm_label": "phase 4 sequencer: assembles verdict from 3 parallel drafts.     runs after all"
+      "norm_label": "phase 4 sequencer: assembles verdict from 3 parallel drafts.     runs after all",
+      "id": "graph_rationale_1635"
     },
     {
       "label": "Runs phase4_technicals_node, phase4_news_node, and phase4_fundamentals_node",
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\agent\\graph.py",
       "source_location": "L1688",
-      "id": "graph_rationale_1688",
       "community": 1,
-      "norm_label": "runs phase4_technicals_node, phase4_news_node, and phase4_fundamentals_node"
+      "norm_label": "runs phase4_technicals_node, phase4_news_node, and phase4_fundamentals_node",
+      "id": "graph_rationale_1688"
     },
     {
       "label": "Assembles the full LangGraph state machine and returns a compiled graph.",
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\agent\\graph.py",
       "source_location": "L1727",
-      "id": "graph_rationale_1727",
       "community": 1,
-      "norm_label": "assembles the full langgraph state machine and returns a compiled graph."
+      "norm_label": "assembles the full langgraph state machine and returns a compiled graph.",
+      "id": "graph_rationale_1727"
     },
     {
       "label": "prompts.py",
@@ -899,36 +899,36 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\agent\\prompt_builder.py",
       "source_location": "L123",
-      "id": "prompt_builder_rationale_123",
       "community": 1,
-      "norm_label": "builds a fully dynamic analyst prompt. every section is conditional \u2014     only i"
+      "norm_label": "builds a fully dynamic analyst prompt. every section is conditional \u2014     only i",
+      "id": "prompt_builder_rationale_123"
     },
     {
       "label": "Returns the specific LLM output instruction for each query mode.",
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\agent\\prompt_builder.py",
       "source_location": "L373",
-      "id": "prompt_builder_rationale_373",
       "community": 1,
-      "norm_label": "returns the specific llm output instruction for each query mode."
+      "norm_label": "returns the specific llm output instruction for each query mode.",
+      "id": "prompt_builder_rationale_373"
     },
     {
       "label": "Builds a query-aware news synthesis prompt.      query_mode:         \"narrative\"",
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\agent\\prompt_builder.py",
       "source_location": "L456",
-      "id": "prompt_builder_rationale_456",
       "community": 1,
-      "norm_label": "builds a query-aware news synthesis prompt.      query_mode:         \"narrative\""
+      "norm_label": "builds a query-aware news synthesis prompt.      query_mode:         \"narrative\"",
+      "id": "prompt_builder_rationale_456"
     },
     {
       "label": "Builds a query-aware prompt for the general educator node.     Automatically sel",
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\agent\\prompt_builder.py",
       "source_location": "L515",
-      "id": "prompt_builder_rationale_515",
       "community": 1,
-      "norm_label": "builds a query-aware prompt for the general educator node.     automatically sel"
+      "norm_label": "builds a query-aware prompt for the general educator node.     automatically sel",
+      "id": "prompt_builder_rationale_515"
     },
     {
       "label": "tools.py",
@@ -1736,54 +1736,54 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\agent.py",
       "source_location": "L38",
-      "id": "agent_rationale_38",
       "community": 11,
-      "norm_label": "lazy-import the compiled graph to avoid crashing main.py if langgraph has issues"
+      "norm_label": "lazy-import the compiled graph to avoid crashing main.py if langgraph has issues",
+      "id": "agent_rationale_38"
     },
     {
       "label": "Async generator that runs the agent graph and yields SSE events.      Fix 3: use",
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\agent.py",
       "source_location": "L50",
-      "id": "agent_rationale_50",
       "community": 11,
-      "norm_label": "async generator that runs the agent graph and yields sse events.      fix 3: use"
+      "norm_label": "async generator that runs the agent graph and yields sse events.      fix 3: use",
+      "id": "agent_rationale_50"
     },
     {
       "label": "Split text into small word-based chunks for a streaming visual effect.     LangG",
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\agent.py",
       "source_location": "L271",
-      "id": "agent_rationale_271",
       "community": 11,
-      "norm_label": "split text into small word-based chunks for a streaming visual effect.     langg"
+      "norm_label": "split text into small word-based chunks for a streaming visual effect.     langg",
+      "id": "agent_rationale_271"
     },
     {
       "label": "Format a Server-Sent Event string.",
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\agent.py",
       "source_location": "L289",
-      "id": "agent_rationale_289",
       "community": 11,
-      "norm_label": "format a server-sent event string."
+      "norm_label": "format a server-sent event string.",
+      "id": "agent_rationale_289"
     },
     {
       "label": "SSE streaming endpoint \u2014 tokens arrive in real-time.",
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\agent.py",
       "source_location": "L297",
-      "id": "agent_rationale_297",
       "community": 11,
-      "norm_label": "sse streaming endpoint \u2014 tokens arrive in real-time."
+      "norm_label": "sse streaming endpoint \u2014 tokens arrive in real-time.",
+      "id": "agent_rationale_297"
     },
     {
       "label": "Non-streaming endpoint \u2014 returns the complete response as JSON.",
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\agent.py",
       "source_location": "L313",
-      "id": "agent_rationale_313",
       "community": 11,
-      "norm_label": "non-streaming endpoint \u2014 returns the complete response as json."
+      "norm_label": "non-streaming endpoint \u2014 returns the complete response as json.",
+      "id": "agent_rationale_313"
     },
     {
       "label": "alerts.py",
@@ -2123,9 +2123,9 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\news.py",
       "source_location": "L12",
-      "id": "news_rationale_12",
       "community": 0,
-      "norm_label": "returns latest financial news articles from yahoo finance rss.     when symbol i"
+      "norm_label": "returns latest financial news articles from yahoo finance rss.     when symbol i",
+      "id": "news_rationale_12"
     },
     {
       "label": "portfolio.py",
@@ -3113,90 +3113,90 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\core\\key_manager.py",
       "source_location": "L41",
-      "id": "key_manager_rationale_41",
       "community": 3,
-      "norm_label": "thread-safe round-robin api key manager for all providers.     import the module"
+      "norm_label": "thread-safe round-robin api key manager for all providers.     import the module",
+      "id": "key_manager_rationale_41"
     },
     {
       "label": "Load API keys stored as numbered env vars: PREFIX_1, PREFIX_2, ... PREFIX_N.",
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\core\\key_manager.py",
       "source_location": "L81",
-      "id": "key_manager_rationale_81",
       "community": 3,
-      "norm_label": "load api keys stored as numbered env vars: prefix_1, prefix_2, ... prefix_n."
+      "norm_label": "load api keys stored as numbered env vars: prefix_1, prefix_2, ... prefix_n.",
+      "id": "key_manager_rationale_81"
     },
     {
       "label": "Thread-safe next() from a cycle iterator. Returns None if no keys.",
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\core\\key_manager.py",
       "source_location": "L109",
-      "id": "key_manager_rationale_109",
       "community": 3,
-      "norm_label": "thread-safe next() from a cycle iterator. returns none if no keys."
+      "norm_label": "thread-safe next() from a cycle iterator. returns none if no keys.",
+      "id": "key_manager_rationale_109"
     },
     {
       "label": "Returns next Finnhub key in rotation (FINNHUB_API_KEY_1 \u2026 N), or None.",
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\core\\key_manager.py",
       "source_location": "L118",
-      "id": "key_manager_rationale_118",
       "community": 3,
-      "norm_label": "returns next finnhub key in rotation (finnhub_api_key_1 ... n), or none."
+      "norm_label": "returns next finnhub key in rotation (finnhub_api_key_1 ... n), or none.",
+      "id": "key_manager_rationale_118"
     },
     {
       "label": "Returns next FMP key in rotation (FMP_API_KEY_1 \u2026 N), or None.",
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\core\\key_manager.py",
       "source_location": "L122",
-      "id": "key_manager_rationale_122",
       "community": 3,
-      "norm_label": "returns next fmp key in rotation (fmp_api_key_1 ... n), or none."
+      "norm_label": "returns next fmp key in rotation (fmp_api_key_1 ... n), or none.",
+      "id": "key_manager_rationale_122"
     },
     {
       "label": "Returns next Alpha Vantage key in rotation (ALPHA_VANTAGE_KEY_1 \u2026 N), or None.",
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\core\\key_manager.py",
       "source_location": "L126",
-      "id": "key_manager_rationale_126",
       "community": 3,
-      "norm_label": "returns next alpha vantage key in rotation (alpha_vantage_key_1 ... n), or none."
+      "norm_label": "returns next alpha vantage key in rotation (alpha_vantage_key_1 ... n), or none.",
+      "id": "key_manager_rationale_126"
     },
     {
       "label": "Returns next NewsAPI key in rotation (NEWS_API_KEY_1 \u2026 N), or None.",
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\core\\key_manager.py",
       "source_location": "L130",
-      "id": "key_manager_rationale_130",
       "community": 3,
-      "norm_label": "returns next newsapi key in rotation (news_api_key_1 ... n), or none."
+      "norm_label": "returns next newsapi key in rotation (news_api_key_1 ... n), or none.",
+      "id": "key_manager_rationale_130"
     },
     {
       "label": "Returns next FRED key in rotation (FRED_API_KEY_1 \u2026 N), or None.",
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\core\\key_manager.py",
       "source_location": "L134",
-      "id": "key_manager_rationale_134",
       "community": 3,
-      "norm_label": "returns next fred key in rotation (fred_api_key_1 ... n), or none."
+      "norm_label": "returns next fred key in rotation (fred_api_key_1 ... n), or none.",
+      "id": "key_manager_rationale_134"
     },
     {
       "label": "Returns next Twelve Data key in rotation (TWELVE_DATA_API_KEY_1 \u2026 N), or None.",
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\core\\key_manager.py",
       "source_location": "L138",
-      "id": "key_manager_rationale_138",
       "community": 3,
-      "norm_label": "returns next twelve data key in rotation (twelve_data_api_key_1 ... n), or none."
+      "norm_label": "returns next twelve data key in rotation (twelve_data_api_key_1 ... n), or none.",
+      "id": "key_manager_rationale_138"
     },
     {
       "label": "Returns NVIDIA NIM key (NVIDIA_NIM_API_KEY \u2014 single key), or None.",
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\core\\key_manager.py",
       "source_location": "L142",
-      "id": "key_manager_rationale_142",
       "community": 3,
-      "norm_label": "returns nvidia nim key (nvidia_nim_api_key \u2014 single key), or none."
+      "norm_label": "returns nvidia nim key (nvidia_nim_api_key \u2014 single key), or none.",
+      "id": "key_manager_rationale_142"
     },
     {
       "label": "security.py",
@@ -4373,63 +4373,63 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\data_provider.py",
       "source_location": "L165",
-      "id": "data_provider_rationale_165",
       "community": 3,
-      "norm_label": "phase 3 async parallel data fetcher for finsight ai agent.      uses asyncio.g"
+      "norm_label": "phase 3 async parallel data fetcher for finsight ai agent.      uses asyncio.g",
+      "id": "data_provider_rationale_165"
     },
     {
       "label": "Priority order:           1. Twelve Data  \u2014 PRIMARY   (6 keys, 4,800 credits/da",
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\data_provider.py",
       "source_location": "L216",
-      "id": "data_provider_rationale_216",
       "community": 3,
-      "norm_label": "priority order:           1. twelve data  \u2014 primary   (6 keys, 4,800 credits/da"
+      "norm_label": "priority order:           1. twelve data  \u2014 primary   (6 keys, 4,800 credits/da",
+      "id": "data_provider_rationale_216"
     },
     {
       "label": "Priority order:           1. Twelve Data  \u2014 PRIMARY   (official NSE/BSE exchang",
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\data_provider.py",
       "source_location": "L290",
-      "id": "data_provider_rationale_290",
       "community": 3,
-      "norm_label": "priority order:           1. twelve data  \u2014 primary   (official nse/bse exchang"
+      "norm_label": "priority order:           1. twelve data  \u2014 primary   (official nse/bse exchang",
+      "id": "data_provider_rationale_290"
     },
     {
       "label": "FMP \u2192 Finnhub \u2192 Yahoo Finance",
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\data_provider.py",
       "source_location": "L396",
-      "id": "data_provider_rationale_396",
       "community": 3,
-      "norm_label": "fmp \u2192 finnhub \u2192 yahoo finance"
+      "norm_label": "fmp \u2192 finnhub \u2192 yahoo finance",
+      "id": "data_provider_rationale_396"
     },
     {
       "label": "NewsAPI \u2192 Yahoo Finance RSS \u2192 Finnhub news",
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\data_provider.py",
       "source_location": "L463",
-      "id": "data_provider_rationale_463",
       "community": 3,
-      "norm_label": "newsapi \u2192 yahoo finance rss \u2192 finnhub news"
+      "norm_label": "newsapi \u2192 yahoo finance rss \u2192 finnhub news",
+      "id": "data_provider_rationale_463"
     },
     {
       "label": "FMP \u2192 Finnhub \u2192 Twelve Data",
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\data_provider.py",
       "source_location": "L535",
-      "id": "data_provider_rationale_535",
       "community": 3,
-      "norm_label": "fmp \u2192 finnhub \u2192 twelve data"
+      "norm_label": "fmp \u2192 finnhub \u2192 twelve data",
+      "id": "data_provider_rationale_535"
     },
     {
       "label": "Finnhub ownership \u2192 NSE scrape",
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\data_provider.py",
       "source_location": "L580",
-      "id": "data_provider_rationale_580",
       "community": 3,
-      "norm_label": "finnhub ownership \u2192 nse scrape"
+      "norm_label": "finnhub ownership \u2192 nse scrape",
+      "id": "data_provider_rationale_580"
     },
     {
       "label": "indicators.py",
@@ -5453,9 +5453,9 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\stock_service.py",
       "source_location": "L605",
-      "id": "stock_service_rationale_605",
       "community": 0,
-      "norm_label": "returns circuit breaker status \u2014 used by the /health endpoint."
+      "norm_label": "returns circuit breaker status \u2014 used by the /health endpoint.",
+      "id": "stock_service_rationale_605"
     },
     {
       "label": "__init__.py",
@@ -8648,11 +8648,11 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\agent.py",
       "source_location": "L314",
       "weight": 0.8,
-      "_src": "agent_rationale_38",
-      "_tgt": "graph_agentstate",
+      "_src": "graph_agentstate",
+      "_tgt": "agent_rationale_38",
+      "confidence_score": 0.5,
       "source": "graph_agentstate",
-      "target": "agent_rationale_38",
-      "confidence_score": 0.5
+      "target": "agent_rationale_38"
     },
     {
       "relation": "uses",
@@ -8660,11 +8660,11 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\agent.py",
       "source_location": "L314",
       "weight": 0.8,
-      "_src": "agent_rationale_50",
-      "_tgt": "graph_agentstate",
+      "_src": "graph_agentstate",
+      "_tgt": "agent_rationale_50",
+      "confidence_score": 0.5,
       "source": "graph_agentstate",
-      "target": "agent_rationale_50",
-      "confidence_score": 0.5
+      "target": "agent_rationale_50"
     },
     {
       "relation": "uses",
@@ -8672,11 +8672,11 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\agent.py",
       "source_location": "L314",
       "weight": 0.8,
-      "_src": "agent_rationale_271",
-      "_tgt": "graph_agentstate",
+      "_src": "graph_agentstate",
+      "_tgt": "agent_rationale_271",
+      "confidence_score": 0.5,
       "source": "graph_agentstate",
-      "target": "agent_rationale_271",
-      "confidence_score": 0.5
+      "target": "agent_rationale_271"
     },
     {
       "relation": "uses",
@@ -8684,11 +8684,11 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\agent.py",
       "source_location": "L314",
       "weight": 0.8,
-      "_src": "agent_rationale_289",
-      "_tgt": "graph_agentstate",
+      "_src": "graph_agentstate",
+      "_tgt": "agent_rationale_289",
+      "confidence_score": 0.5,
       "source": "graph_agentstate",
-      "target": "agent_rationale_289",
-      "confidence_score": 0.5
+      "target": "agent_rationale_289"
     },
     {
       "relation": "uses",
@@ -8696,11 +8696,11 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\agent.py",
       "source_location": "L314",
       "weight": 0.8,
-      "_src": "agent_rationale_297",
-      "_tgt": "graph_agentstate",
+      "_src": "graph_agentstate",
+      "_tgt": "agent_rationale_297",
+      "confidence_score": 0.5,
       "source": "graph_agentstate",
-      "target": "agent_rationale_297",
-      "confidence_score": 0.5
+      "target": "agent_rationale_297"
     },
     {
       "relation": "uses",
@@ -8708,11 +8708,11 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\agent.py",
       "source_location": "L314",
       "weight": 0.8,
-      "_src": "agent_rationale_313",
-      "_tgt": "graph_agentstate",
+      "_src": "graph_agentstate",
+      "_tgt": "agent_rationale_313",
+      "confidence_score": 0.5,
       "source": "graph_agentstate",
-      "target": "agent_rationale_313",
-      "confidence_score": 0.5
+      "target": "agent_rationale_313"
     },
     {
       "relation": "uses",
@@ -9885,8 +9885,8 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\agent.py",
       "source_location": "L179",
       "weight": 1.0,
-      "_src": "agent_agent_stream_generator",
-      "_tgt": "graph_run_phase4_parallel",
+      "_src": "graph_run_phase4_parallel",
+      "_tgt": "agent_agent_stream_generator",
       "source": "graph_run_phase4_parallel",
       "target": "agent_agent_stream_generator"
     },
@@ -15561,8 +15561,8 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\data_provider.py",
       "source_location": "L182",
       "weight": 1.0,
-      "_src": "data_provider_paralleldataprovider_fetch_all_parallel",
-      "_tgt": "cache_cacheservice_get",
+      "_src": "cache_cacheservice_get",
+      "_tgt": "data_provider_paralleldataprovider_fetch_all_parallel",
       "source": "cache_cacheservice_get",
       "target": "data_provider_paralleldataprovider_fetch_all_parallel"
     },
@@ -15573,8 +15573,8 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\data_provider.py",
       "source_location": "L230",
       "weight": 1.0,
-      "_src": "data_provider_paralleldataprovider_fetch_live_price",
-      "_tgt": "cache_cacheservice_get",
+      "_src": "cache_cacheservice_get",
+      "_tgt": "data_provider_paralleldataprovider_fetch_live_price",
       "source": "cache_cacheservice_get",
       "target": "data_provider_paralleldataprovider_fetch_live_price"
     },
@@ -15585,8 +15585,8 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\data_provider.py",
       "source_location": "L303",
       "weight": 1.0,
-      "_src": "data_provider_paralleldataprovider_fetch_ohlcv_history",
-      "_tgt": "cache_cacheservice_get",
+      "_src": "cache_cacheservice_get",
+      "_tgt": "data_provider_paralleldataprovider_fetch_ohlcv_history",
       "source": "cache_cacheservice_get",
       "target": "data_provider_paralleldataprovider_fetch_ohlcv_history"
     },
@@ -15597,8 +15597,8 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\data_provider.py",
       "source_location": "L403",
       "weight": 1.0,
-      "_src": "data_provider_paralleldataprovider_fetch_fundamentals",
-      "_tgt": "cache_cacheservice_get",
+      "_src": "cache_cacheservice_get",
+      "_tgt": "data_provider_paralleldataprovider_fetch_fundamentals",
       "source": "cache_cacheservice_get",
       "target": "data_provider_paralleldataprovider_fetch_fundamentals"
     },
@@ -15609,8 +15609,8 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\data_provider.py",
       "source_location": "L472",
       "weight": 1.0,
-      "_src": "data_provider_paralleldataprovider_fetch_news",
-      "_tgt": "cache_cacheservice_get",
+      "_src": "cache_cacheservice_get",
+      "_tgt": "data_provider_paralleldataprovider_fetch_news",
       "source": "cache_cacheservice_get",
       "target": "data_provider_paralleldataprovider_fetch_news"
     },
@@ -15621,8 +15621,8 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\data_provider.py",
       "source_location": "L543",
       "weight": 1.0,
-      "_src": "data_provider_paralleldataprovider_fetch_financials",
-      "_tgt": "cache_cacheservice_get",
+      "_src": "cache_cacheservice_get",
+      "_tgt": "data_provider_paralleldataprovider_fetch_financials",
       "source": "cache_cacheservice_get",
       "target": "data_provider_paralleldataprovider_fetch_financials"
     },
@@ -15633,8 +15633,8 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\data_provider.py",
       "source_location": "L611",
       "weight": 1.0,
-      "_src": "data_provider_paralleldataprovider_fetch_shareholding",
-      "_tgt": "cache_cacheservice_get",
+      "_src": "cache_cacheservice_get",
+      "_tgt": "data_provider_paralleldataprovider_fetch_shareholding",
       "source": "cache_cacheservice_get",
       "target": "data_provider_paralleldataprovider_fetch_shareholding"
     },
@@ -15645,8 +15645,8 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\data_provider.py",
       "source_location": "L660",
       "weight": 1.0,
-      "_src": "data_provider_paralleldataprovider_fetch_macro",
-      "_tgt": "cache_cacheservice_get",
+      "_src": "cache_cacheservice_get",
+      "_tgt": "data_provider_paralleldataprovider_fetch_macro",
       "source": "cache_cacheservice_get",
       "target": "data_provider_paralleldataprovider_fetch_macro"
     },
@@ -15657,8 +15657,8 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\data_provider.py",
       "source_location": "L679",
       "weight": 1.0,
-      "_src": "data_provider_paralleldataprovider_fetch_sector_context",
-      "_tgt": "cache_cacheservice_get",
+      "_src": "cache_cacheservice_get",
+      "_tgt": "data_provider_paralleldataprovider_fetch_sector_context",
       "source": "cache_cacheservice_get",
       "target": "data_provider_paralleldataprovider_fetch_sector_context"
     },
@@ -15669,8 +15669,8 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\data_provider.py",
       "source_location": "L704",
       "weight": 1.0,
-      "_src": "data_provider_paralleldataprovider_fallback",
-      "_tgt": "cache_cacheservice_get",
+      "_src": "cache_cacheservice_get",
+      "_tgt": "data_provider_paralleldataprovider_fallback",
       "source": "cache_cacheservice_get",
       "target": "data_provider_paralleldataprovider_fallback"
     },
@@ -16400,11 +16400,11 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\stock_service.py",
       "source_location": "L31",
       "weight": 0.8,
-      "_src": "stock_service_rationale_605",
-      "_tgt": "circuit_breaker_circuitbreakeropenerror",
+      "_src": "circuit_breaker_circuitbreakeropenerror",
+      "_tgt": "stock_service_rationale_605",
+      "confidence_score": 0.5,
       "source": "circuit_breaker_circuitbreakeropenerror",
-      "target": "stock_service_rationale_605",
-      "confidence_score": 0.5
+      "target": "stock_service_rationale_605"
     },
     {
       "relation": "uses",
@@ -16652,11 +16652,11 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\stock_service.py",
       "source_location": "L31",
       "weight": 0.8,
-      "_src": "stock_service_rationale_605",
-      "_tgt": "circuit_breaker_circuitbreaker",
+      "_src": "circuit_breaker_circuitbreaker",
+      "_tgt": "stock_service_rationale_605",
+      "confidence_score": 0.5,
       "source": "circuit_breaker_circuitbreaker",
-      "target": "stock_service_rationale_605",
-      "confidence_score": 0.5
+      "target": "stock_service_rationale_605"
     },
     {
       "relation": "calls",
@@ -17661,8 +17661,8 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\data_provider.py",
       "source_location": "L419",
       "weight": 1.0,
-      "_src": "data_provider_paralleldataprovider_fetch_fundamentals",
-      "_tgt": "key_manager_keymanager_get_finnhub_key",
+      "_src": "key_manager_keymanager_get_finnhub_key",
+      "_tgt": "data_provider_paralleldataprovider_fetch_fundamentals",
       "source": "key_manager_keymanager_get_finnhub_key",
       "target": "data_provider_paralleldataprovider_fetch_fundamentals"
     },
@@ -17673,8 +17673,8 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\data_provider.py",
       "source_location": "L504",
       "weight": 1.0,
-      "_src": "data_provider_paralleldataprovider_fetch_news",
-      "_tgt": "key_manager_keymanager_get_finnhub_key",
+      "_src": "key_manager_keymanager_get_finnhub_key",
+      "_tgt": "data_provider_paralleldataprovider_fetch_news",
       "source": "key_manager_keymanager_get_finnhub_key",
       "target": "data_provider_paralleldataprovider_fetch_news"
     },
@@ -17685,8 +17685,8 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\data_provider.py",
       "source_location": "L581",
       "weight": 1.0,
-      "_src": "data_provider_paralleldataprovider_fetch_shareholding",
-      "_tgt": "key_manager_keymanager_get_finnhub_key",
+      "_src": "key_manager_keymanager_get_finnhub_key",
+      "_tgt": "data_provider_paralleldataprovider_fetch_shareholding",
       "source": "key_manager_keymanager_get_finnhub_key",
       "target": "data_provider_paralleldataprovider_fetch_shareholding"
     },
@@ -17709,8 +17709,8 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\data_provider.py",
       "source_location": "L397",
       "weight": 1.0,
-      "_src": "data_provider_paralleldataprovider_fetch_fundamentals",
-      "_tgt": "key_manager_keymanager_get_fmp_key",
+      "_src": "key_manager_keymanager_get_fmp_key",
+      "_tgt": "data_provider_paralleldataprovider_fetch_fundamentals",
       "source": "key_manager_keymanager_get_fmp_key",
       "target": "data_provider_paralleldataprovider_fetch_fundamentals"
     },
@@ -17721,8 +17721,8 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\data_provider.py",
       "source_location": "L536",
       "weight": 1.0,
-      "_src": "data_provider_paralleldataprovider_fetch_financials",
-      "_tgt": "key_manager_keymanager_get_fmp_key",
+      "_src": "key_manager_keymanager_get_fmp_key",
+      "_tgt": "data_provider_paralleldataprovider_fetch_financials",
       "source": "key_manager_keymanager_get_fmp_key",
       "target": "data_provider_paralleldataprovider_fetch_financials"
     },
@@ -17733,8 +17733,8 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\data_provider.py",
       "source_location": "L673",
       "weight": 1.0,
-      "_src": "data_provider_paralleldataprovider_fetch_sector_context",
-      "_tgt": "key_manager_keymanager_get_fmp_key",
+      "_src": "key_manager_keymanager_get_fmp_key",
+      "_tgt": "data_provider_paralleldataprovider_fetch_sector_context",
       "source": "key_manager_keymanager_get_fmp_key",
       "target": "data_provider_paralleldataprovider_fetch_sector_context"
     },
@@ -17757,8 +17757,8 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\data_provider.py",
       "source_location": "L245",
       "weight": 1.0,
-      "_src": "data_provider_paralleldataprovider_fetch_live_price",
-      "_tgt": "key_manager_keymanager_get_av_key",
+      "_src": "key_manager_keymanager_get_av_key",
+      "_tgt": "data_provider_paralleldataprovider_fetch_live_price",
       "source": "key_manager_keymanager_get_av_key",
       "target": "data_provider_paralleldataprovider_fetch_live_price"
     },
@@ -17781,8 +17781,8 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\data_provider.py",
       "source_location": "L464",
       "weight": 1.0,
-      "_src": "data_provider_paralleldataprovider_fetch_news",
-      "_tgt": "key_manager_keymanager_get_newsapi_key",
+      "_src": "key_manager_keymanager_get_newsapi_key",
+      "_tgt": "data_provider_paralleldataprovider_fetch_news",
       "source": "key_manager_keymanager_get_newsapi_key",
       "target": "data_provider_paralleldataprovider_fetch_news"
     },
@@ -17805,8 +17805,8 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\data_provider.py",
       "source_location": "L650",
       "weight": 1.0,
-      "_src": "data_provider_paralleldataprovider_fetch_macro",
-      "_tgt": "key_manager_keymanager_get_fred_key",
+      "_src": "key_manager_keymanager_get_fred_key",
+      "_tgt": "data_provider_paralleldataprovider_fetch_macro",
       "source": "key_manager_keymanager_get_fred_key",
       "target": "data_provider_paralleldataprovider_fetch_macro"
     },
@@ -17829,8 +17829,8 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\data_provider.py",
       "source_location": "L223",
       "weight": 1.0,
-      "_src": "data_provider_paralleldataprovider_fetch_live_price",
-      "_tgt": "key_manager_keymanager_get_twelve_key",
+      "_src": "key_manager_keymanager_get_twelve_key",
+      "_tgt": "data_provider_paralleldataprovider_fetch_live_price",
       "source": "key_manager_keymanager_get_twelve_key",
       "target": "data_provider_paralleldataprovider_fetch_live_price"
     },
@@ -17841,8 +17841,8 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\data_provider.py",
       "source_location": "L296",
       "weight": 1.0,
-      "_src": "data_provider_paralleldataprovider_fetch_ohlcv_history",
-      "_tgt": "key_manager_keymanager_get_twelve_key",
+      "_src": "key_manager_keymanager_get_twelve_key",
+      "_tgt": "data_provider_paralleldataprovider_fetch_ohlcv_history",
       "source": "key_manager_keymanager_get_twelve_key",
       "target": "data_provider_paralleldataprovider_fetch_ohlcv_history"
     },
@@ -17853,8 +17853,8 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\data_provider.py",
       "source_location": "L559",
       "weight": 1.0,
-      "_src": "data_provider_paralleldataprovider_fetch_financials",
-      "_tgt": "key_manager_keymanager_get_twelve_key",
+      "_src": "key_manager_keymanager_get_twelve_key",
+      "_tgt": "data_provider_paralleldataprovider_fetch_financials",
       "source": "key_manager_keymanager_get_twelve_key",
       "target": "data_provider_paralleldataprovider_fetch_financials"
     },
@@ -18333,8 +18333,8 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\app\\portfolio\\page.tsx",
       "source_location": "L144",
       "weight": 1.0,
-      "_src": "page_catch",
-      "_tgt": "alert_alert",
+      "_src": "alert_alert",
+      "_tgt": "page_catch",
       "source": "alert_alert",
       "target": "page_catch"
     },
@@ -19328,8 +19328,8 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\ai\\analyst.py",
       "source_location": "L27",
       "weight": 0.8,
-      "_src": "analyst_rationale_1",
-      "_tgt": "analysis_financialanalysisresult",
+      "_src": "analysis_financialanalysisresult",
+      "_tgt": "analyst_rationale_1",
       "confidence_score": 0.5,
       "source": "analysis_financialanalysisresult",
       "target": "analyst_rationale_1"
@@ -19340,8 +19340,8 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\ai\\analyst.py",
       "source_location": "L27",
       "weight": 0.8,
-      "_src": "analyst_rationale_49",
-      "_tgt": "analysis_financialanalysisresult",
+      "_src": "analysis_financialanalysisresult",
+      "_tgt": "analyst_rationale_49",
       "confidence_score": 0.5,
       "source": "analysis_financialanalysisresult",
       "target": "analyst_rationale_49"
@@ -19352,8 +19352,8 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\ai\\analyst.py",
       "source_location": "L27",
       "weight": 0.8,
-      "_src": "analyst_rationale_72",
-      "_tgt": "analysis_financialanalysisresult",
+      "_src": "analysis_financialanalysisresult",
+      "_tgt": "analyst_rationale_72",
       "confidence_score": 0.5,
       "source": "analysis_financialanalysisresult",
       "target": "analyst_rationale_72"
@@ -19364,8 +19364,8 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\ai\\analyst.py",
       "source_location": "L27",
       "weight": 0.8,
-      "_src": "analyst_rationale_83",
-      "_tgt": "analysis_financialanalysisresult",
+      "_src": "analysis_financialanalysisresult",
+      "_tgt": "analyst_rationale_83",
       "confidence_score": 0.5,
       "source": "analysis_financialanalysisresult",
       "target": "analyst_rationale_83"
@@ -19376,8 +19376,8 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\ai\\analyst.py",
       "source_location": "L27",
       "weight": 0.8,
-      "_src": "analyst_rationale_135",
-      "_tgt": "analysis_financialanalysisresult",
+      "_src": "analysis_financialanalysisresult",
+      "_tgt": "analyst_rationale_135",
       "confidence_score": 0.5,
       "source": "analysis_financialanalysisresult",
       "target": "analyst_rationale_135"
@@ -19388,8 +19388,8 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\ai\\analyst.py",
       "source_location": "L27",
       "weight": 0.8,
-      "_src": "analyst_rationale_162",
-      "_tgt": "analysis_financialanalysisresult",
+      "_src": "analysis_financialanalysisresult",
+      "_tgt": "analyst_rationale_162",
       "confidence_score": 0.5,
       "source": "analysis_financialanalysisresult",
       "target": "analyst_rationale_162"
@@ -19400,8 +19400,8 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\ai\\analyst.py",
       "source_location": "L27",
       "weight": 0.8,
-      "_src": "analyst_rationale_188",
-      "_tgt": "analysis_financialanalysisresult",
+      "_src": "analysis_financialanalysisresult",
+      "_tgt": "analyst_rationale_188",
       "confidence_score": 0.5,
       "source": "analysis_financialanalysisresult",
       "target": "analyst_rationale_188"
@@ -19412,8 +19412,8 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\ai\\analyst.py",
       "source_location": "L27",
       "weight": 0.8,
-      "_src": "analyst_rationale_232",
-      "_tgt": "analysis_financialanalysisresult",
+      "_src": "analysis_financialanalysisresult",
+      "_tgt": "analyst_rationale_232",
       "confidence_score": 0.5,
       "source": "analysis_financialanalysisresult",
       "target": "analyst_rationale_232"
@@ -19424,8 +19424,8 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\ai\\analyst.py",
       "source_location": "L27",
       "weight": 0.8,
-      "_src": "analyst_rationale_247",
-      "_tgt": "analysis_financialanalysisresult",
+      "_src": "analysis_financialanalysisresult",
+      "_tgt": "analyst_rationale_247",
       "confidence_score": 0.5,
       "source": "analysis_financialanalysisresult",
       "target": "analyst_rationale_247"
@@ -19436,8 +19436,8 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\ai\\analyst.py",
       "source_location": "L27",
       "weight": 0.8,
-      "_src": "analyst_rationale_262",
-      "_tgt": "analysis_financialanalysisresult",
+      "_src": "analysis_financialanalysisresult",
+      "_tgt": "analyst_rationale_262",
       "confidence_score": 0.5,
       "source": "analysis_financialanalysisresult",
       "target": "analyst_rationale_262"
@@ -19748,8 +19748,8 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\ai\\analyst.py",
       "source_location": "L29",
       "weight": 0.8,
-      "_src": "analyst_rationale_1",
-      "_tgt": "news_newsresponse",
+      "_src": "news_newsresponse",
+      "_tgt": "analyst_rationale_1",
       "confidence_score": 0.5,
       "source": "news_newsresponse",
       "target": "analyst_rationale_1"
@@ -19760,8 +19760,8 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\ai\\analyst.py",
       "source_location": "L29",
       "weight": 0.8,
-      "_src": "analyst_rationale_49",
-      "_tgt": "news_newsresponse",
+      "_src": "news_newsresponse",
+      "_tgt": "analyst_rationale_49",
       "confidence_score": 0.5,
       "source": "news_newsresponse",
       "target": "analyst_rationale_49"
@@ -19772,8 +19772,8 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\ai\\analyst.py",
       "source_location": "L29",
       "weight": 0.8,
-      "_src": "analyst_rationale_72",
-      "_tgt": "news_newsresponse",
+      "_src": "news_newsresponse",
+      "_tgt": "analyst_rationale_72",
       "confidence_score": 0.5,
       "source": "news_newsresponse",
       "target": "analyst_rationale_72"
@@ -19784,8 +19784,8 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\ai\\analyst.py",
       "source_location": "L29",
       "weight": 0.8,
-      "_src": "analyst_rationale_83",
-      "_tgt": "news_newsresponse",
+      "_src": "news_newsresponse",
+      "_tgt": "analyst_rationale_83",
       "confidence_score": 0.5,
       "source": "news_newsresponse",
       "target": "analyst_rationale_83"
@@ -19796,8 +19796,8 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\ai\\analyst.py",
       "source_location": "L29",
       "weight": 0.8,
-      "_src": "analyst_rationale_135",
-      "_tgt": "news_newsresponse",
+      "_src": "news_newsresponse",
+      "_tgt": "analyst_rationale_135",
       "confidence_score": 0.5,
       "source": "news_newsresponse",
       "target": "analyst_rationale_135"
@@ -19808,8 +19808,8 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\ai\\analyst.py",
       "source_location": "L29",
       "weight": 0.8,
-      "_src": "analyst_rationale_162",
-      "_tgt": "news_newsresponse",
+      "_src": "news_newsresponse",
+      "_tgt": "analyst_rationale_162",
       "confidence_score": 0.5,
       "source": "news_newsresponse",
       "target": "analyst_rationale_162"
@@ -19820,8 +19820,8 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\ai\\analyst.py",
       "source_location": "L29",
       "weight": 0.8,
-      "_src": "analyst_rationale_188",
-      "_tgt": "news_newsresponse",
+      "_src": "news_newsresponse",
+      "_tgt": "analyst_rationale_188",
       "confidence_score": 0.5,
       "source": "news_newsresponse",
       "target": "analyst_rationale_188"
@@ -19832,8 +19832,8 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\ai\\analyst.py",
       "source_location": "L29",
       "weight": 0.8,
-      "_src": "analyst_rationale_232",
-      "_tgt": "news_newsresponse",
+      "_src": "news_newsresponse",
+      "_tgt": "analyst_rationale_232",
       "confidence_score": 0.5,
       "source": "news_newsresponse",
       "target": "analyst_rationale_232"
@@ -19844,8 +19844,8 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\ai\\analyst.py",
       "source_location": "L29",
       "weight": 0.8,
-      "_src": "analyst_rationale_247",
-      "_tgt": "news_newsresponse",
+      "_src": "news_newsresponse",
+      "_tgt": "analyst_rationale_247",
       "confidence_score": 0.5,
       "source": "news_newsresponse",
       "target": "analyst_rationale_247"
@@ -19856,8 +19856,8 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\ai\\analyst.py",
       "source_location": "L29",
       "weight": 0.8,
-      "_src": "analyst_rationale_262",
-      "_tgt": "news_newsresponse",
+      "_src": "news_newsresponse",
+      "_tgt": "analyst_rationale_262",
       "confidence_score": 0.5,
       "source": "news_newsresponse",
       "target": "analyst_rationale_262"
@@ -20144,8 +20144,8 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\ai\\analyst.py",
       "source_location": "L28",
       "weight": 0.8,
-      "_src": "analyst_rationale_1",
-      "_tgt": "stock_stockdataresponse",
+      "_src": "stock_stockdataresponse",
+      "_tgt": "analyst_rationale_1",
       "confidence_score": 0.5,
       "source": "stock_stockdataresponse",
       "target": "analyst_rationale_1"
@@ -20156,8 +20156,8 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\ai\\analyst.py",
       "source_location": "L28",
       "weight": 0.8,
-      "_src": "analyst_rationale_49",
-      "_tgt": "stock_stockdataresponse",
+      "_src": "stock_stockdataresponse",
+      "_tgt": "analyst_rationale_49",
       "confidence_score": 0.5,
       "source": "stock_stockdataresponse",
       "target": "analyst_rationale_49"
@@ -20168,8 +20168,8 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\ai\\analyst.py",
       "source_location": "L28",
       "weight": 0.8,
-      "_src": "analyst_rationale_72",
-      "_tgt": "stock_stockdataresponse",
+      "_src": "stock_stockdataresponse",
+      "_tgt": "analyst_rationale_72",
       "confidence_score": 0.5,
       "source": "stock_stockdataresponse",
       "target": "analyst_rationale_72"
@@ -20180,8 +20180,8 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\ai\\analyst.py",
       "source_location": "L28",
       "weight": 0.8,
-      "_src": "analyst_rationale_83",
-      "_tgt": "stock_stockdataresponse",
+      "_src": "stock_stockdataresponse",
+      "_tgt": "analyst_rationale_83",
       "confidence_score": 0.5,
       "source": "stock_stockdataresponse",
       "target": "analyst_rationale_83"
@@ -20192,8 +20192,8 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\ai\\analyst.py",
       "source_location": "L28",
       "weight": 0.8,
-      "_src": "analyst_rationale_135",
-      "_tgt": "stock_stockdataresponse",
+      "_src": "stock_stockdataresponse",
+      "_tgt": "analyst_rationale_135",
       "confidence_score": 0.5,
       "source": "stock_stockdataresponse",
       "target": "analyst_rationale_135"
@@ -20204,8 +20204,8 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\ai\\analyst.py",
       "source_location": "L28",
       "weight": 0.8,
-      "_src": "analyst_rationale_162",
-      "_tgt": "stock_stockdataresponse",
+      "_src": "stock_stockdataresponse",
+      "_tgt": "analyst_rationale_162",
       "confidence_score": 0.5,
       "source": "stock_stockdataresponse",
       "target": "analyst_rationale_162"
@@ -20216,8 +20216,8 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\ai\\analyst.py",
       "source_location": "L28",
       "weight": 0.8,
-      "_src": "analyst_rationale_188",
-      "_tgt": "stock_stockdataresponse",
+      "_src": "stock_stockdataresponse",
+      "_tgt": "analyst_rationale_188",
       "confidence_score": 0.5,
       "source": "stock_stockdataresponse",
       "target": "analyst_rationale_188"
@@ -20228,8 +20228,8 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\ai\\analyst.py",
       "source_location": "L28",
       "weight": 0.8,
-      "_src": "analyst_rationale_232",
-      "_tgt": "stock_stockdataresponse",
+      "_src": "stock_stockdataresponse",
+      "_tgt": "analyst_rationale_232",
       "confidence_score": 0.5,
       "source": "stock_stockdataresponse",
       "target": "analyst_rationale_232"
@@ -20240,8 +20240,8 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\ai\\analyst.py",
       "source_location": "L28",
       "weight": 0.8,
-      "_src": "analyst_rationale_247",
-      "_tgt": "stock_stockdataresponse",
+      "_src": "stock_stockdataresponse",
+      "_tgt": "analyst_rationale_247",
       "confidence_score": 0.5,
       "source": "stock_stockdataresponse",
       "target": "analyst_rationale_247"
@@ -20252,8 +20252,8 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\ai\\analyst.py",
       "source_location": "L28",
       "weight": 0.8,
-      "_src": "analyst_rationale_262",
-      "_tgt": "stock_stockdataresponse",
+      "_src": "stock_stockdataresponse",
+      "_tgt": "analyst_rationale_262",
       "confidence_score": 0.5,
       "source": "stock_stockdataresponse",
       "target": "analyst_rationale_262"
@@ -23553,8 +23553,8 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\lib\\ai.api.ts",
       "source_location": "L67",
       "weight": 1.0,
-      "_src": "ai_api_streamagent",
-      "_tgt": "page_catch",
+      "_src": "page_catch",
+      "_tgt": "ai_api_streamagent",
       "source": "page_catch",
       "target": "ai_api_streamagent"
     },

@@ -9,28 +9,28 @@ export function SkeletonThreeWayCompare() {
         <div className="grid mb-2" style={{ gridTemplateColumns: "100px repeat(3, 1fr)", gap: "6px" }}>
           <div />
           <div className="rounded-lg p-2 border border-white/5 bg-zinc-900 flex justify-center">
-            <Shimmer w="60px" h="14px" />
+            <Shimmer width="60px" height="14px" />
           </div>
           <div className="rounded-lg p-2 border border-white/5 bg-zinc-900 flex justify-center">
-            <Shimmer w="60px" h="14px" />
+            <Shimmer width="60px" height="14px" />
           </div>
           <div className="rounded-lg p-2 border border-white/5 bg-zinc-900 flex justify-center">
-            <Shimmer w="60px" h="14px" />
+            <Shimmer width="60px" height="14px" />
           </div>
         </div>
         
         {/* 5 Rows of Metrics */}
         {[1, 2, 3, 4, 5].map((row) => (
           <div key={row} className="grid items-center mb-1" style={{ gridTemplateColumns: "100px repeat(3, 1fr)", gap: "6px" }}>
-            <Shimmer w="70px" h="12px" />
+            <Shimmer width="70px" height="12px" />
             <div className="bg-zinc-900 border border-white/5 rounded-lg p-2 flex justify-center">
-              <Shimmer w="40px" h="12px" />
+              <Shimmer width="40px" height="12px" />
             </div>
             <div className="bg-zinc-900 border border-white/5 rounded-lg p-2 flex justify-center">
-              <Shimmer w="40px" h="12px" />
+              <Shimmer width="40px" height="12px" />
             </div>
             <div className="bg-zinc-900 border border-white/5 rounded-lg p-2 flex justify-center">
-              <Shimmer w="40px" h="12px" />
+              <Shimmer width="40px" height="12px" />
             </div>
           </div>
         ))}
@@ -38,7 +38,7 @@ export function SkeletonThreeWayCompare() {
 
       {/* Bar Chart Skeletons */}
       <div className="bg-zinc-900 rounded-xl border border-white/5 p-4 mb-3">
-        <Shimmer w="120px" h="12px" className="mb-3" />
+        <Shimmer width="120px" height="12px" className="mb-3" />
         <div className="flex items-end gap-1 h-12">
           {[1,2,3,4,5,6,7,8,9,10].map(i => (
             <div key={i} className="flex-1 flex flex-col justify-end">
