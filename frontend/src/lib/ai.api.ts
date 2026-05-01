@@ -62,7 +62,7 @@ export function streamAgent(
   onError: (err: Error) => void
 ): AbortController {
   const controller = new AbortController();
-  const BASE_URL = 'http://127.0.0.1:8000';
+  const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
 
   fetch(`${BASE_URL}/api/v1/agent/stream`, {
     method: 'POST',

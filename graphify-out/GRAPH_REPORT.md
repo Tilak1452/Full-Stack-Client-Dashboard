@@ -1,7 +1,7 @@
 # Graph Report - D:\Full-Stack-Client-Dashboard  (2026-05-01)
 
 ## Corpus Check
-- 157 files · ~234,011 words
+- 157 files · ~235,168 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -158,8 +158,8 @@
 ## Surprising Connections (you probably didn't know these)
 - `Base` --uses--> `Alert Model (models/alert.py) SQLAlchemy model for persisting user-defined mark`  [INFERRED]
   D:\Full-Stack-Client-Dashboard\backend\app\core\database.py → D:\Full-Stack-Client-Dashboard\backend\app\models\alert.py
-- `Liveness probe reporting system status.` --uses--> `Base`  [INFERRED]
-  D:\Full-Stack-Client-Dashboard\backend\app\main.py → D:\Full-Stack-Client-Dashboard\backend\app\core\database.py
+- `Base` --uses--> `Liveness probe reporting system status.`  [INFERRED]
+  D:\Full-Stack-Client-Dashboard\backend\app\core\database.py → D:\Full-Stack-Client-Dashboard\backend\app\main.py
 - `Base` --uses--> `Liveness probe reporting system status.`  [INFERRED]
   D:\Full-Stack-Client-Dashboard\backend\app\core\database.py → D:\Full-Stack-Client-Dashboard\backend\app\main.py
 - `DOPathRewriteMiddleware` --uses--> `Base`  [INFERRED]

@@ -170,9 +170,9 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\main.py",
       "source_location": "L252",
-      "id": "main_rationale_252",
       "community": 9,
-      "norm_label": "liveness probe reporting system status."
+      "norm_label": "liveness probe reporting system status.",
+      "id": "main_rationale_252"
     },
     {
       "label": "__init__.py",
@@ -8212,9 +8212,9 @@
       "weight": 0.8,
       "_src": "main_rationale_252",
       "_tgt": "analyze_healthresponse",
+      "confidence_score": 0.5,
       "source": "main_rationale_252",
-      "target": "analyze_healthresponse",
-      "confidence_score": 0.5
+      "target": "analyze_healthresponse"
     },
     {
       "relation": "uses",
@@ -8224,9 +8224,9 @@
       "weight": 0.8,
       "_src": "main_rationale_252",
       "_tgt": "database_base",
+      "confidence_score": 0.5,
       "source": "main_rationale_252",
-      "target": "database_base",
-      "confidence_score": 0.5
+      "target": "database_base"
     },
     {
       "relation": "contains",
@@ -17222,8 +17222,8 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\main.py",
       "source_location": "L66",
       "weight": 0.8,
-      "_src": "main_rationale_249",
-      "_tgt": "database_base",
+      "_src": "database_base",
+      "_tgt": "main_rationale_249",
       "confidence_score": 0.5,
       "source": "database_base",
       "target": "main_rationale_249"
@@ -19526,8 +19526,8 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\main.py",
       "source_location": "L65",
       "weight": 0.8,
-      "_src": "main_rationale_249",
-      "_tgt": "analyze_healthresponse",
+      "_src": "analyze_healthresponse",
+      "_tgt": "main_rationale_249",
       "confidence_score": 0.5,
       "source": "analyze_healthresponse",
       "target": "main_rationale_249"

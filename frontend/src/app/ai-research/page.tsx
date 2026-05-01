@@ -29,7 +29,7 @@ export default function AIResearchPage() {
     setArtifact({ ...EMPTY_ARTIFACT, isStreaming: true });
 
     let assistantText = "";
-    const API_BASE = "http://localhost:8000";
+    const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
     const es = new EventSource(`${API_BASE}/api/v1/agent/stream?q=${encodeURIComponent(query)}`);
     esRef.current = es;
 
