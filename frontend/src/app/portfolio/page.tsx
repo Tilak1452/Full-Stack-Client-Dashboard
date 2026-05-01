@@ -1,4 +1,4 @@
-"use client";
+   "use client";
 
 import React, { useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
@@ -16,18 +16,26 @@ export default function PortfolioPage() {
   // Modal states
   const [buyModal, setBuyModal] = useState<{open: boolean; symbol: string; price: number}>({open: false, symbol: '', price: 0});
   const [sellModal, setSellModal] = useState<{open: boolean; holding: HoldingItem | null}>({open: false, holding: null});
+  const [selectedPortfolioId, setSelectedPortfolioId] = useState<number | null>(null);
 
-  const { data: portfolios = [], isLoading: portfoliosLoading, error: portfoliosError } = useQuery({
+  const { data: portfolios = [], isLoading: portfoliosLoading, error: portfoliosError, refetch: refetchPortfolios } = useQuery({
     queryKey: ['portfolios'],
     queryFn: portfolioApi.list,
   });
 
-  const portfolioId = portfolios.length > 0 ? portfolios[0]?.id : null;
+  // Auto-select first portfolio if none selected
+  React.useEffect(() => {
+    if (portfolios.length > 0 && selectedPortfolioId === null) {
+      setSelectedPortfolioId(portfolios[0].id);
+    }
+  }, [portfolios, selectedPortfolioId]);
+
+  const portfolioId = selectedPortfolioId ?? (portfolios.length > 0 ? portfolios[0]?.id : null);
 
   const { data: summary, isLoading: summaryLoading, error: summaryError, refetch } = useQuery({
     queryKey: ['portfolio-summary', portfolioId],
     queryFn: () => portfolioApi.getSummary(portfolioId!),
-    enabled: portfolioId !== null,
+    enabled: !!portfolioId,
   });
 
   const isLoading = portfoliosLoading || summaryLoading;
@@ -54,8 +62,11 @@ export default function PortfolioPage() {
               {error instanceof Error ? error.message : 'No portfolios available or failed to load data.'}
             </p>
             <button
-              onClick={() => refetch()}
-              className="mt-3 text-lime text-sm hover:opacity-80"
+              onClick={() => {
+                refetchPortfolios();
+                if (portfolioId) refetch();
+              }}
+              className="mt-3 text-lime text-sm hover:opacity-80 cursor-pointer"
             >
               Try again
             </button>
@@ -109,6 +120,44 @@ export default function PortfolioPage() {
       <TopBar title="Portfolio" />
       <div className="flex-1 overflow-y-auto p-5 md:p-[22px] flex flex-col gap-3.5">
         
+        {/* Portfolio Selection & Actions */}
+        <div className="bg-card border border-border rounded-2xl p-5 flex flex-wrap items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <select
+              value={selectedPortfolioId || ''}
+              onChange={(e) => setSelectedPortfolioId(parseInt(e.target.value))}
+              className="px-4 py-2 bg-card2 border border-border rounded-xl text-text text-[13px] outline-none focus:border-lime/40 cursor-pointer min-w-[200px]"
+            >
+              {portfolios.map(p => (
+                <option key={p.id} value={p.id}>{p.name}</option>
+              ))}
+            </select>
+            <button
+              onClick={async () => {
+                const name = window.prompt("Enter new portfolio name:");
+                if (name && name.trim()) {
+                  try {
+                    const newPortfolio = await portfolioApi.create({ name: name.trim() });
+                    await refetchPortfolios();
+                    setSelectedPortfolioId(newPortfolio.id);
+                  } catch (e: any) {
+                    alert("Failed to create portfolio: " + e.message);
+                  }
+                }
+              }}
+              className="bg-card2 border border-border rounded-xl px-4 py-2 text-[13px] text-muted hover:text-text cursor-pointer transition-colors"
+            >
+              + Create new portfolio
+            </button>
+          </div>
+          <button
+            onClick={() => {}}
+            className="bg-lime/10 border border-lime/20 text-lime rounded-xl px-4 py-2 text-[13px] font-semibold cursor-pointer hover:bg-lime/20 transition-colors"
+          >
+            Portfolio Analyse
+          </button>
+        </div>
+
         {/* Summary cards */}
         <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
           {[

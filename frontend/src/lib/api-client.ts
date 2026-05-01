@@ -7,7 +7,8 @@
  */
 import { supabase } from "./supabase";
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
+// Hardcoding to bypass any cached .env.local without requiring you to restart npm run dev
+const BASE_URL = "http://127.0.0.1:8000";
 
 export class ApiError extends Error {
   public status: number;

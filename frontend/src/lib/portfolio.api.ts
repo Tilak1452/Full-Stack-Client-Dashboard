@@ -74,8 +74,22 @@ export interface MptOptimizationResult {
 }
 
 export const portfolioApi = {
-  list: (): Promise<PortfolioListItem[]> =>
-    apiFetch<PortfolioListItem[]>('/api/v1/portfolios/'),
+  list: async (): Promise<PortfolioListItem[]> => {
+    const list = await apiFetch<PortfolioListItem[]>('/api/v1/portfolios/');
+    if (list.length === 0) {
+      try {
+        const created = await apiFetch<PortfolioListItem>('/api/v1/portfolios/', {
+          method: 'POST',
+          body: JSON.stringify({ name: 'Portfolio 1' }),
+        });
+        return [created];
+      } catch (e) {
+        // If creation fails (e.g. not authenticated), just return empty
+        return list;
+      }
+    }
+    return list;
+  },
 
   create: (payload: CreatePortfolioPayload): Promise<PortfolioListItem> =>
     apiFetch<PortfolioListItem>('/api/v1/portfolios/', {

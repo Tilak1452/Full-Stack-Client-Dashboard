@@ -118,6 +118,7 @@ def build_analyst_prompt(
     setup: dict,
     structure: dict,
     original_query: str,
+    compare_data: list = None,
 ) -> str:
     """
     Builds a fully dynamic analyst prompt. Every section is conditional —
@@ -350,32 +351,60 @@ def build_analyst_prompt(
             )
         parts.append("- Recommendation: Wait for a cleaner signal before entering.")
 
+    # --- Compare Data (conditional) ---
+    if compare_data and len(compare_data) > 1:
+        parts.append("\n### Peer Comparison Data")
+        for idx, comp in enumerate(compare_data):
+            comp_sym = comp.get("symbol", f"Stock {idx+1}")
+            comp_price = comp.get("stock_data", {}).get("current_price", "N/A")
+            comp_pe = comp.get("fundamentals", {}).get("pe_ratio", "N/A")
+            comp_rsi = comp.get("technicals", {}).get("rsi_14", "N/A")
+            if isinstance(comp_rsi, float): comp_rsi = round(comp_rsi, 1)
+            parts.append(f"**{comp_sym}**: Price: ₹{comp_price} | P/E: {comp_pe}x | RSI: {comp_rsi}")
+
     # --- Output Mode Instruction (this is what powers dynamic responses) ---
     parts.append("\n---")
-    parts.append(_get_mode_instruction(output_mode, symbol, original_query))
+    parts.append(_get_mode_instruction(output_mode, symbol, original_query, has_compare=(compare_data is not None and len(compare_data) > 1)))
 
     return "\n".join(parts)
 
 
-def _get_mode_instruction(output_mode: str, symbol: str, original_query: str) -> str:
+def _get_mode_instruction(output_mode: str, symbol: str, original_query: str, has_compare: bool = False) -> str:
     """Returns the specific LLM output instruction for each query mode."""
+    if has_compare:
+        return (
+            f"## Your Task: COMPARISON ANALYSIS\n"
+            f"The user asked: '{original_query}'\n"
+            f"You are comparing multiple stocks. Structure your response clearly:\n"
+            f"**1. The Winner:** Start with a 1-sentence verdict on which stock is the better buy right now.\n"
+            f"**2. Key Differences:** Use bullet points to contrast their Valuations (P/E) and Technicals (RSI).\n"
+            f"**3. Trade Outlook:** Give a brief outlook on the primary stock vs the peers.\n"
+            f"Use proper markdown formatting, bold text for symbols, and clean bulleted lists.\n"
+            f"Tone: Senior analyst comparing equities. Be decisive.\n"
+            f"Length: 150-250 words."
+        )
+
     instructions = {
         "trade_plan": (
             f"## Your Task: TRADE PLAN\n"
             f"The user asked: '{original_query}'\n"
             f"Lead with a 1-sentence directional verdict. Then go straight into the numbers:\n"
-            f"Entry → Stop Loss → Target 1 → Target 2 → Risk/Reward → Position Size.\n"
+            f"- **Entry:** ...\n"
+            f"- **Stop Loss:** ...\n"
+            f"- **Targets:** ...\n"
+            f"- **Risk/Reward:** ...\n"
             f"Close with 2 bullet points: what would INVALIDATE this setup.\n"
+            f"Format strictly with markdown bullet points and bold headers.\n"
             f"Tone: Trading desk. Fast. Concrete. Every sentence contains a price level or percentage.\n"
             f"Length: 150-250 words. No general market philosophy."
         ),
         "technical_deep_dive": (
             f"## Your Task: TECHNICAL ANALYSIS\n"
             f"The user asked: '{original_query}'\n"
-            f"Walk through each indicator from the data above — RSI, MACD, Bollinger, Volume, SMA.\n"
+            f"Walk through each indicator from the data above using a markdown bulleted list.\n"
             f"For each indicator, state the value, what it means RIGHT NOW, and if it's confirming or contradicting the others.\n"
             f"Check for divergences between price action and momentum indicators.\n"
-            f"Conclude with a technical verdict: BULLISH / BEARISH / NEUTRAL and the 2 strongest signals driving it.\n"
+            f"Conclude with a technical verdict: **BULLISH / BEARISH / NEUTRAL** and the 2 strongest signals driving it.\n"
             f"Tone: Analyst note. Precise. Reference every number shown above.\n"
             f"Length: 200-300 words."
         ),

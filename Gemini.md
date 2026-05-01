@@ -7,7 +7,7 @@
 > Do NOT invent any file, endpoint, or data field that is not listed here.
 > If something is not covered, ask the developer before assuming.
 >
-> **Last updated: April 20, 2026** — Migrated to Supabase Auth (GoTrue). Frontend directly calls Supabase for login/signup. Backend `get_current_user` now verifies Supabase JWTs. Removed custom JWT creation and DB password hashing. Added Supabase SDK client and pure ASGI path rewrite middleware for DigitalOcean deployed routing.
+> **Last updated: April 29, 2026** — Migrated to Supabase Auth (GoTrue). Frontend directly calls Supabase for login/signup. Backend `get_current_user` now verifies Supabase JWTs. Removed custom JWT creation and DB password hashing. Added Supabase SDK client and pure ASGI path rewrite middleware for DigitalOcean deployed routing. **[April 21]** Upgraded `security.py` to support both legacy HS256 string secrets AND modern ES256/ECC P-256 JWK JSON secrets dynamically. Fixed Supabase email confirmation redirect from localhost to live URL. Integrated Graphify knowledge graph tool. **[April 29]** Dropped `public.users` table. Deleted dead auth code (`models/user.py`, `services/auth_service.py`, `ai/analyst.py`). Added OpenRouter agent system (`backend/app/agent/`). Added landing page components. Cleaned up empty placeholder packages. Removed one-time migration scripts.
 
 ---
 
@@ -104,7 +104,19 @@ Full-Stack-Client-Dashboard/              ← ROOT (open this in your editor)
 ├── .env.example                          ← Safe template for .env (empty values, committed to Git)
 ├── .gitignore                            ← Blocks node_modules, .venv, .env, *.db from Git
 ├── requirements.txt                      ← Python dependencies (pip install -r requirements.txt)
-├── git_guide.md                          ← Team collaboration guide for Git/GitHub workflow
+├── redundancy_cleanup.md                 ← Master cleanup guide (April 29, 2026)
+│
+├── .agents/                              ← [NEW Apr 21] Antigravity AI assistant configuration
+│   ├── rules/
+│   │   └── graphify.md                  ← Instructs AI to read GRAPH_REPORT.md before architecture questions
+│   └── workflows/
+│       └── graphify-workflow.md          ← Registers /graphify command to rebuild the knowledge graph
+│
+├── graphify-out/                         ← [NEW Apr 21] Graphify knowledge graph output (auto-generated)
+│   ├── graph.json                        ← Full project knowledge graph (695 nodes, 1243 edges, 82 communities)
+│   ├── graph.html                        ← Interactive browser visualization of the knowledge graph
+│   ├── GRAPH_REPORT.md                  ← Human-readable architecture summary (AI reads this first)
+│   └── cache/                            ← Per-file AST cache for fast incremental graph rebuilds
 │
 ├── backend/                              ← FastAPI Python backend
 │   ├── __init__.py
@@ -126,21 +138,28 @@ Full-Stack-Client-Dashboard/              ← ROOT (open this in your editor)
 │       │   ├── news.py                   ← GET /api/v1/news (Yahoo Finance RSS)
 │       │   ├── market.py                 ← GET /api/v1/indices, /api/v1/movers
 │       │   ├── rag.py                    ← POST /rag/upload, GET /rag/query
-│       │   └── stream.py                 ← WS /api/v1/stream/price/{symbol}
+│       │   ├── stream.py                 ← WS /api/v1/stream/price/{symbol}
+│       │   └── agent.py                  ← [NEW Apr 29] /api/v1/agent/* (OpenRouter multi-model AI agent)
 │       │
 │       ├── core/                         ← Infrastructure layer
 │       │   ├── __init__.py
 │       │   ├── config.py                 ← Pydantic Settings loaded from root .env
-│       │   ├── security.py               ← Supabase JWT verification (decode_access_token)
+│       │   ├── security.py               ← Supabase JWT verification (decode_access_token) — supports HS256 string AND ES256/ECC JWK JSON [Updated Apr 21]
 │       │   ├── database.py               ← SQLAlchemy engine, session factory, Base
 │       │   ├── cache.py                  ← Redis (with in-memory fallback) caching layer
 │       │   ├── circuit_breaker.py         ← Circuit breaker pattern for external APIs
 │       │   ├── dependencies.py           ← FastAPI get_db() dependency injection
 │       │   └── telemetry.py              ← Performance metrics middleware
 │       │
+│       ├── agent/                        ← [NEW Apr 29] OpenRouter AI agent system (replaced ai/analyst.py)
+│       │   ├── __init__.py
+│       │   ├── graph.py                  ← Main agent orchestrator: multi-model, timeout-aware (45KB)
+│       │   ├── prompt_builder.py         ← Builds context-aware prompts for stock/news/general queries
+│       │   ├── prompts.py                ← System prompt templates and instructions
+│       │   └── tools.py                  ← Agent tools: stock lookup, market structure, setup detection
+│       │
 │       ├── services/                     ← Business logic layer
 │       │   ├── __init__.py
-│       │   ├── auth_service.py           ← Stub file (Authentication logic moved to Supabase)
 │       │   ├── stock_service.py          ← yFinance wrapper: price, history, indicators (25KB)
 │       │   ├── news_service.py           ← Yahoo RSS + NewsAPI + VADER sentiment
 │       │   ├── macro_service.py          ← FRED economic data + commodity prices
@@ -152,11 +171,12 @@ Full-Stack-Client-Dashboard/              ← ROOT (open this in your editor)
 │       │   ├── pdf_service.py            ← PDF parsing service
 │       │   ├── indicators.py             ← RSI, SMA, EMA technical indicator calculations
 │       │   ├── categorizer.py            ← Query categorization for the AI agent
-│       │   └── data_provider.py          ← Unified data fetching abstraction
+│       │   ├── data_provider.py          ← Unified data fetching abstraction
+│       │   ├── setup_engine.py           ← [NEW] Trading setup detection (RSI recovery, volume breakout, trend)
+│       │   └── market_structure.py       ← [NEW] Market structure analyzer (trend, support/resistance)
 │       │
 │       ├── ai/                           ← AI and LLM modules
 │       │   ├── __init__.py
-│       │   ├── analyst.py                ← LangChain/LangGraph AI agent orchestrator (15KB)
 │       │   ├── scoring.py                ← AI confidence scoring
 │       │   ├── moderation.py             ← Input moderation and safety checks
 │       │   ├── hallucination_check.py    ← LLM output hallucination detection
@@ -164,29 +184,29 @@ Full-Stack-Client-Dashboard/              ← ROOT (open this in your editor)
 │       │   ├── timeout_guard.py          ← LLM call timeout protection
 │       │   ├── document_loader.py        ← PDF/TXT document parser (uses structlog)
 │       │   ├── vector_store_chroma.py    ← Local ChromaDB vector store implementation
-│       │   └── vector_store_pinecone.py  ← Cloud Pinecone vector store implementation
+│       │   ├── vector_store_pinecone.py  ← Cloud Pinecone vector store implementation
+│       │   └── interfaces/               ← [NEW] Abstract interfaces
+│       │       ├── __init__.py
+│       │       └── vector_store.py       ← Abstract vector store base class
 │       │
 │       ├── models/                       ← SQLAlchemy ORM models (database table definitions)
 │       │   ├── __init__.py               ← Registers all models for Base.metadata.create_all()
-│       │   ├── user.py                   ← User table (Authentication)
 │       │   ├── portfolio.py              ← Portfolio table
 │       │   ├── holding.py                ← Holding table (belongs to Portfolio)
 │       │   ├── transaction.py            ← Transaction table (immutable audit trail)
 │       │   └── alert.py                  ← Alert table (market alert rules)
+│       │   (user.py deleted April 29, 2026 — public.users table dropped, auth via Supabase)
 │       │
 │       ├── schemas/                      ← Pydantic request/response validation models
 │       │   ├── __init__.py
-│       │   ├── auth.py                   ← UserCreate, Token Request/Response schemas
+│       │   ├── auth.py                   ← UserPublic schema (used by /api/v1/auth/me). Old UserCreate/Token schemas removed Apr 29.
 │       │   ├── analyze.py                ← AnalyzeRequest, AnalyzeResponse, HealthResponse
 │       │   ├── analysis.py               ← FinancialAnalysisResult, TechnicalSignal, SentimentSignal
 │       │   ├── stock.py                  ← StockDataResponse
 │       │   ├── news.py                   ← NewsArticle, NewsResponse
 │       │   └── portfolio.py              ← Portfolio request/response schemas
 │       │
-│       ├── data/                         ← Empty placeholder package
-│       ├── sentiment/                    ← Empty placeholder package
-│       ├── portfolio/                    ← Empty placeholder package
-│       └── utils/                        ← Empty placeholder package
+│       (data/, sentiment/, portfolio/, utils/ empty placeholder packages deleted April 29, 2026)
 │
 ├── frontend/                             ← Next.js 14 React frontend
 │   ├── .env.local                        ← Frontend env vars (NEXT_PUBLIC_API_URL, WS_URL)
@@ -239,7 +259,17 @@ Full-Stack-Client-Dashboard/              ← ROOT (open this in your editor)
 │       │   ├── IndicatorCard.tsx         ← Reusable card for displaying a single indicator value
 │       │   ├── TechnicalSummaryGauge.tsx ← Visual gauge for overall technical rating
 │       │   ├── SupportResistanceBar.tsx  ← Bar showing support/resistance price range
-│       │   └── TradingViewWidget.tsx     ← Embedded TradingView chart widget
+│       │   ├── TradingViewWidget.tsx     ← Embedded TradingView chart widget
+│       │   ├── AIInsights.tsx            ← [NEW] Dashboard AI insights card with live status
+│       │   ├── AppShell.tsx              ← [NEW] App shell wrapper component
+│       │   └── landing/                  ← [NEW] Landing page components
+│       │       ├── FeatureGrid.tsx        ← Feature showcase grid
+│       │       ├── HeroSection.tsx        ← Hero banner with CTA
+│       │       ├── LandingFooter.tsx      ← Landing page footer
+│       │       ├── NavBar.tsx             ← Landing page navigation bar
+│       │       ├── ProtocolSection.tsx    ← Protocol/methodology section
+│       │       ├── TickerTape.tsx         ← Scrolling stock ticker animation
+│       │       └── TrustBar.tsx           ← Trust indicators bar
 │       │
 │       └── lib/                          ← API clients, hooks, and utilities
 │           ├── api-client.ts             ← Base fetch wrapper (apiFetch + ApiError class)
@@ -284,6 +314,7 @@ Full-Stack-Client-Dashboard/              ← ROOT (open this in your editor)
 | **pandas** + **pandas-datareader** | Data processing + FRED economic data | Latest |
 | **Redis** | Optional caching (falls back to in-memory) | Latest |
 | **structlog** | Structured logging (used in document_loader) | Latest |
+| **OpenRouter** | LLM routing layer for multi-model AI agent (`agent/graph.py`) | Latest |
 
 ### Frontend
 | Technology | Purpose | Version |
@@ -343,7 +374,14 @@ A safe template with empty values is committed as `.env.example`. New developers
 DATABASE_URL=postgresql+psycopg2://postgres:[YOUR-PASSWORD]@db.xxxxxxxxxxxx.supabase.co:5432/postgres
 
 # Supabase Auth Secret (required for verifying backend API calls)
-SUPABASE_JWT_SECRET=your_jwt_secret_from_api_settings
+# IMPORTANT [Updated Apr 21]: This field now supports TWO formats:
+#   Format A — Legacy HS256 (plain string from Supabase API > JWT Settings > Legacy JWT Secret tab):
+#     SUPABASE_JWT_SECRET=your-long-random-string-here
+#   Format B — Modern ES256/ECC P-256 (paste the JWK JSON as a single line, no surrounding quotes needed):
+#     SUPABASE_JWT_SECRET={"x":"...","y":"...","alg":"ES256","crv":"P-256","kty":"EC","key_ops":["verify"]}
+# The backend auto-detects the format. If your Supabase project uses the new "JWT Signing Keys" (ECC P-256),
+# paste the full JSON block. If using the Legacy tab, paste the plain string.
+SUPABASE_JWT_SECRET=your_jwt_secret_or_jwk_json_here
 
 # At least ONE LLM key is required (Groq is free)
 GROQ_API_KEY=
@@ -455,7 +493,7 @@ Location: `backend/app/main.py`
 5. Registers global exception handlers (422 validation, 500 catch-all)
 6. On startup: validates DB connection, runs `Base.metadata.create_all()`, starts APScheduler for alerts, starts APScheduler for price updates (every 5 min via `price_update_job.py`)
 7. On shutdown: stops both APScheduler instances
-8. Registers all 9 routers
+8. Registers all 10 routers
 
 > **IMPORTANT:** `Base.metadata.create_all()` only creates **new tables**. It does NOT add new columns to existing tables. If new columns are added to a model, you MUST run `migrate.py` manually. See Section 15.
 
@@ -470,6 +508,7 @@ app.include_router(alerts_router)       # /api/v1/alerts/*
 app.include_router(stock.router)        # /api/v1/stock/*
 app.include_router(news.router)         # /api/v1/news
 app.include_router(market.router)       # /api/v1/indices, /api/v1/movers
+app.include_router(agent_router)        # /api/v1/agent/*
 ```
 
 ### Core Layer
@@ -572,13 +611,14 @@ Supabase dashboard: https://supabase.com/dashboard
 
 ### ORM Models (backend/app/models/)
 
-#### User (table: `users`)
-| Column | Type | Constraints |
-|--------|------|-------------|
-| `id` | Integer | PK, auto-increment |
-| `email` | String(255) | NOT NULL, UNIQUE, INDEXED |
-| `hashed_password` | String | NOT NULL |
-| `created_at` | DateTime(tz) | server_default=now() |
+#### User — REMOVED (April 29, 2026)
+The `public.users` table was dropped from Supabase. User authentication
+and identity are now fully managed by Supabase Auth (`auth.users` schema).
+The backend extracts user info (UUID, email) from the Supabase JWT on every
+request — no local user table lookup is needed. The FK constraints on
+`portfolios.user_id` and `alerts.user_id` that previously pointed to this
+table have also been dropped.
+
 
 #### Portfolio (table: `portfolios`)
 | Column | Type | Constraints |
@@ -899,6 +939,10 @@ All prices are displayed in **Indian Rupees (₹)** using `toLocaleString('en-IN
 
 11. **`.env` leading spaces issue:** Lines in `.env` starting with a leading space (e.g., `·LANGCHAIN_TRACING_V2=true`) are silently ignored by pydantic-settings. Keep all variable names flush with the left margin.
 
+12. **[Apr 21] Supabase JWT Algorithm Change — ECC P-256:** Supabase rotated its JWT signing key from the legacy HS256 symmetric secret to a modern ECC P-256 asymmetric key (`ES256`). If you encounter a login loop or `401 Unauthorized` on protected endpoints after this date, verify that your `SUPABASE_JWT_SECRET` in `.env` matches the current active key type in your Supabase project (Authentication > JWT Signing Keys). The backend `security.py` now detects the format automatically.
+
+13. **[Apr 21] Supabase Email Confirmation URL:** By default, Supabase sends confirmation emails that redirect to `http://localhost:3000`. For production deployments, you MUST update the **Site URL** in the Supabase dashboard (Authentication → URL Configuration) to your live domain. Without this, mobile users clicking the link will see `ERR_CONNECTION_REFUSED`.
+
 ---
 
 ## SECTION 14 — GIT & COLLABORATION
@@ -983,4 +1027,103 @@ Also back-fills `cost_basis = quantity * average_price` for any existing rows wh
 
 Because the Supabase database is **shared** (all team members point `DATABASE_URL` to the same instance), running `migrate.py` on one machine fixes the database for **everyone simultaneously**. You do not need each developer to run it independently, as long as they are all using the same `DATABASE_URL`.
 
+---
 
+## SECTION 16 — GRAPHIFY KNOWLEDGE GRAPH
+
+Graphify is a code intelligence tool that generates a navigable knowledge graph of the entire codebase. The AI assistant reads this graph to answer architecture questions without needing to scan raw files.
+
+### What Graphify Generates
+
+| File | Description |
+|------|-------------|
+| `graphify-out/graph.json` | Full project graph with 695 nodes and 1,243 edges |
+| `graphify-out/graph.html` | Interactive browser visualization — open locally to explore |
+| `graphify-out/GRAPH_REPORT.md` | Human-readable summary of "god nodes", communities, and architecture clusters |
+| `graphify-out/cache/` | Per-file AST cache — enables fast incremental rebuilds (only changed files are re-processed) |
+
+### Key Graph Stats (as of April 21, 2026)
+- **695 nodes** (files, functions, classes)
+- **1,243 edges** (imports, calls, dependencies)
+- **82 communities** (functional clusters automatically detected)
+- **Core "God Nodes"** (highest connectivity): `stock_service.py`, `api/stock.py`, `lib/api-client.ts`
+
+### Automation
+- **Git Hook:** A `post-commit` hook is installed at `.git/hooks/post-commit`. Every `git commit` automatically triggers `graphify update .` and rebuilds the graph with only the changed files.
+- **Manual Update:** If needed outside of a commit, run `python -m graphify update .` from the project root.
+
+### AI Assistant Integration
+- **Rules file:** `.agents/rules/graphify.md` — instructs the AI to always read `GRAPH_REPORT.md` before answering architecture or codebase-wide questions.
+- **Workflow file:** `.agents/workflows/graphify-workflow.md` — registers the `/graphify` slash command to manually trigger a graph rebuild from within the chat.
+
+### Installation (New Developer Setup)
+If Graphify is not yet installed on a new machine:
+```bash
+# Install graphifyy (double 'y' is the correct package name)
+pip install graphifyy
+
+# Initialize for the Antigravity AI assistant
+python -m graphify antigravity install
+
+# Build the graph from scratch
+python -m graphify extract .
+
+# Install git hooks for automatic updates
+python -m graphify hook install
+```
+
+---
+
+## SECTION 17 — CHANGE LOG
+
+### April 29, 2026
+
+#### 🧹 Dead Code Cleanup
+- Dropped `public.users` table from Supabase. Auth is now 100% via Supabase Auth JWT.
+- Deleted `backend/app/models/user.py` — ORM model for the dropped table.
+- Removed `User` import from `backend/app/models/__init__.py`.
+- Deleted `backend/app/services/auth_service.py` — empty stub file.
+- Deleted `backend/app/ai/analyst.py` — replaced by `backend/app/agent/graph.py`.
+- Cleaned dead schemas from `backend/app/schemas/auth.py`. Only `UserPublic` retained.
+- Deleted dangerous one-time scripts: `wipe_users.py`, `drop_users_table.py`, `migrate_user_id.py`, `verify_migration.py`, `test_jwt.py`.
+- Deleted stale root files: `financial_ai.db`, `image.png`, `image2.jpeg`, `Recording 2026-04-21 142759.mp4`, `import_log.txt`.
+- Removed empty placeholder packages: `app/data/`, `app/sentiment/`, `app/portfolio/`, `app/utils/`.
+
+#### 🆕 New Systems Documented
+- Registered `backend/app/agent/` package in folder structure (new OpenRouter agent).
+- Registered `api/agent.py` and `/api/v1/agent/chat` endpoint in API reference.
+- Registered `services/setup_engine.py` and `services/market_structure.py`.
+- Registered `ai/interfaces/vector_store.py` abstract base class.
+- Registered frontend components: `AIInsights.tsx`, `AppShell.tsx`, `landing/` directory.
+- Registered `frontend/public/landing/` assets.
+- Added OpenRouter to the Technology Stack table.
+
+### April 21, 2026
+
+#### 🔐 JWT Authentication Fix — ES256 Support
+- **Problem:** Supabase rotated its JWT signing algorithm from Legacy HS256 to modern ECC P-256 (`ES256`). The backend only accepted HS256, causing all authenticated requests to return `401 Unauthorized`, creating an infinite login redirect loop.
+- **Files Modified:** `backend/app/core/security.py`
+- **Changes Made:**
+  - `decode_access_token()` now auto-detects the secret format: if `SUPABASE_JWT_SECRET` starts with `{`, it is parsed as a JWK JSON object (ES256/RS256). Otherwise, it is treated as a plain HS256 string.
+  - Added quote-stripping (`strip("'")`/`strip('"')`) to handle cloud environment variable dashboards that may wrap the value in quotes.
+  - Added `jwt.get_unverified_header()` to dynamically read the algorithm from the incoming token, making the backend fully forward-compatible with future Supabase algorithm changes.
+  - Accepts `HS256`, `ES256`, and `RS256` simultaneously.
+
+#### 🌍 Supabase Site URL Fix (Email Confirmation)
+- **Problem:** Supabase confirmation emails redirected to `http://localhost:3000` instead of the live deployment URL. Mobile users clicking the link saw `ERR_CONNECTION_REFUSED`.
+- **Fix:** Update **Authentication → URL Configuration → Site URL** in the Supabase dashboard to the live production domain.
+- **Action Required:** No code change needed — this is a Supabase dashboard configuration.
+
+#### 🧠 Graphify Knowledge Graph Integration
+- **What it is:** A code intelligence tool that builds a navigable graph of the entire codebase for the AI assistant.
+- **Files Added:**
+  - `.agents/rules/graphify.md` — AI rule: read GRAPH_REPORT.md before architecture questions.
+  - `.agents/workflows/graphify-workflow.md` — Registers `/graphify` command.
+  - `graphify-out/graph.json`, `graphify-out/graph.html`, `graphify-out/GRAPH_REPORT.md` — Generated graph artifacts.
+  - `graphify-out/cache/` — Incremental rebuild cache (130 files cached).
+- **Automation:** Git hook installed at `.git/hooks/post-commit` auto-rebuilds graph on every commit.
+- **Stats:** 695 nodes, 1,243 edges, 82 communities.
+
+#### 🛠️ `.env` Fix
+- **Problem:** `SUPABASE_JWT_SECRET` had a duplicate key prefix (`SUPABASE_JWT_SECRET=SUPABASE_JWT_SECRET=...`), making the value unparseable.
+- **Fixed:** Corrected to a single `SUPABASE_JWT_SECRET='{...json...}'`.

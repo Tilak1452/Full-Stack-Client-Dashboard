@@ -475,17 +475,48 @@ class StockService:
         quarterly_financials = []
         if not isinstance(qfin, Exception) and hasattr(qfin, 'columns'):
             try:
+                def _sg(df, col, key):
+                    try:
+                        v = df[col].get(key)
+                        return float(v) if v is not None else None
+                    except Exception:
+                        return None
                 for col in qfin.columns:
                     period_label = col.strftime("%b %Y") if hasattr(col, 'strftime') else str(col)
-                    revenue = qfin[col].get("Total Revenue")
-                    net_income = qfin[col].get("Net Income")
                     quarterly_financials.append({
                         "period": period_label,
-                        "total_revenue": float(revenue) if revenue is not None else None,
-                        "net_income": float(net_income) if net_income is not None else None,
+                        "total_revenue":   _sg(qfin, col, "Total Revenue"),
+                        "net_income":      _sg(qfin, col, "Net Income"),
+                        "gross_profit":    _sg(qfin, col, "Gross Profit"),
+                        "operating_income": _sg(qfin, col, "Operating Income"),
+                        "ebitda":          _sg(qfin, col, "EBITDA"),
                     })
             except Exception as e:
                 logger.warning("Failed to parse quarterly financials | %s", e)
+
+        # ── Parse annual financials ──
+        annual_financials = []
+        try:
+            afin = ticker.financials
+            if hasattr(afin, 'columns'):
+                def _sga(df, col, key):
+                    try:
+                        v = df[col].get(key)
+                        return float(v) if v is not None else None
+                    except Exception:
+                        return None
+                for col in afin.columns:
+                    period_label = col.strftime("%Y") if hasattr(col, 'strftime') else str(col)
+                    annual_financials.append({
+                        "period": period_label,
+                        "total_revenue":   _sga(afin, col, "Total Revenue"),
+                        "net_income":      _sga(afin, col, "Net Income"),
+                        "gross_profit":    _sga(afin, col, "Gross Profit"),
+                        "operating_income": _sga(afin, col, "Operating Income"),
+                        "ebitda":          _sga(afin, col, "EBITDA"),
+                    })
+        except Exception as e:
+            logger.warning("Failed to parse annual financials | %s", e)
 
         # ── Parse shareholding ──
         shareholding = {
@@ -539,13 +570,28 @@ class StockService:
             except Exception as e:
                 logger.warning("Failed to parse calendar | %s", e)
 
+        # ── Parse dividends / corporate actions ──
+        corporate_actions = {"dividends": [], "splits": []}
+        try:
+            divs = ticker.dividends
+            if divs is not None and len(divs) > 0:
+                for date_idx, amount in divs.items():
+                    corporate_actions["dividends"].append({
+                        "date": date_idx.strftime("%Y-%m-%d") if hasattr(date_idx, 'strftime') else str(date_idx),
+                        "amount": float(amount) if amount is not None else None,
+                    })
+                corporate_actions["dividends"] = list(reversed(corporate_actions["dividends"]))
+        except Exception as e:
+            logger.warning("Failed to parse dividends | %s", e)
+
         return {
             "symbol": symbol,
             "overview": overview,
             "quarterly_financials": quarterly_financials,
-            "annual_financials": [],  # Skipping annual for now — quarterly is primary
+            "annual_financials": annual_financials,
             "shareholding": shareholding,
             "calendar": cal_data,
+            "corporate_actions": corporate_actions,
         }
 
 

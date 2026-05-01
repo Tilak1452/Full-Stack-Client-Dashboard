@@ -19,4 +19,7 @@ export interface NewsResponse {
 export const newsApi = {
   getLatest: (limit = 20): Promise<NewsResponse> =>
     apiFetch<NewsResponse>(`/api/v1/news?limit=${limit}`),
+
+  getForSymbol: (symbol: string, limit = 15): Promise<NewsResponse> =>
+    apiFetch<NewsResponse>(`/api/v1/news?symbol=${encodeURIComponent(symbol)}&limit=${limit}`),
 };

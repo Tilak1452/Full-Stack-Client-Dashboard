@@ -83,3 +83,11 @@
 .font-mono-brand {
   font-family: var(--font-jetbrains-mono), monospace;
 }
+
+@keyframes shimmer-move {
+  0%   { background-position: -400px 0; }
+  100% { background-position:  400px 0; }
+}
+.shimmer-animate {
+  animation: shimmer-move 1.4s infinite linear;
+}

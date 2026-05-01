@@ -40,12 +40,34 @@ class Settings(BaseSettings):
     # Supabase Auth — JWT secret used to verify tokens issued by Supabase GoTrue
     supabase_jwt_secret: str = ""
 
-    # ─── NVIDIA Nemotron via OpenRouter (Agent Pipeline) ──────────────────────
-    nvidia_nemotron_3_super_api_key: str = ""
-    nvidia_nemotron_3_nano_api_key: str = ""          # Falls back to super key if blank
-    nvidia_base_url: str = "https://openrouter.ai/api/v1"
-    nemotron_super_model: str = "nvidia/llama-3.1-nemotron-70b-instruct"
-    nemotron_nano_model: str = "meta-llama/llama-3.1-8b-instruct"
+    # ─── Direct Provider APIs (No OpenRouter) ───────────────────────────────
+    # Tier 1 — Simple: Google Gemma 4 31B (direct via langchain-google-genai)
+    # Multiple keys for rotation when one hits quota limits
+    
+    gemini_api_key_1: str = ""     # Gemini_API_KEY_1
+    gemini_api_key_2: str = ""     # Gemini_API_KEY_2
+    gemini_api_key_3: str = ""     # Gemini_API_KEY_3
+    gemini_api_key_4: str = ""     # Gemini_API_KEY_4
+    gemini_api_key_5: str = ""     # Gemini_API_KEY_5
+    gemini_api_key_6: str = ""     # Gemini_API_KEY_6
+    gemini_api_key_7: str = ""     # Gemini_API_KEY_7
+    gemini_api_key_8: str = ""     # Gemini_API_KEY_8
+    gemini_api_key_9: str = ""     # Gemini_API_KEY_9
+    gemini_api_key_10: str = ""    # Gemini_API_KEY_10
+
+    # ─── Direct Provider APIs (Gemini only — NVIDIA NIM removed) ─────────────────
+    # All LLM tiers now use Google Gemini keys (Flash-Lite for classify/simple,
+    # Flash for medium/complex/fundamentals). 7 keys in round-robin rotation.
+
+    # ─── Model slugs (direct provider format) ────────────────────────────────
+    simple_model: str = "gemma-4-31b-it"           # Google AI Studio slug
+    medium_model: str = "gemini-2.5-flash"          # Gemini 2.5 Flash (replaced Qwen/NIM)
+    complex_model: str = "gemini-2.5-flash"         # Gemini 2.5 Flash (replaced Qwen/NIM)
+
+    # Gemini model tiers (direct Google AI)
+    gemini_flash_model: str = "gemini-2.5-flash"              # Full Flash — medium/complex/fundamentals
+    gemini_flash_lite_model: str = "gemini-2.5-flash-lite"    # Lite Flash — simple/classify (fast + cheap)
+    gemini_pro_model: str = "gemini-2.5-pro"                  # Pro — fallback for heavy queries
 
     # ─── Per-node token budgets ───────────────────────────────────────────────
     nemotron_classify_max_tokens: int = 200
@@ -57,6 +79,36 @@ class Settings(BaseSettings):
 
     # ─── GNews API key ────────────────────────────────────────────────────────
     gnews_api_key: str = ""
+
+    # ── NEW: Phase 3 — Data Provider Key Lists (comma-separated) ─────────────
+    # These are loaded by KeyManager for multi-key round-robin rotation.
+    # KeyManager reads from env vars directly; these settings are for reference.
+    google_api_keys: str = ""           # Maps to GOOGLE_API_KEYS (comma-sep)
+    nvidia_api_keys: str = ""           # Maps to NVIDIA_API_KEYS (comma-sep)
+    finnhub_api_keys: str = ""          # Maps to FINNHUB_API_KEYS (comma-sep)
+    twelve_data_api_keys: str = ""      # Maps to TWELVE_DATA_API_KEYS (comma-sep)
+    fmp_api_keys: str = ""              # Maps to FMP_API_KEYS (comma-sep)
+    alpha_vantage_keys: str = ""        # Maps to ALPHA_VANTAGE_KEYS (comma-sep)
+    news_api_keys: str = ""             # Maps to NEWS_API_KEYS (comma-sep)
+    fred_api_keys: str = ""             # Maps to FRED_API_KEYS (comma-sep)
+
+    # ── Phase 3 — Data Fetch Timeouts (seconds) ─────────────────────────────
+    timeout_yahoo: int = 5
+    timeout_fmp: int = 4
+    timeout_finnhub: int = 4
+    timeout_alpha_vantage: int = 6
+    timeout_newsapi: int = 3
+    timeout_twelve_data: int = 5         # Twelve Data API (NSE/BSE Indian stocks)
+    timeout_fred: int = 8
+    timeout_nse_scrape: int = 6
+    timeout_bse_scrape: int = 6
+
+    # ── NEW: Phase 3/4 — LLM Provider Config ─────────────────────────────────
+    llm_provider_timeout: int = 35      # Per-LLM-call timeout for Phase 4 nodes
+
+    # ── NEW: Phase 4 — Feature Flags ──────────────────────────────────────────
+    enable_parallel_phase4: bool = True  # Controls whether Phase 4 runs parallel nodes
+    enable_artifact_system: bool = True  # Controls whether artifact_type is emitted via SSE
 
     class Config:
         env_file = env_path

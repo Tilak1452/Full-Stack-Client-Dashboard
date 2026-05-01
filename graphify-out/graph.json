@@ -14043,8 +14043,8 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\core\\security.py",
       "source_location": "L39",
       "weight": 1.0,
-      "_src": "security_decode_access_token",
-      "_tgt": "cache_cacheservice_get",
+      "_src": "cache_cacheservice_get",
+      "_tgt": "security_decode_access_token",
       "source": "cache_cacheservice_get",
       "target": "security_decode_access_token"
     },
@@ -14227,6 +14227,18 @@
       "source": "cache_cacheservice_set",
       "target": "cache_rationale_50",
       "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\core\\security.py",
+      "source_location": "L52",
+      "weight": 1.0,
+      "_src": "security_decode_access_token",
+      "_tgt": "cache_cacheservice_set",
+      "source": "cache_cacheservice_set",
+      "target": "security_decode_access_token"
     },
     {
       "relation": "calls",

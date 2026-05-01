@@ -10,6 +10,7 @@ import { AddToPortfolioModal } from '@/components/AddToPortfolioModal';
 import { IcSearch } from '@/components/Icons';
 import { TopBar } from '@/components/TopBar';
 import { stockApi } from '@/lib/stock.api';
+import { newsApi } from '@/lib/news.api';
 import { aiApi, streamAgent, type AgentSSEEvent, type ChunkEventData, type ModelEventData, type ClassifiedEventData } from '@/lib/ai.api';
 import { useWebSocketPrice } from '@/lib/useWebSocketPrice';
 import { useAuth } from '@/lib/auth-context';
@@ -41,7 +42,7 @@ export default function StockPage() {
   
   const [showAiPanel, setShowAiPanel] = useState(false);
   const [inWatchlist, setInWatchlist] = useState(false);
-  const [activeTab, setActiveTab] = useState<'technical' | 'fundamental'>('technical');
+  const [activeTab, setActiveTab] = useState<'technical' | 'fundamental' | 'news'>('technical');
   const [activeInterval, setActiveInterval] = useState<IntervalOption>(INTERVALS[3]); // default: 1d 1mo
   const [showAddModal, setShowAddModal] = useState(false);
   const router = useRouter();
@@ -128,6 +129,14 @@ export default function StockPage() {
     queryKey: ['stock-fundamentals', symbol],
     queryFn: () => stockApi.getFundamentals(symbol),
     enabled: activeTab === 'fundamental' && symbol.length > 0,
+    staleTime: 5 * 60_000,
+  });
+
+  // News (lazy-loaded on news tab click)
+  const { data: newsData, isLoading: newsLoading } = useQuery({
+    queryKey: ['stock-news', symbol],
+    queryFn: () => newsApi.getForSymbol(symbol),
+    enabled: activeTab === 'news' && symbol.length > 0,
     staleTime: 5 * 60_000,
   });
 
@@ -221,10 +230,10 @@ export default function StockPage() {
           </div>
         </div>
 
-        {/* Price header + TradingView chart */}
+        {/* Price header + quick stats + TradingView chart */}
         <div className="grid grid-cols-1 gap-3.5">
           <div className="bg-card border border-border rounded-2xl p-5">
-            <div className="flex items-end gap-4 mb-[18px]">
+            <div className="flex items-end gap-4 mb-3">
               <div>
                 <div className="text-[11px] text-muted tracking-[0.05em] uppercase mb-1.5">{symbol.split('.')[0]}</div>
                 <div className="flex items-baseline gap-3">
@@ -234,17 +243,39 @@ export default function StockPage() {
                 </div>
               </div>
             </div>
-            <div className="h-[500px] w-full rounded-xl overflow-hidden border border-border">
+
+            {/* Quick stats row */}
+            {stockData && (
+              <div className="flex flex-wrap gap-x-5 gap-y-2 mb-4 pb-4 border-b border-border">
+                {[
+                  { label: 'Day High',   value: stockData.day_high  != null ? `₹${stockData.day_high.toLocaleString('en-IN', {maximumFractionDigits: 2})}` : '—' },
+                  { label: 'Day Low',    value: stockData.day_low   != null ? `₹${stockData.day_low.toLocaleString('en-IN', {maximumFractionDigits: 2})}` : '—' },
+                  { label: 'Prev Close', value: stockData.previous_close != null ? `₹${stockData.previous_close.toLocaleString('en-IN', {maximumFractionDigits: 2})}` : '—' },
+                  { label: 'Volume',     value: stockData.volume != null ? stockData.volume.toLocaleString('en-IN') : '—' },
+                  { label: 'Mkt Cap',    value: formatMarketCap(stockData.market_cap) },
+                  { label: 'P/E',        value: stockData.pe_ratio != null ? stockData.pe_ratio.toFixed(2) : '—' },
+                  { label: 'RSI (14)',   value: stockData.rsi != null ? stockData.rsi.toFixed(1) : '—' },
+                  { label: 'Exchange',   value: stockData.exchange ?? '—' },
+                ].map(stat => (
+                  <div key={stat.label} className="flex flex-col">
+                    <span className="text-[9.5px] uppercase tracking-[0.08em] text-muted">{stat.label}</span>
+                    <span className="text-[13px] font-semibold">{stat.value}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            <div className="h-[460px] w-full rounded-xl overflow-hidden border border-border">
               <TradingViewWidget symbol={symbol} />
             </div>
           </div>
         </div>
 
-        {/* ═══ Tab Toggle: Technical / Fundamental ═══ */}
+        {/* Tab Toggle */}
         <div className="bg-card border border-border rounded-2xl p-5">
           {/* Tab Bar */}
-          <div className="flex gap-1 mb-5 bg-card2 rounded-xl p-1 w-fit">
-            {(['technical', 'fundamental'] as const).map(tab => (
+          <div className="flex gap-1 mb-5 bg-card2 rounded-xl p-1 w-fit flex-wrap">
+            {(['technical', 'fundamental', 'news'] as const).map(tab => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
@@ -254,7 +285,7 @@ export default function StockPage() {
                     : 'bg-transparent text-muted hover:text-text'
                 }`}
               >
-                {tab}
+                {tab === 'news' ? '📰 News' : tab}
               </button>
             ))}
           </div>
@@ -276,6 +307,46 @@ export default function StockPage() {
               data={fundamentals}
               isLoading={fundLoading}
             />
+          )}
+
+          {activeTab === 'news' && (
+            <div className="flex flex-col gap-3">
+              {newsLoading ? (
+                <div className="text-muted text-sm animate-pulse text-center py-8">Loading news...</div>
+              ) : !newsData || newsData.articles.length === 0 ? (
+                <div className="text-muted text-sm text-center py-8">No recent news for {symbol.split('.')[0]}</div>
+              ) : (
+                newsData.articles.map((article, i) => (
+                  <a
+                    key={i}
+                    href={article.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex gap-3 p-3.5 bg-card2 rounded-xl border border-border hover:border-lime/30 transition-colors group"
+                  >
+                    <div className="flex flex-col gap-1 flex-1 min-w-0">
+                      <div className="text-[13px] font-medium text-text group-hover:text-lime transition-colors line-clamp-2">
+                        {article.title}
+                      </div>
+                      <div className="flex items-center gap-2 mt-1">
+                        <span className={`text-[9.5px] px-2 py-0.5 rounded-full font-semibold uppercase tracking-wide ${
+                          article.sentiment === 'positive' ? 'bg-green/15 text-green'
+                          : article.sentiment === 'negative' ? 'bg-red/15 text-red'
+                          : 'bg-dim text-muted'
+                        }`}>
+                          {article.sentiment}
+                        </span>
+                        <span className="text-[10.5px] text-muted">{article.source}</span>
+                        <span className="text-[10.5px] text-muted/60 ml-auto">
+                          {new Date(article.published_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' })}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="text-muted group-hover:text-lime transition-colors text-[16px] self-center shrink-0">→</div>
+                  </a>
+                ))
+              )}
+            </div>
           )}
         </div>
 

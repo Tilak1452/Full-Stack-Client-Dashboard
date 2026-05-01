@@ -1,0 +1,30 @@
+﻿[data_provider.py]
+  twelve_data: 6 refs, lines [223, 227, 296, 304, 559, 563]
+  alpha_vantage: 2 refs, lines [245, 249]
+  finnhub: 23 refs, lines [396, 419, 422, 425, 426, 435, 436, 440, 463, 504, 507, 510, 511, 522, 528, 535, 580, 581, 584, 587, 588, 597, 604]
+  fmp: 6 refs, lines [397, 401, 536, 540, 673, 677]
+  fred: 2 refs, lines [650, 658]
+  newsapi: 2 refs, lines [464, 468]
+  yahoo: 18 refs, lines [6, 21, 80, 82, 84, 116, 133, 270, 279, 330, 340, 357, 446, 453, 489, 496, 635, 641]
+
+[stock_service.py]
+  yahoo: 17 refs, lines [5, 7, 22, 50, 53, 69, 72, 101, 107, 130, 165, 167, 208, 219, 341, 431, 441]
+
+[macro_service.py]
+  yahoo: 3 refs, lines [6, 53, 57]
+
+[options_service.py]
+  yahoo: 2 refs, lines [1, 10]
+
+[mpt_service.py]
+  yahoo: 1 refs, lines [2]
+
+[alert_service.py]
+  yahoo: 6 refs, lines [5, 16, 29, 52, 54, 74]
+
+[market.py]
+  yahoo: 1 refs, lines [7]
+
+[stock.py]
+  yahoo: 3 refs, lines [70, 71, 100]
+

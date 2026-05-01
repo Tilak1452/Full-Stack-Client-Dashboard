@@ -117,6 +117,20 @@ export interface QuarterlyFinancial {
   period: string;
   total_revenue: number | null;
   net_income: number | null;
+  gross_profit?: number | null;
+  operating_income?: number | null;
+  ebitda?: number | null;
+  eps?: number | null;
+}
+
+export interface DividendRecord {
+  date: string;
+  amount: number | null;
+}
+
+export interface CorporateActions {
+  dividends: DividendRecord[];
+  splits: unknown[];
 }
 
 export interface ShareholdingData {
@@ -141,6 +155,7 @@ export interface FundamentalsResponse {
   annual_financials: QuarterlyFinancial[];
   shareholding: ShareholdingData;
   calendar: EarningsCalendar;
+  corporate_actions?: CorporateActions;
 }
 
 export const stockApi = {

@@ -41,7 +41,7 @@ export interface AgentRequest {
 }
 
 export interface AgentSSEEvent {
-  type: 'status' | 'classified' | 'model' | 'chunk' | 'done' | 'error';
+  type: 'status' | 'classified' | 'model' | 'chunk' | 'done' | 'error' | 'complexity';
   data: Record<string, unknown>;
 }
 
@@ -50,6 +50,7 @@ export interface ModelEventData      { model: string; node: string; }
 export interface ClassifiedEventData { category: string; symbol: string | null; confidence: number; }
 export interface StatusEventData     { message: string; step: number; }
 export interface ErrorEventData      { message: string; partial_response: string; }
+export interface ComplexityEventData { complexity: string; model: string; }
 
 
 // ─── NEW: Agent SSE Stream Function ──────────────────────────────────────────
@@ -61,7 +62,7 @@ export function streamAgent(
   onError: (err: Error) => void
 ): AbortController {
   const controller = new AbortController();
-  const BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000';
+  const BASE_URL = 'http://127.0.0.1:8000';
 
   fetch(`${BASE_URL}/api/v1/agent/stream`, {
     method: 'POST',
