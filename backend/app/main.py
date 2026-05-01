@@ -212,11 +212,15 @@ def _stop_price_updater():
 @app.on_event("startup")
 async def on_startup() -> None:
     logger.info("🚀 %s starting up", settings.app_name)
+    logger.info("Step 1: Validating DB connection...")
     validate_db_connection()  # Fail fast if DB is unreachable
+    logger.info("Step 2: DB connection validated. Creating tables...")
     Base.metadata.create_all(bind=engine)  # Auto-create all registered tables
+    logger.info("Step 3: Tables created. Starting scheduler...")
     start_scheduler()
+    logger.info("Step 4: Scheduler started. Starting price updater...")
     _start_price_updater()
-    logger.info("🗃️ Tables created/verified")
+    logger.info("🗃️ All startup tasks completed successfully.")
 
 
 @app.on_event("shutdown")
