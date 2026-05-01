@@ -4,18 +4,19 @@ News Service (services/news_service.py)
 Fetches, normalizes, and caches relevant financial news for a given stock symbol.
 
 Features:
-- Primary source: Yahoo Finance RSS feed (free, no API keys, very reliable)
+- Primary source: yfinance .news property (reliable, works for Indian .NS stocks)
+- Fallback source: Yahoo Finance RSS feed
 - Normalizes output to schemas.news.NewsArticle
-- In-memory LRU cache with TTL (Time To Live) to prevent spamming the provider
-- Fallback/Error handling: Returns empty list instead of crashing if feed fails
+- In-memory cache with TTL to prevent spamming the provider
+- Returns empty list instead of crashing if fetch fails
 """
 
 import logging
 import urllib.parse
-from datetime import datetime
-from functools import lru_cache
+from datetime import datetime, timezone
 from typing import Dict, Any
 
+import yfinance as yf
 import feedparser
 from pydantic import ValidationError
 
@@ -28,9 +29,10 @@ logger = logging.getLogger(__name__)
 class NewsService:
     """
     Stateful service (holds in-memory cache) for fetching targeted financial news.
+    Primary: yfinance .news | Fallback: Yahoo Finance RSS
     """
 
-    def __init__(self, provider_name: str = "YahooFinanceRSS"):
+    def __init__(self, provider_name: str = "YahooFinance"):
         self.provider_name = provider_name
 
     def _get_cache_key(self, symbol: str) -> str:
@@ -40,22 +42,14 @@ class NewsService:
 
     def get_news_for_symbol(
         self,
-        symbol: str, 
+        symbol: str,
         limit: int = 5,
         cache_ttl_minutes: int = 15,
     ) -> NewsResponse:
         """
         Fetches the latest news articles for a stock symbol.
-        Checks cache first. If Miss, fetches from RSS, normalizes, caches, and returns.
-        
-        Args:
-            symbol: Stock ticker (e.g., "AAPL").
-            limit: Max articles to return (default 5).
-            cache_ttl_minutes: How long to cache the result (default 15m).
-            
-        Returns:
-            NewsResponse validated object.
-            Never raises exceptions on network failure — returns empty list instead.
+        Checks cache first. On miss, fetches from yfinance (with RSS fallback).
+        Never raises exceptions — returns empty list on failure.
         """
         symbol = symbol.upper().strip()
         cache_key = self._get_cache_key(symbol)
@@ -64,15 +58,19 @@ class NewsService:
         cached_data = cache.get(cache_key)
         if cached_data:
             logger.info("News cache HIT | symbol=%s", symbol)
-            # Deserialize dictionary back to Pydantic object
             cached_response = NewsResponse(**cached_data)
             return cached_response.model_copy(update={"cached": True})
 
-        # 2. Cache Miss -> Fetch
+        # 2. Cache Miss -> Fetch from yfinance
         logger.info("News cache MISS | symbol=%s | fetching from %s", symbol, self.provider_name)
-        articles = self._fetch_yahoo_rss(symbol, limit)
+        articles = self._fetch_yfinance_news(symbol, limit)
 
-        # 3. Build Response
+        # 3. Fallback to RSS if yfinance returned nothing
+        if not articles:
+            logger.warning("yfinance returned 0 articles for %s, trying RSS fallback", symbol)
+            articles = self._fetch_yahoo_rss(symbol, limit)
+
+        # 4. Build Response
         response = NewsResponse(
             symbol=symbol,
             count=len(articles),
@@ -81,55 +79,106 @@ class NewsService:
             provider=self.provider_name,
         )
 
-        # 4. Save to Cache
-        # Convert Pydantic object to dict for serialization
+        # 5. Cache Result
         cache.set(cache_key, response.model_dump(mode='json'), ttl_seconds=cache_ttl_minutes * 60)
         return response
 
     def get_news(self, limit: int = 10) -> list[NewsArticle]:
         """
-        Fetches general market news.
-        Uses a set of major index tickers to get a broad view.
+        Fetches general Indian market news using NIFTY 50 index ticker.
         """
-        # Using a major index for general market news
-        return self._fetch_yahoo_rss("^NSEI", limit)
+        articles = self._fetch_yfinance_news("^NSEI", limit)
+        if not articles:
+            articles = self._fetch_yahoo_rss("^NSEI", limit)
+        return articles
 
-    # ── Provider Specific Logic ───────────────────────────────────────────────
+    # ── Provider: yfinance (primary) ──────────────────────────────────────────
+
+    def _fetch_yfinance_news(self, symbol: str, limit: int) -> list[NewsArticle]:
+        """
+        Uses yfinance Ticker.news to fetch news. Works for Indian stocks (.NS).
+        yfinance returns providerPublishTime as a Unix timestamp integer.
+        """
+        try:
+            ticker = yf.Ticker(symbol)
+            raw_news = ticker.news or []
+
+            articles = []
+            for item in raw_news[:limit]:
+                try:
+                    publish_ts = item.get("providerPublishTime")
+                    if publish_ts:
+                        published = datetime.fromtimestamp(publish_ts, tz=timezone.utc).replace(tzinfo=None)
+                    else:
+                        published = datetime.utcnow()
+
+                    title = item.get("title", "")
+                    title_lower = title.lower()
+
+                    positive_words = ['surge', 'gain', 'growth', 'bull', 'high', 'optimism', 'positive',
+                                      'breakthrough', 'profit', 'rise', 'jump', 'rally', 'record']
+                    negative_words = ['drop', 'fall', 'loss', 'bear', 'low', 'pessimism', 'negative',
+                                      'crash', 'down', 'slump', 'decline', 'plunge', 'weak']
+
+                    sentiment = "neutral"
+                    if any(word in title_lower for word in positive_words):
+                        sentiment = "positive"
+                    elif any(word in title_lower for word in negative_words):
+                        sentiment = "negative"
+
+                    article = NewsArticle(
+                        title=title,
+                        source=item.get("publisher", "Yahoo Finance"),
+                        published_at=published,
+                        url=item.get("link", ""),
+                        summary=item.get("summary", title)[:500],
+                        sentiment=sentiment,
+                    )
+                    articles.append(article)
+                except (ValidationError, Exception) as e:
+                    logger.debug("Skipping invalid yfinance article | symbol=%s | error=%s", symbol, e)
+                    continue
+
+            logger.info("yfinance news fetched | symbol=%s | count=%d", symbol, len(articles))
+            return articles
+
+        except Exception as exc:
+            logger.error("yfinance news fetch failed | symbol=%s | error=%s", symbol, str(exc))
+            return []
+
+    # ── Provider: RSS fallback ────────────────────────────────────────────────
 
     def _fetch_yahoo_rss(self, symbol: str, limit: int) -> list[NewsArticle]:
         """
-        Fetches and maps Yahoo Finance RSS feed to our NewsArticle schema.
-        We use RSS because it requires no API key and avoids rate limits better than NewsAPI.
+        Fallback RSS source. Yahoo's old RSS feed is deprecated for most tickers
+        but may still work for some indices.
         """
-        # Encode symbol safely for URL
         encoded_symbol = urllib.parse.quote(symbol)
-        url = f"https://feeds.finance.yahoo.com/rss/2.0/headline?s={encoded_symbol}&region=US&lang=en-US"
+        url = f"https://feeds.finance.yahoo.com/rss/2.0/headline?s={encoded_symbol}&region=IN&lang=en-US"
 
         try:
             feed = feedparser.parse(url)
-            
-            if feed.bozo:  # bozo = 1 means RSS parsing error (usually 404 or network issue)
-                logger.warning(
-                    "RSS feed parse error | symbol=%s | bozo_exc=%s", 
-                    symbol, feed.get("bozo_exception", "Unknown")
-                )
+
+            if feed.bozo:
+                logger.warning("RSS feed parse error | symbol=%s | bozo_exc=%s",
+                               symbol, feed.get("bozo_exception", "Unknown"))
                 return []
 
             articles = []
             for entry in feed.entries[:limit]:
-                # Attempt to parse date, fallback to now if missing
                 try:
-                    # RSS dates are usually RFC 822: "Fri, 19 May 2023 15:30:00 +0000"
-                    # feedparser converts it to a time.struct_time tuple
-                    published = datetime(*entry.published_parsed[:6]) if hasattr(entry, 'published_parsed') and entry.published_parsed else datetime.now()
+                    published = (datetime(*entry.published_parsed[:6])
+                                 if hasattr(entry, 'published_parsed') and entry.published_parsed
+                                 else datetime.utcnow())
                 except Exception:
-                    published = datetime.now()
+                    published = datetime.utcnow()
 
-                # Simple sentiment heuristics for demo purposes
                 title_lower = entry.title.lower()
-                positive_words = ['surge', 'gain', 'growth', 'bull', 'high', 'optimism', 'positive', 'breakthrough', 'profit', 'rise']
-                negative_words = ['drop', 'fall', 'loss', 'bear', 'low', 'pessimism', 'negative', 'crash', 'down', 'slump']
-                
+                positive_words = ['surge', 'gain', 'growth', 'bull', 'high', 'optimism', 'positive',
+                                   'breakthrough', 'profit', 'rise']
+                negative_words = ['drop', 'fall', 'loss', 'bear', 'low', 'pessimism', 'negative',
+                                   'crash', 'down', 'slump']
+
                 sentiment = "neutral"
                 if any(word in title_lower for word in positive_words):
                     sentiment = "positive"
@@ -142,22 +191,20 @@ class NewsService:
                         source=entry.get("publisher", "Yahoo Finance"),
                         published_at=published,
                         url=entry.link,
-                        summary=entry.get("summary", "")[:500],  # Cap summary length
-                        sentiment=sentiment
+                        summary=entry.get("summary", "")[:500],
+                        sentiment=sentiment,
                     )
                     articles.append(article)
                 except ValidationError as ve:
-                    logger.debug("Skipping invalid article | symbol=%s | error=%s", symbol, ve)
+                    logger.debug("Skipping invalid RSS article | symbol=%s | error=%s", symbol, ve)
                     continue
 
             return articles
 
         except Exception as exc:
-            logger.error("Failed to fetch news | symbol=%s | error=%s", symbol, str(exc))
-            # Resilient fallback: empty list, no crash
+            logger.error("RSS news fetch failed | symbol=%s | error=%s", symbol, str(exc))
             return []
 
 
 # ── Module-level singleton ────────────────────────────────────────────────────
-# Keeps the in-memory cache alive across requests in FastAPI
 news_service = NewsService()
