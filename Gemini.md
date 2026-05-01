@@ -3,11 +3,11 @@
 > **CRITICAL NOTICE FOR ANY AI OR HUMAN READING THIS:**
 > This is the single source of truth for the FinSight AI project.
 > Every file path, endpoint, data shape, and architectural decision documented here
-> reflects the ACTUAL state of the codebase as of April 2026.
+> reflects the ACTUAL state of the codebase as of May 2026.
 > Do NOT invent any file, endpoint, or data field that is not listed here.
 > If something is not covered, ask the developer before assuming.
 >
-> **Last updated: April 29, 2026** — Migrated to Supabase Auth (GoTrue). Frontend directly calls Supabase for login/signup. Backend `get_current_user` now verifies Supabase JWTs. Removed custom JWT creation and DB password hashing. Added Supabase SDK client and pure ASGI path rewrite middleware for DigitalOcean deployed routing. **[April 21]** Upgraded `security.py` to support both legacy HS256 string secrets AND modern ES256/ECC P-256 JWK JSON secrets dynamically. Fixed Supabase email confirmation redirect from localhost to live URL. Integrated Graphify knowledge graph tool. **[April 29]** Dropped `public.users` table. Deleted dead auth code (`models/user.py`, `services/auth_service.py`, `ai/analyst.py`). Added OpenRouter agent system (`backend/app/agent/`). Added landing page components. Cleaned up empty placeholder packages. Removed one-time migration scripts.
+> **Last updated: May 1, 2026** — Migrated to Supabase Auth (GoTrue). Frontend directly calls Supabase for login/signup. Backend `get_current_user` now verifies Supabase JWTs. Removed custom JWT creation and DB password hashing. Added Supabase SDK client and pure ASGI path rewrite middleware for DigitalOcean deployed routing. **[April 21]** Upgraded `security.py` to support both legacy HS256 string secrets AND modern ES256/ECC P-256 JWK JSON secrets dynamically. Fixed Supabase email confirmation redirect from localhost to live URL. Integrated Graphify knowledge graph tool. **[April 29]** Dropped `public.users` table. Deleted dead auth code (`models/user.py`, `services/auth_service.py`, `ai/analyst.py`). Added OpenRouter agent system (`backend/app/agent/`). Added landing page components. Cleaned up empty placeholder packages. Removed one-time migration scripts. **[May 1]** Production deployment on DigitalOcean App Platform. Switched `DATABASE_URL` to Supabase Session Pooler (IPv4-compatible). Added conditional `create_all` skip when using pooler connections. Frontend `api-client.ts` and `useWebSocketPrice.ts` now read `NEXT_PUBLIC_API_URL` / `NEXT_PUBLIC_WS_URL` env vars (falls back to localhost for dev). Fixed three TypeScript build errors in artifact system (`ArtifactRenderer.tsx`, `SkeletonThreeWayCompare.tsx`, `artifact-assembler.ts`). Added granular startup step logging to `main.py`.
 
 ---
 
@@ -457,8 +457,9 @@ npm run dev
 
 ## SECTION 4 — HOW FRONTEND AND BACKEND CONNECT
 
-The frontend and backend are **completely separate processes** communicating over HTTP on localhost.
+The frontend and backend are **completely separate processes** communicating over HTTP.
 
+### Local Development
 ```
 ┌─────────────────────┐         HTTP / WebSocket          ┌─────────────────────┐
 │   Next.js Frontend  │ ◄──────────────────────────────► │   FastAPI Backend   │
@@ -469,13 +470,27 @@ The frontend and backend are **completely separate processes** communicating ove
 └─────────────────────┘                                   └─────────────────────┘
 ```
 
-**Connection mechanism:**
-1. `frontend/.env.local` sets `NEXT_PUBLIC_API_URL=http://localhost:8000`
-2. `frontend/src/lib/api-client.ts` reads this and creates a base `apiFetch()` function
-3. All API modules (`stock.api.ts`, `portfolio.api.ts`, etc.) call `apiFetch()` with specific endpoints
-4. The backend's CORS middleware (`allow_origins=["*"]`) permits requests from port 3000
+### Production (DigitalOcean App Platform)
+```
+┌───────────────────────────────────────────────────────────────────────┐
+│   DigitalOcean App Platform  (https://finsight-app-v8wgj.ondigitalocean.app)  │
+│                                                                       │
+│   Route: /     → Next.js Frontend (static + SSR)                      │
+│   Route: /api  → FastAPI Backend  (Python worker, port 8080)          │
+│                                                                       │
+│   Backend → Supabase Session Pooler (IPv4, port 5432)                 │
+└───────────────────────────────────────────────────────────────────────┘
+```
 
-**If the backend is not running**, the frontend catches the network error and surfaces: *"Cannot reach backend server. Is it running on port 8000?"*
+**Connection mechanism:**
+1. `api-client.ts` reads `NEXT_PUBLIC_API_URL` from environment. Falls back to `http://127.0.0.1:8000` for local dev.
+2. `useWebSocketPrice.ts` reads `NEXT_PUBLIC_WS_URL` from environment. Falls back to `ws://127.0.0.1:8000` for local dev.
+3. All API modules (`stock.api.ts`, `portfolio.api.ts`, etc.) call `apiFetch()` with specific endpoints
+4. The backend's CORS middleware (`allow_origins=["*"]`) permits cross-origin requests
+5. In production, DigitalOcean routes `/api/*` traffic to the backend and `/` to the frontend
+6. The `DOPathRewriteMiddleware` in `main.py` re-prepends `/api` to paths that DigitalOcean strips
+
+**If the backend is not running**, the frontend catches the network error and surfaces: *"Failed to fetch"* with a retry option.
 
 ---
 
@@ -490,12 +505,15 @@ Location: `backend/app/main.py`
 2. Creates the FastAPI app instance with Swagger/ReDoc documentation
 3. Registers SlowAPI rate limiting middleware (20 requests/minute default)
 4. Registers CORS middleware (`allow_origins=["*"]` for development)
-5. Registers global exception handlers (422 validation, 500 catch-all)
-6. On startup: validates DB connection, runs `Base.metadata.create_all()`, starts APScheduler for alerts, starts APScheduler for price updates (every 5 min via `price_update_job.py`)
-7. On shutdown: stops both APScheduler instances
-8. Registers all 10 routers
+5. Registers `DOPathRewriteMiddleware` — re-prepends `/api` to paths stripped by DigitalOcean's route trimming
+6. Registers global exception handlers (422 validation, 500 catch-all)
+7. On startup: validates DB connection → conditionally runs `Base.metadata.create_all()` (skipped when using Supabase pooler — see note below) → starts APScheduler for alerts → starts APScheduler for price updates (every 5 min via `price_update_job.py`). Each step is logged as "Step 1", "Step 2", etc. for deployment debugging.
+8. On shutdown: stops both APScheduler instances
+9. Registers all 10 routers
 
 > **IMPORTANT:** `Base.metadata.create_all()` only creates **new tables**. It does NOT add new columns to existing tables. If new columns are added to a model, you MUST run `migrate.py` manually. See Section 15.
+>
+> **[May 1] Pooler Skip:** When `DATABASE_URL` contains `pooler.supabase.com`, `create_all()` is **automatically skipped** at startup. The Supabase Session Pooler (PgBouncer in transaction mode) does not support the heavy DDL/metadata reflection queries that `create_all()` sends, causing an infinite hang. Since tables already exist in the cloud database, this is safe. For fresh database setups, use the **direct connection** (port 5432, `db.xxx.supabase.co`) temporarily to run `create_all()` once.
 
 **Router registration order:**
 ```python
@@ -606,8 +624,14 @@ app.include_router(agent_router)        # /api/v1/agent/*
 
 Location: Supabase cloud (PostgreSQL).
 Connection configured via `DATABASE_URL` in `.env`.
-Tables are auto-created by SQLAlchemy on first backend startup via `Base.metadata.create_all(bind=engine)`.
+Tables are auto-created by SQLAlchemy on first backend startup via `Base.metadata.create_all(bind=engine)` — **except** when using a Supabase Session Pooler URL (see Section 5 note on Pooler Skip).
 Supabase dashboard: https://supabase.com/dashboard
+
+**Connection String Formats:**
+- **Direct (local dev / first-time setup):** `postgresql+psycopg2://postgres:[PASS]@db.xxxx.supabase.co:5432/postgres`
+- **Session Pooler (production / IPv4):** `postgresql+psycopg2://postgres.xxxx:[PASS]@aws-1-ap-southeast-1.pooler.supabase.com:5432/postgres`
+
+> **⚠️ IPv4 Note:** DigitalOcean App Platform does not support IPv6. The direct Supabase connection (`db.xxx.supabase.co`) resolves to IPv6 only. You MUST use the Session Pooler URL for production deployments on DigitalOcean.
 
 ### ORM Models (backend/app/models/)
 
@@ -776,15 +800,17 @@ Everything else (indices, movers, news, watchlist prices) is fetched live from t
 
 ## SECTION 9 — API CLIENT LAYER (FRONTEND → BACKEND)
 
-### Base Client (`api-client.ts`)
+### Base Client (`api-client.ts`) [Updated May 1]
 ```typescript
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000';
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
 
 export async function apiFetch<T>(endpoint: string, options?: RequestInit): Promise<T>
 ```
+- **[May 1]** `BASE_URL` reads from `NEXT_PUBLIC_API_URL` environment variable. Falls back to `http://127.0.0.1:8000` for local development. Previously hardcoded to localhost.
 - Auto-prepends `BASE_URL` to all endpoints
-- Sets `Content-Type: application/json` header
-- Throws `ApiError(0, ...)` on network failure (backend unreachable)
+- Retrieves auth token from live Supabase session (`supabase.auth.getSession()`), falls back to localStorage
+- Sets `Content-Type: application/json` and `Authorization: Bearer <token>` headers
+- On `401` response: auto-signs out via Supabase and redirects to `/auth/login`
 - Throws `ApiError(status, detail)` on non-200 responses
 - Returns parsed JSON response
 
@@ -800,15 +826,18 @@ export async function apiFetch<T>(endpoint: string, options?: RequestInit): Prom
 | `news.api.ts` | `newsApi` | `getLatest(limit)` |
 | `market.api.ts` | `marketApi` | `getIndices()`, `getMovers()` |
 
-### WebSocket Hook (`useWebSocketPrice.ts`)
+### WebSocket Hook (`useWebSocketPrice.ts`) [Updated May 1]
 ```typescript
+const WS_BASE = process.env.NEXT_PUBLIC_WS_URL || "ws://127.0.0.1:8000";
+
 function useWebSocketPrice(symbol: string | null): {
   price: number | null;
   connected: boolean;
   error: string | null;
 }
 ```
-- Connects to `ws://localhost:8000/api/v1/stream/price/{symbol}`
+- **[May 1]** `WS_BASE` reads from `NEXT_PUBLIC_WS_URL` environment variable. Falls back to `ws://127.0.0.1:8000` for local development. Previously hardcoded to localhost.
+- Connects to `{WS_BASE}/api/v1/stream/price/{symbol}`
 - Auto-reconnects on symbol change
 - Cleans up WebSocket on component unmount
 
@@ -942,6 +971,14 @@ All prices are displayed in **Indian Rupees (₹)** using `toLocaleString('en-IN
 12. **[Apr 21] Supabase JWT Algorithm Change — ECC P-256:** Supabase rotated its JWT signing key from the legacy HS256 symmetric secret to a modern ECC P-256 asymmetric key (`ES256`). If you encounter a login loop or `401 Unauthorized` on protected endpoints after this date, verify that your `SUPABASE_JWT_SECRET` in `.env` matches the current active key type in your Supabase project (Authentication > JWT Signing Keys). The backend `security.py` now detects the format automatically.
 
 13. **[Apr 21] Supabase Email Confirmation URL:** By default, Supabase sends confirmation emails that redirect to `http://localhost:3000`. For production deployments, you MUST update the **Site URL** in the Supabase dashboard (Authentication → URL Configuration) to your live domain. Without this, mobile users clicking the link will see `ERR_CONNECTION_REFUSED`.
+
+14. **[May 1] Supabase Pooler hangs `create_all()`:** When using the Supabase Session Pooler (`pooler.supabase.com`), `Base.metadata.create_all()` sends DDL introspection queries that PgBouncer cannot handle in transaction mode. This causes the startup to hang indefinitely, failing DigitalOcean health checks. The fix: `main.py` detects pooler URLs and skips `create_all()`. Tables must already exist (created via direct connection or Supabase dashboard).
+
+15. **[May 1] DigitalOcean IPv6 Limitation:** DigitalOcean App Platform workers cannot reach IPv6-only hosts. The default Supabase direct connection (`db.xxx.supabase.co`) resolves to IPv6. You MUST use the **Session Pooler** URL (`aws-1-ap-southeast-1.pooler.supabase.com`) which provides an IPv4 endpoint.
+
+16. **[May 1] Hidden newline in DigitalOcean env vars:** When pasting `DATABASE_URL` into DigitalOcean's environment variable UI, an invisible newline character can be appended. This causes `FATAL: database "postgres\n" does not exist`. Always verify by deleting and retyping the last few characters of the value after pasting.
+
+17. **[May 1] `NEXT_PUBLIC_SUPABASE_ANON` vs `NEXT_PUBLIC_SUPABASE_ANON_KEY`:** The Supabase JS client expects `NEXT_PUBLIC_SUPABASE_ANON_KEY` (with `_KEY` suffix). If the variable is named without `_KEY`, Supabase auth will silently fail in production.
 
 ---
 
@@ -1127,3 +1164,42 @@ python -m graphify hook install
 #### 🛠️ `.env` Fix
 - **Problem:** `SUPABASE_JWT_SECRET` had a duplicate key prefix (`SUPABASE_JWT_SECRET=SUPABASE_JWT_SECRET=...`), making the value unparseable.
 - **Fixed:** Corrected to a single `SUPABASE_JWT_SECRET='{...json...}'`.
+
+### May 1, 2026
+
+#### 🚀 Production Deployment on DigitalOcean App Platform
+- **Platform:** DigitalOcean App Platform with two components:
+  - **Frontend** (`full-stack-client-dashboard-fron`): Next.js static/SSR build, route `/`
+  - **Backend** (`full-stack-client-dashboard`): Python/FastAPI worker, route `/api`, port `8080`
+- **Live URL:** `https://finsight-app-v8wgj.ondigitalocean.app`
+
+#### 🗄️ Database Connection — Supabase Session Pooler
+- **Problem:** DigitalOcean workers are IPv4-only. The direct Supabase connection (`db.xxx.supabase.co:5432`) resolves to IPv6, causing `No route to host` errors.
+- **Fix:** Switched `DATABASE_URL` to the Supabase **Session Pooler**: `postgresql+psycopg2://postgres.xxx:[PASS]@aws-1-ap-southeast-1.pooler.supabase.com:5432/postgres`
+- **Files Modified:** `.env` (DigitalOcean environment variables)
+
+#### ⏳ Startup Hang Fix — Conditional `create_all()` Skip
+- **Problem:** `Base.metadata.create_all(bind=engine)` in `main.py` sends heavy DDL introspection queries. The Supabase Session Pooler (PgBouncer in transaction mode) cannot handle these, causing an infinite hang. DigitalOcean's health check probe then kills the container after 13 failed attempts.
+- **Fix:** Added a runtime check in `on_startup()`: if `DATABASE_URL` contains `pooler.supabase.com`, `create_all()` is skipped entirely. Tables must already exist in the database.
+- **Files Modified:** `backend/app/main.py` (lines 217–221)
+- **Startup now logs:** `Step 1: Validating DB connection...` → `Step 2: Skipping create_all...` → `Step 3: Starting scheduler...` → `Step 4: Starting price updater...` → `All startup tasks completed successfully.`
+
+#### 🌐 Frontend API URL — Environment Variable Migration
+- **Problem:** `api-client.ts` had `BASE_URL` hardcoded to `http://127.0.0.1:8000`. `useWebSocketPrice.ts` had `WS_BASE` hardcoded to `ws://127.0.0.1:8000`. In production, the browser cannot reach localhost.
+- **Fix:** Both now read from `NEXT_PUBLIC_API_URL` and `NEXT_PUBLIC_WS_URL` environment variables, falling back to localhost for local development.
+- **Files Modified:** `frontend/src/lib/api-client.ts`, `frontend/src/lib/useWebSocketPrice.ts`
+- **DigitalOcean Frontend Env Vars Added:**
+  - `NEXT_PUBLIC_API_URL` = `https://finsight-app-v8wgj.ondigitalocean.app`
+  - `NEXT_PUBLIC_WS_URL` = `wss://finsight-app-v8wgj.ondigitalocean.app`
+  - `NEXT_PUBLIC_SUPABASE_URL` = Supabase project URL
+  - `NEXT_PUBLIC_SUPABASE_ANON_KEY` = Supabase anon public key (note: must end with `_KEY`)
+
+#### 🔧 TypeScript Build Fixes (3 errors)
+- **Error 1 — `ArtifactRenderer.tsx`:** Imported `ProgressBar` from `./atoms/ProgressBar`, but the export was renamed to `ShareholdingProgress`. Fixed the import name.
+- **Error 2 — `SkeletonThreeWayCompare.tsx`:** Passed `w`/`h` shorthand props to `<Shimmer>`, but the component interface requires `width`/`height`. Updated all prop names.
+- **Error 3 — `artifact-assembler.ts`:** `s.compare` was typed as `any[]` (array), but `hasMeaningfulCompare()` accessed `.peers` on it (object property). Cast `s.compare as any` to allow dynamic property access.
+- **Files Modified:** `frontend/src/components/artifact/ArtifactRenderer.tsx`, `frontend/src/components/artifact/skeletons/SkeletonThreeWayCompare.tsx`, `frontend/src/lib/artifact-assembler.ts`
+
+#### 📊 Startup Observability
+- **Added:** Granular step-by-step logging to `on_startup()` in `main.py`. Each phase (DB validation, table creation, scheduler start, price updater start) is logged with a numbered step label. This allows instant identification of which startup phase is hanging in cloud deployment logs.
+- **Files Modified:** `backend/app/main.py`

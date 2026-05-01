@@ -144,7 +144,7 @@ class DOPathRewriteMiddleware:
         self.app = app
 
     async def __call__(self, scope, receive, send):
-        if scope["type"] == "http" and scope["path"].startswith("/v1/"):
+        if scope["type"] in ("http", "websocket") and scope["path"].startswith("/v1/"):
             scope["path"] = "/api" + scope["path"]
         await self.app(scope, receive, send)
 
