@@ -3,18 +3,17 @@ News Service (services/news_service.py)
 
 Fetches, normalizes, and caches relevant financial news for a given stock symbol.
 
-Features:
-- Primary source: yfinance .news property (reliable, works for Indian .NS stocks)
-- Fallback source: Yahoo Finance RSS feed
-- Normalizes output to schemas.news.NewsArticle
-- In-memory cache with TTL to prevent spamming the provider
-- Returns empty list instead of crashing if fetch fails
+Sources (in priority order):
+1. yfinance Ticker.news  — fast, works for most tickers including .NS
+2. yfinance Search API   — broader search results, good fallback
+3. Yahoo Finance RSS     — legacy fallback
+
+Handles both old yfinance news format (flat keys) and new format (nested content).
 """
 
 import logging
 import urllib.parse
 from datetime import datetime, timezone
-from typing import Dict, Any
 
 import yfinance as yf
 import feedparser
@@ -26,10 +25,79 @@ from ..schemas.news import NewsArticle, NewsResponse
 logger = logging.getLogger(__name__)
 
 
+def _parse_sentiment(title: str) -> str:
+    title_lower = title.lower()
+    positive = ['surge', 'gain', 'growth', 'bull', 'optimism', 'positive',
+                 'breakthrough', 'profit', 'rise', 'jump', 'rally', 'record',
+                 'soar', 'strong', 'beat', 'upgrade', 'buy']
+    negative = ['drop', 'fall', 'loss', 'bear', 'pessimism', 'negative',
+                 'crash', 'down', 'slump', 'decline', 'plunge', 'weak',
+                 'miss', 'downgrade', 'sell', 'risk', 'concern', 'warning']
+    if any(w in title_lower for w in positive):
+        return "positive"
+    if any(w in title_lower for w in negative):
+        return "negative"
+    return "neutral"
+
+
+def _parse_yf_news_item(item: dict) -> dict | None:
+    """
+    Parse a single yfinance news item. Handles both formats:
+    - Old (pre-1.0): flat keys {title, publisher, link, providerPublishTime, ...}
+    - New (1.x): nested {content: {title, summary, pubDate, provider, canonicalUrl, ...}}
+    Returns a normalized dict or None if parsing fails.
+    """
+    try:
+        # ── New yfinance 1.x format ──
+        content = item.get("content", {})
+        if content and isinstance(content, dict):
+            title = content.get("title", "")
+            summary = content.get("summary", title)
+            url = ""
+            canonical = content.get("canonicalUrl", {})
+            if isinstance(canonical, dict):
+                url = canonical.get("url", "")
+            elif isinstance(canonical, str):
+                url = canonical
+
+            pub_date = content.get("pubDate", "")
+            try:
+                published = datetime.fromisoformat(pub_date.replace("Z", "+00:00")).replace(tzinfo=None) if pub_date else datetime.utcnow()
+            except Exception:
+                published = datetime.utcnow()
+
+            provider = content.get("provider", {})
+            source = provider.get("displayName", "Yahoo Finance") if isinstance(provider, dict) else str(provider)
+
+            return dict(title=title, source=source, published_at=published, url=url, summary=summary[:500])
+
+        # ── Old yfinance format (flat keys) ──
+        title = item.get("title", "")
+        if not title:
+            return None
+
+        pub_ts = item.get("providerPublishTime")
+        if pub_ts:
+            published = datetime.fromtimestamp(pub_ts, tz=timezone.utc).replace(tzinfo=None)
+        else:
+            published = datetime.utcnow()
+
+        return dict(
+            title=title,
+            source=item.get("publisher", "Yahoo Finance"),
+            published_at=published,
+            url=item.get("link", ""),
+            summary=item.get("summary", title)[:500],
+        )
+    except Exception as e:
+        logger.debug("Failed to parse news item: %s | error: %s", item, e)
+        return None
+
+
 class NewsService:
     """
-    Stateful service (holds in-memory cache) for fetching targeted financial news.
-    Primary: yfinance .news | Fallback: Yahoo Finance RSS
+    Fetches and caches financial news.
+    Priority: yfinance Ticker.news → yfinance Search API → Yahoo RSS
     """
 
     def __init__(self, provider_name: str = "YahooFinance"):
@@ -38,39 +106,31 @@ class NewsService:
     def _get_cache_key(self, symbol: str) -> str:
         return f"news:{symbol.upper()}"
 
-    # ── API Integration ───────────────────────────────────────────────────────
-
     def get_news_for_symbol(
         self,
         symbol: str,
         limit: int = 5,
         cache_ttl_minutes: int = 15,
     ) -> NewsResponse:
-        """
-        Fetches the latest news articles for a stock symbol.
-        Checks cache first. On miss, fetches from yfinance (with RSS fallback).
-        Never raises exceptions — returns empty list on failure.
-        """
         symbol = symbol.upper().strip()
         cache_key = self._get_cache_key(symbol)
 
-        # 1. Check Cache
         cached_data = cache.get(cache_key)
         if cached_data:
             logger.info("News cache HIT | symbol=%s", symbol)
-            cached_response = NewsResponse(**cached_data)
-            return cached_response.model_copy(update={"cached": True})
+            return NewsResponse(**cached_data).model_copy(update={"cached": True})
 
-        # 2. Cache Miss -> Fetch from yfinance
-        logger.info("News cache MISS | symbol=%s | fetching from %s", symbol, self.provider_name)
-        articles = self._fetch_yfinance_news(symbol, limit)
+        logger.info("News cache MISS | symbol=%s", symbol)
+        articles = self._fetch_ticker_news(symbol, limit)
 
-        # 3. Fallback to RSS if yfinance returned nothing
         if not articles:
-            logger.warning("yfinance returned 0 articles for %s, trying RSS fallback", symbol)
+            logger.warning("Ticker.news returned 0 for %s — trying Search API", symbol)
+            articles = self._fetch_search_news(symbol, limit)
+
+        if not articles:
+            logger.warning("Search API returned 0 for %s — trying RSS fallback", symbol)
             articles = self._fetch_yahoo_rss(symbol, limit)
 
-        # 4. Build Response
         response = NewsResponse(
             symbol=symbol,
             count=len(articles),
@@ -78,90 +138,76 @@ class NewsService:
             cached=False,
             provider=self.provider_name,
         )
-
-        # 5. Cache Result
         cache.set(cache_key, response.model_dump(mode='json'), ttl_seconds=cache_ttl_minutes * 60)
         return response
 
     def get_news(self, limit: int = 10) -> list[NewsArticle]:
-        """
-        Fetches general Indian market news using NIFTY 50 index ticker.
-        """
-        articles = self._fetch_yfinance_news("^NSEI", limit)
+        """General Indian market news."""
+        articles = self._fetch_ticker_news("^NSEI", limit)
+        if not articles:
+            articles = self._fetch_search_news("NIFTY 50 India", limit)
         if not articles:
             articles = self._fetch_yahoo_rss("^NSEI", limit)
         return articles
 
-    # ── Provider: yfinance (primary) ──────────────────────────────────────────
+    # ── Source 1: yfinance Ticker.news ───────────────────────────────────────
 
-    def _fetch_yfinance_news(self, symbol: str, limit: int) -> list[NewsArticle]:
-        """
-        Uses yfinance Ticker.news to fetch news. Works for Indian stocks (.NS).
-        yfinance returns providerPublishTime as a Unix timestamp integer.
-        """
+    def _fetch_ticker_news(self, symbol: str, limit: int) -> list[NewsArticle]:
         try:
             ticker = yf.Ticker(symbol)
             raw_news = ticker.news or []
+            logger.info("yfinance Ticker.news raw count | symbol=%s | count=%d", symbol, len(raw_news))
 
             articles = []
             for item in raw_news[:limit]:
-                try:
-                    publish_ts = item.get("providerPublishTime")
-                    if publish_ts:
-                        published = datetime.fromtimestamp(publish_ts, tz=timezone.utc).replace(tzinfo=None)
-                    else:
-                        published = datetime.utcnow()
-
-                    title = item.get("title", "")
-                    title_lower = title.lower()
-
-                    positive_words = ['surge', 'gain', 'growth', 'bull', 'high', 'optimism', 'positive',
-                                      'breakthrough', 'profit', 'rise', 'jump', 'rally', 'record']
-                    negative_words = ['drop', 'fall', 'loss', 'bear', 'low', 'pessimism', 'negative',
-                                      'crash', 'down', 'slump', 'decline', 'plunge', 'weak']
-
-                    sentiment = "neutral"
-                    if any(word in title_lower for word in positive_words):
-                        sentiment = "positive"
-                    elif any(word in title_lower for word in negative_words):
-                        sentiment = "negative"
-
-                    article = NewsArticle(
-                        title=title,
-                        source=item.get("publisher", "Yahoo Finance"),
-                        published_at=published,
-                        url=item.get("link", ""),
-                        summary=item.get("summary", title)[:500],
-                        sentiment=sentiment,
-                    )
-                    articles.append(article)
-                except (ValidationError, Exception) as e:
-                    logger.debug("Skipping invalid yfinance article | symbol=%s | error=%s", symbol, e)
+                parsed = _parse_yf_news_item(item)
+                if not parsed or not parsed.get("title"):
                     continue
+                try:
+                    sentiment = _parse_sentiment(parsed["title"])
+                    articles.append(NewsArticle(sentiment=sentiment, **parsed))
+                except ValidationError as e:
+                    logger.debug("Validation error for news item: %s", e)
 
-            logger.info("yfinance news fetched | symbol=%s | count=%d", symbol, len(articles))
+            logger.info("Ticker.news parsed | symbol=%s | count=%d", symbol, len(articles))
             return articles
-
         except Exception as exc:
-            logger.error("yfinance news fetch failed | symbol=%s | error=%s", symbol, str(exc))
+            logger.error("Ticker.news failed | symbol=%s | error=%s", symbol, exc)
             return []
 
-    # ── Provider: RSS fallback ────────────────────────────────────────────────
+    # ── Source 2: yfinance Search API ────────────────────────────────────────
+
+    def _fetch_search_news(self, query: str, limit: int) -> list[NewsArticle]:
+        try:
+            search = yf.Search(query, news_count=limit)
+            raw_news = search.news or []
+            logger.info("yfinance Search.news raw count | query=%s | count=%d", query, len(raw_news))
+
+            articles = []
+            for item in raw_news[:limit]:
+                parsed = _parse_yf_news_item(item)
+                if not parsed or not parsed.get("title"):
+                    continue
+                try:
+                    sentiment = _parse_sentiment(parsed["title"])
+                    articles.append(NewsArticle(sentiment=sentiment, **parsed))
+                except ValidationError as e:
+                    logger.debug("Validation error for search news item: %s", e)
+
+            logger.info("Search.news parsed | query=%s | count=%d", query, len(articles))
+            return articles
+        except Exception as exc:
+            logger.error("Search.news failed | query=%s | error=%s", query, exc)
+            return []
+
+    # ── Source 3: RSS fallback ────────────────────────────────────────────────
 
     def _fetch_yahoo_rss(self, symbol: str, limit: int) -> list[NewsArticle]:
-        """
-        Fallback RSS source. Yahoo's old RSS feed is deprecated for most tickers
-        but may still work for some indices.
-        """
         encoded_symbol = urllib.parse.quote(symbol)
         url = f"https://feeds.finance.yahoo.com/rss/2.0/headline?s={encoded_symbol}&region=IN&lang=en-US"
-
         try:
             feed = feedparser.parse(url)
-
             if feed.bozo:
-                logger.warning("RSS feed parse error | symbol=%s | bozo_exc=%s",
-                               symbol, feed.get("bozo_exception", "Unknown"))
                 return []
 
             articles = []
@@ -173,36 +219,20 @@ class NewsService:
                 except Exception:
                     published = datetime.utcnow()
 
-                title_lower = entry.title.lower()
-                positive_words = ['surge', 'gain', 'growth', 'bull', 'high', 'optimism', 'positive',
-                                   'breakthrough', 'profit', 'rise']
-                negative_words = ['drop', 'fall', 'loss', 'bear', 'low', 'pessimism', 'negative',
-                                   'crash', 'down', 'slump']
-
-                sentiment = "neutral"
-                if any(word in title_lower for word in positive_words):
-                    sentiment = "positive"
-                elif any(word in title_lower for word in negative_words):
-                    sentiment = "negative"
-
                 try:
-                    article = NewsArticle(
+                    articles.append(NewsArticle(
                         title=entry.title,
                         source=entry.get("publisher", "Yahoo Finance"),
                         published_at=published,
                         url=entry.link,
                         summary=entry.get("summary", "")[:500],
-                        sentiment=sentiment,
-                    )
-                    articles.append(article)
-                except ValidationError as ve:
-                    logger.debug("Skipping invalid RSS article | symbol=%s | error=%s", symbol, ve)
+                        sentiment=_parse_sentiment(entry.title),
+                    ))
+                except ValidationError:
                     continue
-
             return articles
-
         except Exception as exc:
-            logger.error("RSS news fetch failed | symbol=%s | error=%s", symbol, str(exc))
+            logger.error("RSS fallback failed | symbol=%s | error=%s", symbol, exc)
             return []
 
 
