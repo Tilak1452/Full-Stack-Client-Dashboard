@@ -9,7 +9,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\check_apis.py",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_check_apis_py",
-      "community": 59,
+      "community": 60,
       "norm_label": "check_apis.py"
     },
     {
@@ -18,7 +18,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\migrate.py",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_migrate_py",
-      "community": 28,
+      "community": 29,
       "norm_label": "migrate.py"
     },
     {
@@ -27,7 +27,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\migrate.py",
       "source_location": "L10",
       "id": "migrate_migrate",
-      "community": 28,
+      "community": 29,
       "norm_label": "migrate()"
     },
     {
@@ -36,7 +36,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\__init__.py",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_backend_init_py",
-      "community": 60,
+      "community": 61,
       "norm_label": "__init__.py"
     },
     {
@@ -45,7 +45,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\main.py",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_backend_app_main_py",
-      "community": 8,
+      "community": 6,
       "norm_label": "main.py"
     },
     {
@@ -54,7 +54,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\main.py",
       "source_location": "L137",
       "id": "main_dopathrewritemiddleware",
-      "community": 8,
+      "community": 6,
       "norm_label": "dopathrewritemiddleware"
     },
     {
@@ -63,7 +63,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\main.py",
       "source_location": "L143",
       "id": "main_dopathrewritemiddleware_init",
-      "community": 8,
+      "community": 6,
       "norm_label": ".__init__()"
     },
     {
@@ -72,7 +72,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\main.py",
       "source_location": "L146",
       "id": "main_dopathrewritemiddleware_call",
-      "community": 8,
+      "community": 6,
       "norm_label": ".__call__()"
     },
     {
@@ -81,7 +81,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\main.py",
       "source_location": "L157",
       "id": "main_validation_exception_handler",
-      "community": 8,
+      "community": 6,
       "norm_label": "validation_exception_handler()"
     },
     {
@@ -90,7 +90,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\main.py",
       "source_location": "L168",
       "id": "main_global_exception_handler",
-      "community": 8,
+      "community": 6,
       "norm_label": "global_exception_handler()"
     },
     {
@@ -99,7 +99,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\main.py",
       "source_location": "L184",
       "id": "main_start_price_updater",
-      "community": 8,
+      "community": 6,
       "norm_label": "_start_price_updater()"
     },
     {
@@ -108,7 +108,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\main.py",
       "source_location": "L205",
       "id": "main_stop_price_updater",
-      "community": 8,
+      "community": 6,
       "norm_label": "_stop_price_updater()"
     },
     {
@@ -117,25 +117,25 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\main.py",
       "source_location": "L213",
       "id": "main_on_startup",
-      "community": 8,
+      "community": 6,
       "norm_label": "on_startup()"
     },
     {
       "label": "on_shutdown()",
       "file_type": "code",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\main.py",
-      "source_location": "L223",
+      "source_location": "L227",
       "id": "main_on_shutdown",
-      "community": 8,
+      "community": 6,
       "norm_label": "on_shutdown()"
     },
     {
       "label": "health_check()",
       "file_type": "code",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\main.py",
-      "source_location": "L244",
+      "source_location": "L248",
       "id": "main_health_check",
-      "community": 8,
+      "community": 6,
       "norm_label": "health_check()"
     },
     {
@@ -143,7 +143,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\main.py",
       "source_location": "L1",
-      "community": 8,
+      "community": 6,
       "norm_label": "application entry point (main.py)  this module serves as the central orchestra",
       "id": "main_rationale_1"
     },
@@ -152,7 +152,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\main.py",
       "source_location": "L138",
-      "community": 8,
+      "community": 6,
       "norm_label": "pure asgi middleware to rewrite paths before starlette's router processes them.",
       "id": "main_rationale_138"
     },
@@ -161,7 +161,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\main.py",
       "source_location": "L185",
-      "community": 8,
+      "community": 6,
       "norm_label": "start the background job that refreshes holding prices every 5 minutes.",
       "id": "main_rationale_185"
     },
@@ -169,10 +169,10 @@
       "label": "Liveness probe reporting system status.",
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\main.py",
-      "source_location": "L245",
-      "community": 8,
-      "norm_label": "liveness probe reporting system status.",
-      "id": "main_rationale_245"
+      "source_location": "L249",
+      "id": "main_rationale_249",
+      "community": 6,
+      "norm_label": "liveness probe reporting system status."
     },
     {
       "label": "__init__.py",
@@ -180,7 +180,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\__init__.py",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_backend_app_init_py",
-      "community": 8,
+      "community": 6,
       "norm_label": "__init__.py"
     },
     {
@@ -198,7 +198,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\agent\\graph.py",
       "source_location": "L43",
       "id": "graph_agentstate",
-      "community": 11,
+      "community": 10,
       "norm_label": "agentstate"
     },
     {
@@ -207,7 +207,7 @@
       "source_file": "",
       "source_location": "",
       "id": "typeddict",
-      "community": 11,
+      "community": 10,
       "norm_label": "typeddict"
     },
     {
@@ -512,7 +512,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\agent\\graph.py",
       "source_location": "L44",
-      "community": 11,
+      "community": 10,
       "norm_label": "complete state passed between all nodes in the graph.",
       "id": "graph_rationale_44"
     },
@@ -593,7 +593,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\agent\\graph.py",
       "source_location": "L445",
-      "community": 61,
+      "community": 62,
       "norm_label": "true when every key in this pool is currently rate-limited.",
       "id": "graph_rationale_445"
     },
@@ -774,7 +774,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\agent\\prompts.py",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_backend_app_agent_prompts_py",
-      "community": 29,
+      "community": 30,
       "norm_label": "prompts.py"
     },
     {
@@ -782,7 +782,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\agent\\prompts.py",
       "source_location": "L1",
-      "community": 29,
+      "community": 30,
       "norm_label": "finsight ai \u2014 upgraded prompt system all prompts include: - failure protocol (pr",
       "id": "prompts_rationale_1"
     },
@@ -1062,7 +1062,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\agent\\__init__.py",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_backend_app_agent_init_py",
-      "community": 62,
+      "community": 63,
       "norm_label": "__init__.py"
     },
     {
@@ -1071,7 +1071,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\ai\\document_loader.py",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_backend_app_ai_document_loader_py",
-      "community": 6,
+      "community": 8,
       "norm_label": "document_loader.py"
     },
     {
@@ -1080,7 +1080,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\ai\\document_loader.py",
       "source_location": "L15",
       "id": "document_loader_documentprocessor",
-      "community": 6,
+      "community": 8,
       "norm_label": "documentprocessor"
     },
     {
@@ -1089,7 +1089,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\ai\\document_loader.py",
       "source_location": "L16",
       "id": "document_loader_documentprocessor_init",
-      "community": 6,
+      "community": 8,
       "norm_label": ".__init__()"
     },
     {
@@ -1098,7 +1098,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\ai\\document_loader.py",
       "source_location": "L23",
       "id": "document_loader_documentprocessor_load_and_split",
-      "community": 6,
+      "community": 8,
       "norm_label": ".load_and_split()"
     },
     {
@@ -1106,7 +1106,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\ai\\document_loader.py",
       "source_location": "L1",
-      "community": 6,
+      "community": 8,
       "norm_label": "document loader module for the financial research ai agent. handles ingestion o",
       "id": "document_loader_rationale_1"
     },
@@ -1115,7 +1115,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\ai\\document_loader.py",
       "source_location": "L24",
-      "community": 6,
+      "community": 8,
       "norm_label": "loads a document from the file path and splits it into chunks.",
       "id": "document_loader_rationale_24"
     },
@@ -1431,7 +1431,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\ai\\vector_store_chroma.py",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_backend_app_ai_vector_store_chroma_py",
-      "community": 6,
+      "community": 8,
       "norm_label": "vector_store_chroma.py"
     },
     {
@@ -1440,7 +1440,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\ai\\vector_store_chroma.py",
       "source_location": "L12",
       "id": "vector_store_chroma_chromavectorstore",
-      "community": 6,
+      "community": 8,
       "norm_label": "chromavectorstore"
     },
     {
@@ -1449,7 +1449,7 @@
       "source_file": "",
       "source_location": "",
       "id": "vectorstoreinterface",
-      "community": 6,
+      "community": 8,
       "norm_label": "vectorstoreinterface"
     },
     {
@@ -1458,7 +1458,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\ai\\vector_store_chroma.py",
       "source_location": "L13",
       "id": "vector_store_chroma_chromavectorstore_init",
-      "community": 6,
+      "community": 8,
       "norm_label": ".__init__()"
     },
     {
@@ -1467,7 +1467,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\ai\\vector_store_chroma.py",
       "source_location": "L35",
       "id": "vector_store_chroma_chromavectorstore_add_documents",
-      "community": 6,
+      "community": 8,
       "norm_label": ".add_documents()"
     },
     {
@@ -1476,7 +1476,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\ai\\vector_store_chroma.py",
       "source_location": "L49",
       "id": "vector_store_chroma_chromavectorstore_similarity_search_with_score",
-      "community": 6,
+      "community": 8,
       "norm_label": ".similarity_search_with_score()"
     },
     {
@@ -1485,7 +1485,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\ai\\vector_store_pinecone.py",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_backend_app_ai_vector_store_pinecone_py",
-      "community": 6,
+      "community": 8,
       "norm_label": "vector_store_pinecone.py"
     },
     {
@@ -1494,7 +1494,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\ai\\vector_store_pinecone.py",
       "source_location": "L18",
       "id": "vector_store_pinecone_pineconevectorstoreimpl",
-      "community": 6,
+      "community": 8,
       "norm_label": "pineconevectorstoreimpl"
     },
     {
@@ -1503,7 +1503,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\ai\\vector_store_pinecone.py",
       "source_location": "L28",
       "id": "vector_store_pinecone_pineconevectorstoreimpl_init",
-      "community": 6,
+      "community": 8,
       "norm_label": ".__init__()"
     },
     {
@@ -1512,7 +1512,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\ai\\vector_store_pinecone.py",
       "source_location": "L61",
       "id": "vector_store_pinecone_pineconevectorstoreimpl_embed_texts",
-      "community": 6,
+      "community": 8,
       "norm_label": "._embed_texts()"
     },
     {
@@ -1521,7 +1521,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\ai\\vector_store_pinecone.py",
       "source_location": "L64",
       "id": "vector_store_pinecone_pineconevectorstoreimpl_embed_query",
-      "community": 6,
+      "community": 8,
       "norm_label": "._embed_query()"
     },
     {
@@ -1530,7 +1530,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\ai\\vector_store_pinecone.py",
       "source_location": "L69",
       "id": "vector_store_pinecone_pineconevectorstoreimpl_add_documents",
-      "community": 6,
+      "community": 8,
       "norm_label": ".add_documents()"
     },
     {
@@ -1539,7 +1539,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\ai\\vector_store_pinecone.py",
       "source_location": "L96",
       "id": "vector_store_pinecone_pineconevectorstoreimpl_similarity_search_with_score",
-      "community": 6,
+      "community": 8,
       "norm_label": ".similarity_search_with_score()"
     },
     {
@@ -1547,7 +1547,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\ai\\vector_store_pinecone.py",
       "source_location": "L19",
-      "community": 6,
+      "community": 8,
       "norm_label": "managed cloud vector store backed by pinecone (raw sdk, no langchain-pinecone).",
       "id": "vector_store_pinecone_rationale_19"
     },
@@ -1557,7 +1557,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\ai\\__init__.py",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_backend_app_ai_init_py",
-      "community": 63,
+      "community": 64,
       "norm_label": "__init__.py"
     },
     {
@@ -1566,7 +1566,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\ai\\interfaces\\vector_store.py",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_backend_app_ai_interfaces_vector_store_py",
-      "community": 6,
+      "community": 8,
       "norm_label": "vector_store.py"
     },
     {
@@ -1575,7 +1575,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\ai\\interfaces\\vector_store.py",
       "source_location": "L5",
       "id": "vector_store_vectorstoreinterface",
-      "community": 6,
+      "community": 8,
       "norm_label": "vectorstoreinterface"
     },
     {
@@ -1584,7 +1584,7 @@
       "source_file": "",
       "source_location": "",
       "id": "abc",
-      "community": 6,
+      "community": 8,
       "norm_label": "abc"
     },
     {
@@ -1593,7 +1593,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\ai\\interfaces\\vector_store.py",
       "source_location": "L13",
       "id": "vector_store_add_documents",
-      "community": 6,
+      "community": 8,
       "norm_label": "add_documents()"
     },
     {
@@ -1602,7 +1602,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\ai\\interfaces\\vector_store.py",
       "source_location": "L20",
       "id": "vector_store_similarity_search_with_score",
-      "community": 6,
+      "community": 8,
       "norm_label": "similarity_search_with_score()"
     },
     {
@@ -1610,7 +1610,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\ai\\interfaces\\vector_store.py",
       "source_location": "L6",
-      "community": 6,
+      "community": 8,
       "norm_label": "abstract interface for vector database operations.     this ensures that the un",
       "id": "vector_store_rationale_6"
     },
@@ -1619,7 +1619,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\ai\\interfaces\\vector_store.py",
       "source_location": "L14",
-      "community": 64,
+      "community": 65,
       "norm_label": "adds a list of langchain documents to the vector store.",
       "id": "vector_store_rationale_14"
     },
@@ -1628,7 +1628,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\ai\\interfaces\\vector_store.py",
       "source_location": "L21",
-      "community": 65,
+      "community": 66,
       "norm_label": "retrieves the top k most similar documents to the query.         optionally fil",
       "id": "vector_store_rationale_21"
     },
@@ -1638,7 +1638,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\ai\\interfaces\\__init__.py",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_backend_app_ai_interfaces_init_py",
-      "community": 66,
+      "community": 67,
       "norm_label": "__init__.py"
     },
     {
@@ -1647,7 +1647,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\agent.py",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_backend_app_api_agent_py",
-      "community": 11,
+      "community": 10,
       "norm_label": "agent.py"
     },
     {
@@ -1656,7 +1656,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\agent.py",
       "source_location": "L29",
       "id": "agent_agentrequest",
-      "community": 11,
+      "community": 10,
       "norm_label": "agentrequest"
     },
     {
@@ -1665,7 +1665,7 @@
       "source_file": "",
       "source_location": "",
       "id": "basemodel",
-      "community": 7,
+      "community": 4,
       "norm_label": "basemodel"
     },
     {
@@ -1674,7 +1674,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\agent.py",
       "source_location": "L37",
       "id": "agent_get_agent_graph",
-      "community": 11,
+      "community": 10,
       "norm_label": "_get_agent_graph()"
     },
     {
@@ -1683,7 +1683,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\agent.py",
       "source_location": "L49",
       "id": "agent_agent_stream_generator",
-      "community": 11,
+      "community": 10,
       "norm_label": "_agent_stream_generator()"
     },
     {
@@ -1692,7 +1692,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\agent.py",
       "source_location": "L270",
       "id": "agent_split_into_chunks",
-      "community": 11,
+      "community": 10,
       "norm_label": "_split_into_chunks()"
     },
     {
@@ -1701,7 +1701,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\agent.py",
       "source_location": "L288",
       "id": "agent_sse_event",
-      "community": 11,
+      "community": 10,
       "norm_label": "_sse_event()"
     },
     {
@@ -1710,7 +1710,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\agent.py",
       "source_location": "L296",
       "id": "agent_stream_agent",
-      "community": 11,
+      "community": 10,
       "norm_label": "stream_agent()"
     },
     {
@@ -1719,7 +1719,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\agent.py",
       "source_location": "L312",
       "id": "agent_invoke_agent",
-      "community": 11,
+      "community": 10,
       "norm_label": "invoke_agent()"
     },
     {
@@ -1727,7 +1727,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\agent.py",
       "source_location": "L1",
-      "community": 11,
+      "community": 10,
       "norm_label": "agent api router (api/agent.py)  exposes the finsight langgraph agent via:   - p",
       "id": "agent_rationale_1"
     },
@@ -1736,7 +1736,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\agent.py",
       "source_location": "L38",
-      "community": 11,
+      "community": 10,
       "norm_label": "lazy-import the compiled graph to avoid crashing main.py if langgraph has issues",
       "id": "agent_rationale_38"
     },
@@ -1745,7 +1745,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\agent.py",
       "source_location": "L50",
-      "community": 11,
+      "community": 10,
       "norm_label": "async generator that runs the agent graph and yields sse events.      fix 3: use",
       "id": "agent_rationale_50"
     },
@@ -1754,7 +1754,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\agent.py",
       "source_location": "L271",
-      "community": 11,
+      "community": 10,
       "norm_label": "split text into small word-based chunks for a streaming visual effect.     langg",
       "id": "agent_rationale_271"
     },
@@ -1763,7 +1763,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\agent.py",
       "source_location": "L289",
-      "community": 11,
+      "community": 10,
       "norm_label": "format a server-sent event string.",
       "id": "agent_rationale_289"
     },
@@ -1772,7 +1772,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\agent.py",
       "source_location": "L297",
-      "community": 11,
+      "community": 10,
       "norm_label": "sse streaming endpoint \u2014 tokens arrive in real-time.",
       "id": "agent_rationale_297"
     },
@@ -1781,7 +1781,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\agent.py",
       "source_location": "L313",
-      "community": 11,
+      "community": 10,
       "norm_label": "non-streaming endpoint \u2014 returns the complete response as json.",
       "id": "agent_rationale_313"
     },
@@ -1791,7 +1791,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\alerts.py",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_backend_app_api_alerts_py",
-      "community": 4,
+      "community": 7,
       "norm_label": "alerts.py"
     },
     {
@@ -1800,7 +1800,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\alerts.py",
       "source_location": "L14",
       "id": "alerts_createalertrequest",
-      "community": 4,
+      "community": 7,
       "norm_label": "createalertrequest"
     },
     {
@@ -1809,7 +1809,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\alerts.py",
       "source_location": "L21",
       "id": "alerts_create_alert",
-      "community": 4,
+      "community": 7,
       "norm_label": "create_alert()"
     },
     {
@@ -1818,7 +1818,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\alerts.py",
       "source_location": "L34",
       "id": "alerts_list_active_alerts",
-      "community": 4,
+      "community": 7,
       "norm_label": "list_active_alerts()"
     },
     {
@@ -1827,7 +1827,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\alerts.py",
       "source_location": "L48",
       "id": "alerts_get_notifications",
-      "community": 4,
+      "community": 7,
       "norm_label": "get_notifications()"
     },
     {
@@ -1836,7 +1836,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\alerts.py",
       "source_location": "L54",
       "id": "alerts_delete_alert",
-      "community": 4,
+      "community": 7,
       "norm_label": "delete_alert()"
     },
     {
@@ -1844,7 +1844,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\alerts.py",
       "source_location": "L1",
-      "community": 4,
+      "community": 7,
       "norm_label": "alert api router (api/alerts.py) crud endpoints for creating, reading, and dele",
       "id": "alerts_rationale_1"
     },
@@ -1853,7 +1853,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\alerts.py",
       "source_location": "L22",
-      "community": 4,
+      "community": 7,
       "norm_label": "create a new market alert rule.",
       "id": "alerts_rationale_22"
     },
@@ -1862,7 +1862,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\alerts.py",
       "source_location": "L35",
-      "community": 4,
+      "community": 7,
       "norm_label": "list all currently active alert rules.",
       "id": "alerts_rationale_35"
     },
@@ -1871,7 +1871,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\alerts.py",
       "source_location": "L49",
-      "community": 4,
+      "community": 7,
       "norm_label": "get the last 10 triggered alert notifications (ui polls this).",
       "id": "alerts_rationale_49"
     },
@@ -1880,7 +1880,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\alerts.py",
       "source_location": "L55",
-      "community": 4,
+      "community": 7,
       "norm_label": "delete an alert rule by id.",
       "id": "alerts_rationale_55"
     },
@@ -1890,7 +1890,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\analyze.py",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_backend_app_api_analyze_py",
-      "community": 8,
+      "community": 6,
       "norm_label": "analyze.py"
     },
     {
@@ -1899,7 +1899,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\analyze.py",
       "source_location": "L53",
       "id": "analyze_analyze",
-      "community": 8,
+      "community": 6,
       "norm_label": "analyze()"
     },
     {
@@ -1907,7 +1907,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\schemas\\analyze.py",
       "source_location": "L1",
-      "community": 8,
+      "community": 6,
       "norm_label": "schemas \u2013 analyze module (app/schemas/analyze.py)  this module defines the dat",
       "id": "analyze_rationale_1"
     },
@@ -1916,7 +1916,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\analyze.py",
       "source_location": "L54",
-      "community": 8,
+      "community": 6,
       "norm_label": "accepts a financial question, categorizes it, fetches relevant data,     runs l",
       "id": "analyze_rationale_54"
     },
@@ -1926,7 +1926,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\assets.py",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_backend_app_api_assets_py",
-      "community": 10,
+      "community": 4,
       "norm_label": "assets.py"
     },
     {
@@ -1935,7 +1935,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\assets.py",
       "source_location": "L17",
       "id": "assets_get_macro_data",
-      "community": 10,
+      "community": 15,
       "norm_label": "get_macro_data()"
     },
     {
@@ -1944,7 +1944,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\assets.py",
       "source_location": "L25",
       "id": "assets_get_options_data",
-      "community": 10,
+      "community": 13,
       "norm_label": "get_options_data()"
     },
     {
@@ -1953,7 +1953,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\assets.py",
       "source_location": "L34",
       "id": "assets_blackscholesrequest",
-      "community": 10,
+      "community": 4,
       "norm_label": "blackscholesrequest"
     },
     {
@@ -1962,7 +1962,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\assets.py",
       "source_location": "L42",
       "id": "assets_price_option",
-      "community": 10,
+      "community": 13,
       "norm_label": "price_option()"
     },
     {
@@ -1971,7 +1971,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\assets.py",
       "source_location": "L64",
       "id": "assets_mptrequest",
-      "community": 10,
+      "community": 4,
       "norm_label": "mptrequest"
     },
     {
@@ -1980,7 +1980,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\assets.py",
       "source_location": "L69",
       "id": "assets_mpt_optimize",
-      "community": 10,
+      "community": 4,
       "norm_label": "mpt_optimize()"
     },
     {
@@ -1988,7 +1988,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\assets.py",
       "source_location": "L18",
-      "community": 10,
+      "community": 15,
       "norm_label": "returns 10y treasury yield, cpi inflation, and unemployment rate from fred.",
       "id": "assets_rationale_18"
     },
@@ -1997,7 +1997,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\assets.py",
       "source_location": "L26",
-      "community": 10,
+      "community": 13,
       "norm_label": "returns the nearest expiration options chain for a given symbol.     includes to",
       "id": "assets_rationale_26"
     },
@@ -2006,7 +2006,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\assets.py",
       "source_location": "L43",
-      "community": 10,
+      "community": 13,
       "norm_label": "calculates theoretical call and put option prices using the black-scholes model.",
       "id": "assets_rationale_43"
     },
@@ -2015,7 +2015,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\assets.py",
       "source_location": "L70",
-      "community": 10,
+      "community": 4,
       "norm_label": "given a list of tickers, fetches 5 years of historical price data and computes",
       "id": "assets_rationale_70"
     },
@@ -2025,7 +2025,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\auth.py",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_backend_app_api_auth_py",
-      "community": 8,
+      "community": 6,
       "norm_label": "auth.py"
     },
     {
@@ -2034,7 +2034,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\auth.py",
       "source_location": "L26",
       "id": "auth_me",
-      "community": 8,
+      "community": 6,
       "norm_label": "me()"
     },
     {
@@ -2042,7 +2042,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\schemas\\auth.py",
       "source_location": "L1",
-      "community": 8,
+      "community": 6,
       "norm_label": "request and response shapes for auth endpoints.  after migrating to supabase aut",
       "id": "auth_rationale_1"
     },
@@ -2051,7 +2051,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\auth.py",
       "source_location": "L27",
-      "community": 8,
+      "community": 6,
       "norm_label": "returns the profile of the currently authenticated user.     requires: authoriza",
       "id": "auth_rationale_27"
     },
@@ -2133,7 +2133,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\portfolio.py",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_backend_app_api_portfolio_py",
-      "community": 7,
+      "community": 4,
       "norm_label": "portfolio.py"
     },
     {
@@ -2142,7 +2142,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\portfolio.py",
       "source_location": "L47",
       "id": "portfolio_get_all_portfolios",
-      "community": 7,
+      "community": 4,
       "norm_label": "get_all_portfolios()"
     },
     {
@@ -2151,7 +2151,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\portfolio.py",
       "source_location": "L65",
       "id": "portfolio_create_portfolio",
-      "community": 7,
+      "community": 4,
       "norm_label": "create_portfolio()"
     },
     {
@@ -2160,7 +2160,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\portfolio.py",
       "source_location": "L87",
       "id": "portfolio_add_holding",
-      "community": 7,
+      "community": 4,
       "norm_label": "add_holding()"
     },
     {
@@ -2169,7 +2169,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\portfolio.py",
       "source_location": "L121",
       "id": "portfolio_record_transaction",
-      "community": 7,
+      "community": 4,
       "norm_label": "record_transaction()"
     },
     {
@@ -2178,7 +2178,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\portfolio.py",
       "source_location": "L168",
       "id": "portfolio_sell_holding",
-      "community": 7,
+      "community": 4,
       "norm_label": "sell_holding()"
     },
     {
@@ -2187,7 +2187,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\portfolio.py",
       "source_location": "L214",
       "id": "portfolio_build_portfolio_response",
-      "community": 7,
+      "community": 4,
       "norm_label": "_build_portfolio_response()"
     },
     {
@@ -2196,7 +2196,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\portfolio.py",
       "source_location": "L254",
       "id": "portfolio_get_portfolio_summary",
-      "community": 7,
+      "community": 4,
       "norm_label": "get_portfolio_summary()"
     },
     {
@@ -2205,7 +2205,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\portfolio.py",
       "source_location": "L274",
       "id": "portfolio_optimize_user_portfolio",
-      "community": 7,
+      "community": 4,
       "norm_label": "optimize_user_portfolio()"
     },
     {
@@ -2213,7 +2213,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\schemas\\portfolio.py",
       "source_location": "L1",
-      "community": 7,
+      "community": 4,
       "norm_label": "portfolio pydantic schemas (schemas/portfolio.py)  responsibilities: - define",
       "id": "portfolio_rationale_1"
     },
@@ -2222,7 +2222,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\portfolio.py",
       "source_location": "L51",
-      "community": 7,
+      "community": 4,
       "norm_label": "returns a list of all portfolios for the current user.",
       "id": "portfolio_rationale_51"
     },
@@ -2231,7 +2231,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\portfolio.py",
       "source_location": "L70",
-      "community": 7,
+      "community": 4,
       "norm_label": "creates a new portfolio with the given name for the user.     returns 409 confl",
       "id": "portfolio_rationale_70"
     },
@@ -2240,7 +2240,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\portfolio.py",
       "source_location": "L93",
-      "community": 7,
+      "community": 4,
       "norm_label": "adds a new holding or updates quantity + weighted average cost if the symbol exi",
       "id": "portfolio_rationale_93"
     },
@@ -2249,7 +2249,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\portfolio.py",
       "source_location": "L127",
-      "community": 7,
+      "community": 4,
       "norm_label": "records a buy or sell transaction limit.     for buy: adds to or creates the ho",
       "id": "portfolio_rationale_127"
     },
@@ -2258,7 +2258,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\portfolio.py",
       "source_location": "L175",
-      "community": 7,
+      "community": 4,
       "norm_label": "sells shares from a holding.     calculates realized p&l using fifo method.",
       "id": "portfolio_rationale_175"
     },
@@ -2267,7 +2267,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\portfolio.py",
       "source_location": "L215",
-      "community": 7,
+      "community": 4,
       "norm_label": "constructs a portfolioresponse from a portfolio orm object.     kept here to av",
       "id": "portfolio_rationale_215"
     },
@@ -2276,7 +2276,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\portfolio.py",
       "source_location": "L259",
-      "community": 7,
+      "community": 4,
       "norm_label": "returns an aggregated summary of the portfolio with all pre-calculated p&l.",
       "id": "portfolio_rationale_259"
     },
@@ -2286,7 +2286,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\rag.py",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_backend_app_api_rag_py",
-      "community": 6,
+      "community": 8,
       "norm_label": "rag.py"
     },
     {
@@ -2295,7 +2295,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\rag.py",
       "source_location": "L20",
       "id": "rag_get_vector_store",
-      "community": 6,
+      "community": 8,
       "norm_label": "get_vector_store()"
     },
     {
@@ -2304,7 +2304,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\rag.py",
       "source_location": "L32",
       "id": "rag_upload_document",
-      "community": 6,
+      "community": 8,
       "norm_label": "upload_document()"
     },
     {
@@ -2313,7 +2313,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\rag.py",
       "source_location": "L77",
       "id": "rag_query_documents",
-      "community": 6,
+      "community": 8,
       "norm_label": "query_documents()"
     },
     {
@@ -2321,7 +2321,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\rag.py",
       "source_location": "L33",
-      "community": 6,
+      "community": 8,
       "norm_label": "uploads a document (pdf/txt), parses it, splits it, and adds it to the vector st",
       "id": "rag_rationale_33"
     },
@@ -2330,7 +2330,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\rag.py",
       "source_location": "L78",
-      "community": 6,
+      "community": 8,
       "norm_label": "semantic search over the embedded documents.",
       "id": "rag_rationale_78"
     },
@@ -2475,7 +2475,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\__init__.py",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_backend_app_api_init_py",
-      "community": 67,
+      "community": 68,
       "norm_label": "__init__.py"
     },
     {
@@ -2484,7 +2484,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\core\\cache.py",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_backend_app_core_cache_py",
-      "community": 12,
+      "community": 0,
       "norm_label": "cache.py"
     },
     {
@@ -2493,7 +2493,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\core\\cache.py",
       "source_location": "L10",
       "id": "cache_cacheservice",
-      "community": 12,
+      "community": 0,
       "norm_label": "cacheservice"
     },
     {
@@ -2502,7 +2502,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\core\\cache.py",
       "source_location": "L16",
       "id": "cache_cacheservice_init",
-      "community": 12,
+      "community": 0,
       "norm_label": ".__init__()"
     },
     {
@@ -2520,7 +2520,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\core\\cache.py",
       "source_location": "L49",
       "id": "cache_cacheservice_set",
-      "community": 4,
+      "community": 7,
       "norm_label": ".set()"
     },
     {
@@ -2529,7 +2529,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\core\\cache.py",
       "source_location": "L64",
       "id": "cache_cacheservice_clear",
-      "community": 12,
+      "community": 0,
       "norm_label": ".clear()"
     },
     {
@@ -2537,7 +2537,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\core\\cache.py",
       "source_location": "L11",
-      "community": 12,
+      "community": 0,
       "norm_label": "a unified caching layer that attempts to use redis.     if redis is unavailable",
       "id": "cache_rationale_11"
     },
@@ -2555,7 +2555,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\core\\cache.py",
       "source_location": "L50",
-      "community": 4,
+      "community": 7,
       "norm_label": "store an item in cache with a ttl (time to live).",
       "id": "cache_rationale_50"
     },
@@ -2781,7 +2781,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\core\\config.py",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_backend_app_core_config_py",
-      "community": 12,
+      "community": 6,
       "norm_label": "config.py"
     },
     {
@@ -2790,7 +2790,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\core\\config.py",
       "source_location": "L16",
       "id": "config_settings",
-      "community": 12,
+      "community": 6,
       "norm_label": "settings"
     },
     {
@@ -2799,7 +2799,7 @@
       "source_file": "",
       "source_location": "",
       "id": "basesettings",
-      "community": 12,
+      "community": 6,
       "norm_label": "basesettings"
     },
     {
@@ -2808,7 +2808,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\core\\config.py",
       "source_location": "L113",
       "id": "config_config",
-      "community": 12,
+      "community": 6,
       "norm_label": "config"
     },
     {
@@ -2816,7 +2816,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\core\\config.py",
       "source_location": "L1",
-      "community": 12,
+      "community": 6,
       "norm_label": "application configuration \u2014 loaded from .env via python-dotenv. extend this as",
       "id": "config_rationale_1"
     },
@@ -2853,7 +2853,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\core\\database.py",
       "source_location": "L73",
       "id": "database_validate_db_connection",
-      "community": 8,
+      "community": 6,
       "norm_label": "validate_db_connection()"
     },
     {
@@ -2879,7 +2879,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\core\\database.py",
       "source_location": "L74",
-      "community": 8,
+      "community": 6,
       "norm_label": "validate the database connection on application startup.      runs a lightweig",
       "id": "database_rationale_74"
     },
@@ -2889,7 +2889,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\core\\dependencies.py",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_backend_app_core_dependencies_py",
-      "community": 4,
+      "community": 14,
       "norm_label": "dependencies.py"
     },
     {
@@ -2898,7 +2898,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\core\\dependencies.py",
       "source_location": "L48",
       "id": "dependencies_get_db",
-      "community": 4,
+      "community": 14,
       "norm_label": "get_db()"
     },
     {
@@ -2907,7 +2907,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\core\\dependencies.py",
       "source_location": "L79",
       "id": "dependencies_get_current_user",
-      "community": 4,
+      "community": 14,
       "norm_label": "get_current_user()"
     },
     {
@@ -2915,7 +2915,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\core\\dependencies.py",
       "source_location": "L1",
-      "community": 4,
+      "community": 14,
       "norm_label": "fastapi dependency injection layer (dependencies.py)  responsibilities: 1. provi",
       "id": "dependencies_rationale_1"
     },
@@ -2924,7 +2924,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\core\\dependencies.py",
       "source_location": "L49",
-      "community": 4,
+      "community": 14,
       "norm_label": "dependency that provides a sqlalchemy session with full transaction management.",
       "id": "dependencies_rationale_49"
     },
@@ -2933,7 +2933,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\core\\dependencies.py",
       "source_location": "L82",
-      "community": 4,
+      "community": 14,
       "norm_label": "fastapi dependency that extracts and validates a supabase jwt from the     autho",
       "id": "dependencies_rationale_82"
     },
@@ -3204,7 +3204,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\core\\security.py",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_backend_app_core_security_py",
-      "community": 4,
+      "community": 14,
       "norm_label": "security.py"
     },
     {
@@ -3213,7 +3213,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\core\\security.py",
       "source_location": "L21",
       "id": "security_decode_access_token",
-      "community": 4,
+      "community": 14,
       "norm_label": "decode_access_token()"
     },
     {
@@ -3221,7 +3221,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\core\\security.py",
       "source_location": "L1",
-      "community": 4,
+      "community": 14,
       "norm_label": "security.py \u2014 supabase auth edition  the backend no longer creates or hashes pas",
       "id": "security_rationale_1"
     },
@@ -3230,7 +3230,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\core\\security.py",
       "source_location": "L22",
-      "community": 4,
+      "community": 14,
       "norm_label": "decodes and verifies a supabase-issued jwt.      uses the supabase_jwt_secret (h",
       "id": "security_rationale_22"
     },
@@ -3240,7 +3240,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\core\\telemetry.py",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_backend_app_core_telemetry_py",
-      "community": 8,
+      "community": 6,
       "norm_label": "telemetry.py"
     },
     {
@@ -3249,7 +3249,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\core\\telemetry.py",
       "source_location": "L8",
       "id": "telemetry_performance_metrics_middleware",
-      "community": 8,
+      "community": 6,
       "norm_label": "performance_metrics_middleware()"
     },
     {
@@ -3257,7 +3257,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\core\\telemetry.py",
       "source_location": "L9",
-      "community": 8,
+      "community": 6,
       "norm_label": "middleware to log execution time for all endpoints.     helps track performance",
       "id": "telemetry_rationale_9"
     },
@@ -3267,7 +3267,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\core\\__init__.py",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_backend_app_core_init_py",
-      "community": 68,
+      "community": 69,
       "norm_label": "__init__.py"
     },
     {
@@ -3276,7 +3276,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\models\\alert.py",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_backend_app_models_alert_py",
-      "community": 4,
+      "community": 7,
       "norm_label": "alert.py"
     },
     {
@@ -3285,7 +3285,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\models\\alert.py",
       "source_location": "L11",
       "id": "alert_alertcondition",
-      "community": 4,
+      "community": 7,
       "norm_label": "alertcondition"
     },
     {
@@ -3294,7 +3294,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\models\\alert.py",
       "source_location": "L20",
       "id": "alert_alertstatus",
-      "community": 4,
+      "community": 7,
       "norm_label": "alertstatus"
     },
     {
@@ -3303,7 +3303,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\models\\alert.py",
       "source_location": "L26",
       "id": "alert_alert",
-      "community": 4,
+      "community": 7,
       "norm_label": "alert"
     },
     {
@@ -3320,7 +3320,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\models\\alert.py",
       "source_location": "L1",
-      "community": 4,
+      "community": 7,
       "norm_label": "alert model (models/alert.py) sqlalchemy model for persisting user-defined mark",
       "id": "alert_rationale_1"
     },
@@ -3555,7 +3555,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\schemas\\analyze.py",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_backend_app_schemas_analyze_py",
-      "community": 8,
+      "community": 6,
       "norm_label": "analyze.py"
     },
     {
@@ -3564,7 +3564,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\schemas\\analyze.py",
       "source_location": "L105",
       "id": "analyze_analyzerequest",
-      "community": 8,
+      "community": 6,
       "norm_label": "analyzerequest"
     },
     {
@@ -3573,7 +3573,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\schemas\\analyze.py",
       "source_location": "L117",
       "id": "analyze_analyzeresponse",
-      "community": 8,
+      "community": 6,
       "norm_label": "analyzeresponse"
     },
     {
@@ -3582,7 +3582,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\schemas\\analyze.py",
       "source_location": "L134",
       "id": "analyze_healthresponse",
-      "community": 8,
+      "community": 6,
       "norm_label": "healthresponse"
     },
     {
@@ -3591,7 +3591,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\schemas\\auth.py",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_backend_app_schemas_auth_py",
-      "community": 8,
+      "community": 6,
       "norm_label": "auth.py"
     },
     {
@@ -3600,7 +3600,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\schemas\\auth.py",
       "source_location": "L13",
       "id": "auth_userpublic",
-      "community": 8,
+      "community": 6,
       "norm_label": "userpublic"
     },
     {
@@ -3608,7 +3608,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\schemas\\auth.py",
       "source_location": "L14",
-      "community": 8,
+      "community": 6,
       "norm_label": "safe user representation returned from /auth/me.",
       "id": "auth_rationale_14"
     },
@@ -3618,7 +3618,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\schemas\\news.py",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_backend_app_schemas_news_py",
-      "community": 12,
+      "community": 0,
       "norm_label": "news.py"
     },
     {
@@ -3644,7 +3644,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\schemas\\news.py",
       "source_location": "L1",
-      "community": 12,
+      "community": 0,
       "norm_label": "news schemas (schemas/news.py)  pydantic models for normalizing news data from",
       "id": "news_rationale_1"
     },
@@ -3672,7 +3672,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\schemas\\portfolio.py",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_backend_app_schemas_portfolio_py",
-      "community": 7,
+      "community": 4,
       "norm_label": "portfolio.py"
     },
     {
@@ -3681,7 +3681,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\schemas\\portfolio.py",
       "source_location": "L17",
       "id": "portfolio_createportfoliorequest",
-      "community": 7,
+      "community": 4,
       "norm_label": "createportfoliorequest"
     },
     {
@@ -3690,7 +3690,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\schemas\\portfolio.py",
       "source_location": "L28",
       "id": "portfolio_addholdingrequest",
-      "community": 7,
+      "community": 4,
       "norm_label": "addholdingrequest"
     },
     {
@@ -3699,7 +3699,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\schemas\\portfolio.py",
       "source_location": "L42",
       "id": "portfolio_uppercase_symbol",
-      "community": 7,
+      "community": 4,
       "norm_label": "uppercase_symbol()"
     },
     {
@@ -3708,7 +3708,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\schemas\\portfolio.py",
       "source_location": "L47",
       "id": "portfolio_recordtransactionrequest",
-      "community": 7,
+      "community": 4,
       "norm_label": "recordtransactionrequest"
     },
     {
@@ -3717,7 +3717,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\schemas\\portfolio.py",
       "source_location": "L66",
       "id": "portfolio_lowercase_type",
-      "community": 7,
+      "community": 4,
       "norm_label": "lowercase_type()"
     },
     {
@@ -3726,7 +3726,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\schemas\\portfolio.py",
       "source_location": "L70",
       "id": "portfolio_sellholdingrequest",
-      "community": 7,
+      "community": 4,
       "norm_label": "sellholdingrequest"
     },
     {
@@ -3735,7 +3735,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\schemas\\portfolio.py",
       "source_location": "L78",
       "id": "portfolio_holdingsummary",
-      "community": 7,
+      "community": 4,
       "norm_label": "holdingsummary"
     },
     {
@@ -3744,7 +3744,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\schemas\\portfolio.py",
       "source_location": "L100",
       "id": "portfolio_portfolioresponse",
-      "community": 7,
+      "community": 4,
       "norm_label": "portfolioresponse"
     },
     {
@@ -3753,7 +3753,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\schemas\\portfolio.py",
       "source_location": "L110",
       "id": "portfolio_portfoliosummaryresponse",
-      "community": 7,
+      "community": 4,
       "norm_label": "portfoliosummaryresponse"
     },
     {
@@ -3762,7 +3762,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\schemas\\portfolio.py",
       "source_location": "L136",
       "id": "portfolio_transactionresponse",
-      "community": 7,
+      "community": 4,
       "norm_label": "transactionresponse"
     },
     {
@@ -3771,7 +3771,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\schemas\\portfolio.py",
       "source_location": "L151",
       "id": "portfolio_sellresponse",
-      "community": 7,
+      "community": 4,
       "norm_label": "sellresponse"
     },
     {
@@ -3779,7 +3779,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\schemas\\portfolio.py",
       "source_location": "L18",
-      "community": 7,
+      "community": 4,
       "norm_label": "request body for post /portfolios \u2014 creates a new portfolio.",
       "id": "portfolio_rationale_18"
     },
@@ -3788,7 +3788,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\schemas\\portfolio.py",
       "source_location": "L29",
-      "community": 7,
+      "community": 4,
       "norm_label": "request body for post /portfolios/{portfolio_id}/holdings.",
       "id": "portfolio_rationale_29"
     },
@@ -3797,7 +3797,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\schemas\\portfolio.py",
       "source_location": "L43",
-      "community": 69,
+      "community": 70,
       "norm_label": "normalize symbol to uppercase for consistency.",
       "id": "portfolio_rationale_43"
     },
@@ -3806,7 +3806,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\schemas\\portfolio.py",
       "source_location": "L48",
-      "community": 7,
+      "community": 4,
       "norm_label": "request body for post /portfolios/{portfolio_id}/transactions.",
       "id": "portfolio_rationale_48"
     },
@@ -3815,7 +3815,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\schemas\\portfolio.py",
       "source_location": "L71",
-      "community": 7,
+      "community": 4,
       "norm_label": "request body for post /portfolios/{portfolio_id}/holdings/{symbol}/sell.",
       "id": "portfolio_rationale_71"
     },
@@ -3824,7 +3824,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\schemas\\portfolio.py",
       "source_location": "L79",
-      "community": 7,
+      "community": 4,
       "norm_label": "a single holding entry in the portfolio summary \u2014 with all p&l data.",
       "id": "portfolio_rationale_79"
     },
@@ -3833,7 +3833,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\schemas\\portfolio.py",
       "source_location": "L101",
-      "community": 7,
+      "community": 4,
       "norm_label": "structured json response for portfolio operations.",
       "id": "portfolio_rationale_101"
     },
@@ -3842,7 +3842,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\schemas\\portfolio.py",
       "source_location": "L111",
-      "community": 7,
+      "community": 4,
       "norm_label": "aggregated portfolio summary response with pre-calculated p&l.      includes:",
       "id": "portfolio_rationale_111"
     },
@@ -3851,7 +3851,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\schemas\\portfolio.py",
       "source_location": "L137",
-      "community": 7,
+      "community": 4,
       "norm_label": "structured json response for a recorded transaction.",
       "id": "portfolio_rationale_137"
     },
@@ -3860,7 +3860,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\schemas\\portfolio.py",
       "source_location": "L152",
-      "community": 7,
+      "community": 4,
       "norm_label": "response for a sell operation.",
       "id": "portfolio_rationale_152"
     },
@@ -3906,7 +3906,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\schemas\\__init__.py",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_backend_app_schemas_init_py",
-      "community": 70,
+      "community": 71,
       "norm_label": "__init__.py"
     },
     {
@@ -3915,7 +3915,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\alert_service.py",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_backend_app_services_alert_service_py",
-      "community": 4,
+      "community": 7,
       "norm_label": "alert_service.py"
     },
     {
@@ -3924,7 +3924,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\alert_service.py",
       "source_location": "L33",
       "id": "alert_service_evaluate_condition",
-      "community": 4,
+      "community": 7,
       "norm_label": "_evaluate_condition()"
     },
     {
@@ -3933,7 +3933,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\alert_service.py",
       "source_location": "L51",
       "id": "alert_service_fetch_market_data",
-      "community": 4,
+      "community": 7,
       "norm_label": "_fetch_market_data()"
     },
     {
@@ -3942,7 +3942,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\alert_service.py",
       "source_location": "L70",
       "id": "alert_service_fetch_and_evaluate_alerts",
-      "community": 4,
+      "community": 7,
       "norm_label": "fetch_and_evaluate_alerts()"
     },
     {
@@ -3951,7 +3951,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\alert_service.py",
       "source_location": "L155",
       "id": "alert_service_generate_market_summary_job",
-      "community": 4,
+      "community": 7,
       "norm_label": "generate_market_summary_job()"
     },
     {
@@ -3960,7 +3960,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\alert_service.py",
       "source_location": "L188",
       "id": "alert_service_get_recent_alerts",
-      "community": 4,
+      "community": 7,
       "norm_label": "get_recent_alerts()"
     },
     {
@@ -3969,7 +3969,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\alert_service.py",
       "source_location": "L194",
       "id": "alert_service_get_all_active_alerts",
-      "community": 4,
+      "community": 7,
       "norm_label": "get_all_active_alerts()"
     },
     {
@@ -3978,7 +3978,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\alert_service.py",
       "source_location": "L203",
       "id": "alert_service_create_alert",
-      "community": 4,
+      "community": 7,
       "norm_label": "create_alert()"
     },
     {
@@ -3987,7 +3987,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\alert_service.py",
       "source_location": "L222",
       "id": "alert_service_delete_alert",
-      "community": 4,
+      "community": 7,
       "norm_label": "delete_alert()"
     },
     {
@@ -3996,7 +3996,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\alert_service.py",
       "source_location": "L235",
       "id": "alert_service_start_scheduler",
-      "community": 8,
+      "community": 6,
       "norm_label": "start_scheduler()"
     },
     {
@@ -4005,7 +4005,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\alert_service.py",
       "source_location": "L248",
       "id": "alert_service_stop_scheduler",
-      "community": 8,
+      "community": 6,
       "norm_label": "stop_scheduler()"
     },
     {
@@ -4013,7 +4013,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\alert_service.py",
       "source_location": "L1",
-      "community": 4,
+      "community": 7,
       "norm_label": "real alert service (services/alert_service.py)  production-grade background po",
       "id": "alert_service_rationale_1"
     },
@@ -4022,7 +4022,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\alert_service.py",
       "source_location": "L35",
-      "community": 4,
+      "community": 7,
       "norm_label": "deterministic threshold evaluation for one alert row.",
       "id": "alert_service_rationale_35"
     },
@@ -4031,7 +4031,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\alert_service.py",
       "source_location": "L52",
-      "community": 4,
+      "community": 7,
       "norm_label": "fetches current price, rsi, and sma from yfinance for a single symbol.",
       "id": "alert_service_rationale_52"
     },
@@ -4040,7 +4040,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\alert_service.py",
       "source_location": "L71",
-      "community": 4,
+      "community": 7,
       "norm_label": "background coroutine that:     1. reads all active alerts from database     2.",
       "id": "alert_service_rationale_71"
     },
@@ -4049,7 +4049,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\alert_service.py",
       "source_location": "L156",
-      "community": 4,
+      "community": 7,
       "norm_label": "generates ai insights for the dashboard periodically.",
       "id": "alert_service_rationale_156"
     },
@@ -4058,7 +4058,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\alert_service.py",
       "source_location": "L189",
-      "community": 4,
+      "community": 7,
       "norm_label": "returns the last 10 triggered alert notifications for the ui for a specific user",
       "id": "alert_service_rationale_189"
     },
@@ -4067,7 +4067,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\alert_service.py",
       "source_location": "L195",
-      "community": 4,
+      "community": 7,
       "norm_label": "db read for all active alert rules for a specific user.",
       "id": "alert_service_rationale_195"
     },
@@ -4076,7 +4076,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\alert_service.py",
       "source_location": "L204",
-      "community": 4,
+      "community": 7,
       "norm_label": "api endpoint helper to create a new alert rule in the db.",
       "id": "alert_service_rationale_204"
     },
@@ -4086,7 +4086,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\categorizer.py",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_backend_app_services_categorizer_py",
-      "community": 13,
+      "community": 11,
       "norm_label": "categorizer.py"
     },
     {
@@ -4095,7 +4095,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\categorizer.py",
       "source_location": "L27",
       "id": "categorizer_categorize_query",
-      "community": 13,
+      "community": 11,
       "norm_label": "categorize_query()"
     },
     {
@@ -4103,7 +4103,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\categorizer.py",
       "source_location": "L1",
-      "community": 13,
+      "community": 11,
       "norm_label": "categorization service. determines the intent of a user query: 'stock', 'news',",
       "id": "categorizer_rationale_1"
     },
@@ -4112,7 +4112,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\categorizer.py",
       "source_location": "L28",
-      "community": 13,
+      "community": 11,
       "norm_label": "classifies the user query using an llm (mocked for now).     falls back to 'gen",
       "id": "categorizer_rationale_28"
     },
@@ -4121,7 +4121,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\categorizer.py",
       "source_location": "L9",
-      "community": 13,
+      "community": 11,
       "norm_label": "# todo: import actual llm client in task 4",
       "id": "categorizer_rationale_9"
     },
@@ -4130,7 +4130,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\categorizer.py",
       "source_location": "L33",
-      "community": 13,
+      "community": 11,
       "norm_label": "# todo: replace with actual llm call in task 12/4",
       "id": "categorizer_rationale_33"
     },
@@ -4140,7 +4140,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\data_provider.py",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_backend_app_services_data_provider_py",
-      "community": 6,
+      "community": 8,
       "norm_label": "data_provider.py"
     },
     {
@@ -4149,7 +4149,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\data_provider.py",
       "source_location": "L17",
       "id": "data_provider_dataprovider",
-      "community": 6,
+      "community": 8,
       "norm_label": "dataprovider"
     },
     {
@@ -4158,7 +4158,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\data_provider.py",
       "source_location": "L26",
       "id": "data_provider_get_stock_data",
-      "community": 6,
+      "community": 8,
       "norm_label": "get_stock_data()"
     },
     {
@@ -4167,7 +4167,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\data_provider.py",
       "source_location": "L49",
       "id": "data_provider_get_historical_data",
-      "community": 6,
+      "community": 8,
       "norm_label": "get_historical_data()"
     },
     {
@@ -4176,7 +4176,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\data_provider.py",
       "source_location": "L82",
       "id": "data_provider_yfinanceprovider",
-      "community": 6,
+      "community": 8,
       "norm_label": "yfinanceprovider"
     },
     {
@@ -4185,7 +4185,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\data_provider.py",
       "source_location": "L92",
       "id": "data_provider_yfinanceprovider_init",
-      "community": 6,
+      "community": 8,
       "norm_label": ".__init__()"
     },
     {
@@ -4194,7 +4194,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\data_provider.py",
       "source_location": "L98",
       "id": "data_provider_yfinanceprovider_get_stock_data",
-      "community": 6,
+      "community": 8,
       "norm_label": ".get_stock_data()"
     },
     {
@@ -4203,7 +4203,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\data_provider.py",
       "source_location": "L101",
       "id": "data_provider_yfinanceprovider_get_historical_data",
-      "community": 6,
+      "community": 8,
       "norm_label": ".get_historical_data()"
     },
     {
@@ -4328,7 +4328,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\data_provider.py",
       "source_location": "L1",
-      "community": 6,
+      "community": 8,
       "norm_label": "dataprovider interface (services/data_provider.py)  defines the abstract contr",
       "id": "data_provider_rationale_1"
     },
@@ -4337,7 +4337,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\data_provider.py",
       "source_location": "L18",
-      "community": 6,
+      "community": 8,
       "norm_label": "abstract base class defining the minimum contract for any stock data source.",
       "id": "data_provider_rationale_18"
     },
@@ -4346,7 +4346,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\data_provider.py",
       "source_location": "L27",
-      "community": 71,
+      "community": 72,
       "norm_label": "fetch the latest price and metadata for a stock symbol.          args:",
       "id": "data_provider_rationale_27"
     },
@@ -4355,7 +4355,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\data_provider.py",
       "source_location": "L55",
-      "community": 72,
+      "community": 73,
       "norm_label": "fetch historical ohlc + volume data.          args:             symbol:   sto",
       "id": "data_provider_rationale_55"
     },
@@ -4364,7 +4364,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\data_provider.py",
       "source_location": "L83",
-      "community": 6,
+      "community": 8,
       "norm_label": "concrete dataprovider backed by yfinance (via stockservice).      delegates to",
       "id": "data_provider_rationale_83"
     },
@@ -4707,7 +4707,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\macro_service.py",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_backend_app_services_macro_service_py",
-      "community": 10,
+      "community": 15,
       "norm_label": "macro_service.py"
     },
     {
@@ -4716,7 +4716,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\macro_service.py",
       "source_location": "L16",
       "id": "macro_service_fetch_fred_metric",
-      "community": 10,
+      "community": 15,
       "norm_label": "fetch_fred_metric()"
     },
     {
@@ -4725,7 +4725,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\macro_service.py",
       "source_location": "L51",
       "id": "macro_service_fetch_commodity_metric",
-      "community": 10,
+      "community": 15,
       "norm_label": "fetch_commodity_metric()"
     },
     {
@@ -4734,7 +4734,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\macro_service.py",
       "source_location": "L79",
       "id": "macro_service_get_macro_dashboard",
-      "community": 10,
+      "community": 15,
       "norm_label": "get_macro_dashboard()"
     },
     {
@@ -4742,7 +4742,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\macro_service.py",
       "source_location": "L17",
-      "community": 10,
+      "community": 15,
       "norm_label": "fetch macroeconomic data from the federal reserve economic data (fred).     com",
       "id": "macro_service_rationale_17"
     },
@@ -4751,7 +4751,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\macro_service.py",
       "source_location": "L52",
-      "community": 10,
+      "community": 15,
       "norm_label": "fetch near-real-time commodity data using yfinance.     common symbols: 'gc=f'",
       "id": "macro_service_rationale_52"
     },
@@ -4760,7 +4760,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\macro_service.py",
       "source_location": "L80",
-      "community": 10,
+      "community": 15,
       "norm_label": "returns a comprehensive snapshot of the macro economy and key commodities.",
       "id": "macro_service_rationale_80"
     },
@@ -4806,7 +4806,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\mpt_service.py",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_backend_app_services_mpt_service_py",
-      "community": 7,
+      "community": 4,
       "norm_label": "mpt_service.py"
     },
     {
@@ -4815,7 +4815,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\mpt_service.py",
       "source_location": "L9",
       "id": "mpt_service_optimize_portfolio",
-      "community": 7,
+      "community": 4,
       "norm_label": "optimize_portfolio()"
     },
     {
@@ -4823,7 +4823,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\mpt_service.py",
       "source_location": "L10",
-      "community": 7,
+      "community": 4,
       "norm_label": "given a list of ticker symbols, fetches up to 5 years of historical data,     c",
       "id": "mpt_service_rationale_10"
     },
@@ -4833,7 +4833,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\news_service.py",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_backend_app_services_news_service_py",
-      "community": 12,
+      "community": 0,
       "norm_label": "news_service.py"
     },
     {
@@ -4895,7 +4895,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\news_service.py",
       "source_location": "L1",
-      "community": 12,
+      "community": 0,
       "norm_label": "news service (services/news_service.py)  fetches, normalizes, and caches relev",
       "id": "news_service_rationale_1"
     },
@@ -4941,7 +4941,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\options_service.py",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_backend_app_services_options_service_py",
-      "community": 10,
+      "community": 13,
       "norm_label": "options_service.py"
     },
     {
@@ -4950,7 +4950,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\options_service.py",
       "source_location": "L5",
       "id": "options_service_get_options_chain",
-      "community": 10,
+      "community": 13,
       "norm_label": "get_options_chain()"
     },
     {
@@ -4959,7 +4959,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\options_service.py",
       "source_location": "L36",
       "id": "options_service_norm_cdf",
-      "community": 10,
+      "community": 13,
       "norm_label": "norm_cdf()"
     },
     {
@@ -4968,7 +4968,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\options_service.py",
       "source_location": "L39",
       "id": "options_service_black_scholes_call",
-      "community": 10,
+      "community": 13,
       "norm_label": "black_scholes_call()"
     },
     {
@@ -4977,7 +4977,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\options_service.py",
       "source_location": "L55",
       "id": "options_service_black_scholes_put",
-      "community": 10,
+      "community": 13,
       "norm_label": "black_scholes_put()"
     },
     {
@@ -4985,7 +4985,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\options_service.py",
       "source_location": "L6",
-      "community": 10,
+      "community": 13,
       "norm_label": "fetches the nearest expiration options chain for a given ticker.",
       "id": "options_service_rationale_6"
     },
@@ -4994,7 +4994,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\options_service.py",
       "source_location": "L40",
-      "community": 10,
+      "community": 13,
       "norm_label": "computes theoretical call option price using black-scholes.     s: current stoc",
       "id": "options_service_rationale_40"
     },
@@ -5003,7 +5003,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\options_service.py",
       "source_location": "L56",
-      "community": 10,
+      "community": 13,
       "norm_label": "computes theoretical put option price using black-scholes.",
       "id": "options_service_rationale_56"
     },
@@ -5463,7 +5463,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\__init__.py",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_backend_app_services_init_py",
-      "community": 73,
+      "community": 74,
       "norm_label": "__init__.py"
     },
     {
@@ -5472,7 +5472,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\tests\\conftest.py",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_backend_tests_conftest_py",
-      "community": 22,
+      "community": 23,
       "norm_label": "conftest.py"
     },
     {
@@ -5481,7 +5481,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\tests\\conftest.py",
       "source_location": "L81",
       "id": "conftest_client",
-      "community": 22,
+      "community": 23,
       "norm_label": "client()"
     },
     {
@@ -5489,7 +5489,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\tests\\conftest.py",
       "source_location": "L1",
-      "community": 22,
+      "community": 23,
       "norm_label": "pytest configuration \u2013 test client setup (tests/conftest.py)  this module defi",
       "id": "conftest_rationale_1"
     },
@@ -5498,7 +5498,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\tests\\conftest.py",
       "source_location": "L82",
-      "community": 22,
+      "community": 23,
       "norm_label": "returns a synchronous test client for the fastapi app.",
       "id": "conftest_rationale_82"
     },
@@ -5508,7 +5508,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\tests\\test_categorization.py",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_backend_tests_test_categorization_py",
-      "community": 13,
+      "community": 11,
       "norm_label": "test_categorization.py"
     },
     {
@@ -5517,7 +5517,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\tests\\test_categorization.py",
       "source_location": "L80",
       "id": "test_categorization_test_categorize_stock",
-      "community": 13,
+      "community": 11,
       "norm_label": "test_categorize_stock()"
     },
     {
@@ -5526,7 +5526,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\tests\\test_categorization.py",
       "source_location": "L91",
       "id": "test_categorization_test_categorize_news",
-      "community": 13,
+      "community": 11,
       "norm_label": "test_categorize_news()"
     },
     {
@@ -5535,7 +5535,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\tests\\test_categorization.py",
       "source_location": "L102",
       "id": "test_categorization_test_categorize_portfolio",
-      "community": 13,
+      "community": 11,
       "norm_label": "test_categorize_portfolio()"
     },
     {
@@ -5544,7 +5544,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\tests\\test_categorization.py",
       "source_location": "L113",
       "id": "test_categorization_test_categorize_general",
-      "community": 13,
+      "community": 11,
       "norm_label": "test_categorize_general()"
     },
     {
@@ -5553,7 +5553,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\tests\\test_categorization.py",
       "source_location": "L124",
       "id": "test_categorization_test_categorize_fallback",
-      "community": 13,
+      "community": 11,
       "norm_label": "test_categorize_fallback()"
     },
     {
@@ -5561,7 +5561,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\tests\\test_categorization.py",
       "source_location": "L1",
-      "community": 13,
+      "community": 11,
       "norm_label": "unit tests \u2013 categorization service  this module contains unit tests for the `",
       "id": "test_categorization_rationale_1"
     },
@@ -5570,7 +5570,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\tests\\test_categorization.py",
       "source_location": "L125",
-      "community": 13,
+      "community": 11,
       "norm_label": "ensure it doesn't crash on empty or weird input.",
       "id": "test_categorization_rationale_125"
     },
@@ -5670,7 +5670,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\tests\\test_health.py",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_backend_tests_test_health_py",
-      "community": 15,
+      "community": 16,
       "norm_label": "test_health.py"
     },
     {
@@ -5679,7 +5679,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\tests\\test_health.py",
       "source_location": "L85",
       "id": "test_health_test_health_check",
-      "community": 15,
+      "community": 16,
       "norm_label": "test_health_check()"
     },
     {
@@ -5688,7 +5688,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\tests\\test_health.py",
       "source_location": "L93",
       "id": "test_health_test_analyze_stub_returns_valid_schema",
-      "community": 15,
+      "community": 16,
       "norm_label": "test_analyze_stub_returns_valid_schema()"
     },
     {
@@ -5697,7 +5697,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\tests\\test_health.py",
       "source_location": "L106",
       "id": "test_health_test_analyze_rejects_empty_question",
-      "community": 15,
+      "community": 16,
       "norm_label": "test_analyze_rejects_empty_question()"
     },
     {
@@ -5706,7 +5706,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\tests\\test_health.py",
       "source_location": "L112",
       "id": "test_health_test_analyze_rejects_missing_field",
-      "community": 15,
+      "community": 16,
       "norm_label": "test_analyze_rejects_missing_field()"
     },
     {
@@ -5714,7 +5714,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\tests\\test_health.py",
       "source_location": "L1",
-      "community": 15,
+      "community": 16,
       "norm_label": "integration tests \u2013 health & analyze endpoints  this module contains integrati",
       "id": "test_health_rationale_1"
     },
@@ -5723,7 +5723,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\tests\\test_health.py",
       "source_location": "L94",
-      "community": 15,
+      "community": 16,
       "norm_label": "smoke test: verify /analyze returns a valid structured json response.",
       "id": "test_health_rationale_94"
     },
@@ -5732,7 +5732,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\tests\\test_health.py",
       "source_location": "L107",
-      "community": 15,
+      "community": 16,
       "norm_label": "validation: empty question should return 422.",
       "id": "test_health_rationale_107"
     },
@@ -5741,7 +5741,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\tests\\test_health.py",
       "source_location": "L113",
-      "community": 15,
+      "community": 16,
       "norm_label": "validation: missing 'question' field should return 422.",
       "id": "test_health_rationale_113"
     },
@@ -5751,7 +5751,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\tests\\__init__.py",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_backend_tests_init_py",
-      "community": 74,
+      "community": 75,
       "norm_label": "__init__.py"
     },
     {
@@ -5760,7 +5760,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\next-env.d.ts",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_frontend_next_env_d_ts",
-      "community": 75,
+      "community": 76,
       "norm_label": "next-env.d.ts"
     },
     {
@@ -5769,7 +5769,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\postcss.config.js",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_frontend_postcss_config_js",
-      "community": 76,
+      "community": 77,
       "norm_label": "postcss.config.js"
     },
     {
@@ -5778,7 +5778,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\tailwind.config.ts",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_frontend_tailwind_config_ts",
-      "community": 77,
+      "community": 78,
       "norm_label": "tailwind.config.ts"
     },
     {
@@ -5787,7 +5787,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\middleware.ts",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_frontend_src_middleware_ts",
-      "community": 4,
+      "community": 7,
       "norm_label": "middleware.ts"
     },
     {
@@ -5796,7 +5796,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\middleware.ts",
       "source_location": "L7",
       "id": "middleware_middleware",
-      "community": 4,
+      "community": 7,
       "norm_label": "middleware()"
     },
     {
@@ -5805,7 +5805,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\app\\layout.tsx",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_frontend_src_app_layout_tsx",
-      "community": 30,
+      "community": 31,
       "norm_label": "layout.tsx"
     },
     {
@@ -5814,7 +5814,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\app\\layout.tsx",
       "source_location": "L20",
       "id": "layout_rootlayout",
-      "community": 30,
+      "community": 31,
       "norm_label": "rootlayout()"
     },
     {
@@ -5823,7 +5823,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\app\\page.tsx",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_frontend_src_app_page_tsx",
-      "community": 31,
+      "community": 32,
       "norm_label": "page.tsx"
     },
     {
@@ -5832,7 +5832,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\app\\page.tsx",
       "source_location": "L14",
       "id": "page_landingpage",
-      "community": 31,
+      "community": 32,
       "norm_label": "landingpage()"
     },
     {
@@ -5841,7 +5841,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\app\\providers.tsx",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_frontend_src_app_providers_tsx",
-      "community": 32,
+      "community": 33,
       "norm_label": "providers.tsx"
     },
     {
@@ -5850,7 +5850,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\app\\providers.tsx",
       "source_location": "L6",
       "id": "providers_providers",
-      "community": 32,
+      "community": 33,
       "norm_label": "providers()"
     },
     {
@@ -5859,7 +5859,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\app\\ai-research\\page.tsx",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_frontend_src_app_ai_research_page_tsx",
-      "community": 78,
+      "community": 79,
       "norm_label": "page.tsx"
     },
     {
@@ -5868,7 +5868,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\app\\alerts\\page.tsx",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_frontend_src_app_alerts_page_tsx",
-      "community": 26,
+      "community": 27,
       "norm_label": "page.tsx"
     },
     {
@@ -5877,7 +5877,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\app\\alerts\\page.tsx",
       "source_location": "L25",
       "id": "page_toggle",
-      "community": 26,
+      "community": 27,
       "norm_label": "toggle()"
     },
     {
@@ -5886,7 +5886,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\app\\alerts\\page.tsx",
       "source_location": "L31",
       "id": "page_getconditiontype",
-      "community": 26,
+      "community": 27,
       "norm_label": "getconditiontype()"
     },
     {
@@ -5895,7 +5895,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\app\\auth\\login\\page.tsx",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_frontend_src_app_auth_login_page_tsx",
-      "community": 16,
+      "community": 17,
       "norm_label": "page.tsx"
     },
     {
@@ -5904,7 +5904,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\app\\auth\\login\\page.tsx",
       "source_location": "L9",
       "id": "page_loginpage",
-      "community": 16,
+      "community": 17,
       "norm_label": "loginpage()"
     },
     {
@@ -5913,7 +5913,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\app\\auth\\signup\\page.tsx",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_frontend_src_app_auth_signup_page_tsx",
-      "community": 16,
+      "community": 17,
       "norm_label": "page.tsx"
     },
     {
@@ -5922,7 +5922,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\app\\auth\\signup\\page.tsx",
       "source_location": "L9",
       "id": "page_signuppage",
-      "community": 16,
+      "community": 17,
       "norm_label": "signuppage()"
     },
     {
@@ -5931,7 +5931,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\app\\dashboard\\page.tsx",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_frontend_src_app_dashboard_page_tsx",
-      "community": 33,
+      "community": 34,
       "norm_label": "page.tsx"
     },
     {
@@ -5940,7 +5940,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\app\\dashboard\\page.tsx",
       "source_location": "L17",
       "id": "page_spark",
-      "community": 33,
+      "community": 34,
       "norm_label": "spark()"
     },
     {
@@ -5949,7 +5949,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\app\\news\\page.tsx",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_frontend_src_app_news_page_tsx",
-      "community": 4,
+      "community": 7,
       "norm_label": "page.tsx"
     },
     {
@@ -5958,7 +5958,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\app\\news\\page.tsx",
       "source_location": "L16",
       "id": "page_fetchsynthesis",
-      "community": 4,
+      "community": 7,
       "norm_label": "fetchsynthesis()"
     },
     {
@@ -5967,7 +5967,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\app\\news\\page.tsx",
       "source_location": "L124",
       "id": "page_formattime",
-      "community": 4,
+      "community": 7,
       "norm_label": "formattime()"
     },
     {
@@ -5976,7 +5976,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\app\\portfolio\\page.tsx",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_frontend_src_app_portfolio_page_tsx",
-      "community": 4,
+      "community": 7,
       "norm_label": "page.tsx"
     },
     {
@@ -5985,7 +5985,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\app\\portfolio\\page.tsx",
       "source_location": "L143",
       "id": "page_catch",
-      "community": 4,
+      "community": 7,
       "norm_label": "catch()"
     },
     {
@@ -5994,7 +5994,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\app\\settings\\page.tsx",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_frontend_src_app_settings_page_tsx",
-      "community": 79,
+      "community": 80,
       "norm_label": "page.tsx"
     },
     {
@@ -6003,7 +6003,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\app\\stock\\[symbol]\\page.tsx",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_frontend_src_app_stock_symbol_page_tsx",
-      "community": 23,
+      "community": 24,
       "norm_label": "page.tsx"
     },
     {
@@ -6012,7 +6012,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\app\\stock\\[symbol]\\page.tsx",
       "source_location": "L28",
       "id": "page_formatmarketcap",
-      "community": 23,
+      "community": 24,
       "norm_label": "formatmarketcap()"
     },
     {
@@ -6021,7 +6021,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\app\\stock\\[symbol]\\page.tsx",
       "source_location": "L95",
       "id": "page_handlesearch",
-      "community": 23,
+      "community": 24,
       "norm_label": "handlesearch()"
     },
     {
@@ -6030,7 +6030,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\app\\stock\\[symbol]\\page.tsx",
       "source_location": "L152",
       "id": "page_handleanalyzeclick",
-      "community": 23,
+      "community": 24,
       "norm_label": "handleanalyzeclick()"
     },
     {
@@ -6039,7 +6039,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\app\\watchlist\\page.tsx",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_frontend_src_app_watchlist_page_tsx",
-      "community": 18,
+      "community": 19,
       "norm_label": "page.tsx"
     },
     {
@@ -6048,7 +6048,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\app\\watchlist\\page.tsx",
       "source_location": "L12",
       "id": "page_getexchangebadge",
-      "community": 18,
+      "community": 19,
       "norm_label": "getexchangebadge()"
     },
     {
@@ -6057,7 +6057,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\app\\watchlist\\page.tsx",
       "source_location": "L19",
       "id": "page_getcleanticker",
-      "community": 18,
+      "community": 19,
       "norm_label": "getcleanticker()"
     },
     {
@@ -6066,7 +6066,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\app\\watchlist\\page.tsx",
       "source_location": "L44",
       "id": "page_savesymbols",
-      "community": 18,
+      "community": 19,
       "norm_label": "savesymbols()"
     },
     {
@@ -6075,7 +6075,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\app\\watchlist\\page.tsx",
       "source_location": "L51",
       "id": "page_handleadd",
-      "community": 18,
+      "community": 19,
       "norm_label": "handleadd()"
     },
     {
@@ -6084,7 +6084,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\app\\watchlist\\page.tsx",
       "source_location": "L59",
       "id": "page_handleremove",
-      "community": 18,
+      "community": 19,
       "norm_label": "handleremove()"
     },
     {
@@ -6093,7 +6093,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\AddToPortfolioModal.tsx",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_frontend_src_components_addtoportfoliomodal_tsx",
-      "community": 80,
+      "community": 81,
       "norm_label": "addtoportfoliomodal.tsx"
     },
     {
@@ -6102,7 +6102,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\AIInsights.tsx",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_frontend_src_components_aiinsights_tsx",
-      "community": 81,
+      "community": 82,
       "norm_label": "aiinsights.tsx"
     },
     {
@@ -6111,7 +6111,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\AppShell.tsx",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_frontend_src_components_appshell_tsx",
-      "community": 34,
+      "community": 35,
       "norm_label": "appshell.tsx"
     },
     {
@@ -6120,7 +6120,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\AppShell.tsx",
       "source_location": "L6",
       "id": "appshell_appshell",
-      "community": 34,
+      "community": 35,
       "norm_label": "appshell()"
     },
     {
@@ -6129,7 +6129,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\CorporateActionsCard.tsx",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_frontend_src_components_corporateactionscard_tsx",
-      "community": 27,
+      "community": 28,
       "norm_label": "corporateactionscard.tsx"
     },
     {
@@ -6138,7 +6138,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\CorporateActionsCard.tsx",
       "source_location": "L14",
       "id": "corporateactionscard_fmt",
-      "community": 27,
+      "community": 28,
       "norm_label": "fmt()"
     },
     {
@@ -6147,7 +6147,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\CorporateActionsCard.tsx",
       "source_location": "L19",
       "id": "corporateactionscard_fmtrev",
-      "community": 27,
+      "community": 28,
       "norm_label": "fmtrev()"
     },
     {
@@ -6156,7 +6156,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\FinancialStatements.tsx",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_frontend_src_components_financialstatements_tsx",
-      "community": 20,
+      "community": 21,
       "norm_label": "financialstatements.tsx"
     },
     {
@@ -6165,7 +6165,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\FinancialStatements.tsx",
       "source_location": "L21",
       "id": "financialstatements_fmt",
-      "community": 20,
+      "community": 21,
       "norm_label": "fmt()"
     },
     {
@@ -6174,7 +6174,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\FinancialStatements.tsx",
       "source_location": "L31",
       "id": "financialstatements_getlabel",
-      "community": 20,
+      "community": 21,
       "norm_label": "getlabel()"
     },
     {
@@ -6183,7 +6183,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\FinancialStatements.tsx",
       "source_location": "L34",
       "id": "financialstatements_getrev",
-      "community": 20,
+      "community": 21,
       "norm_label": "getrev()"
     },
     {
@@ -6192,7 +6192,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\FinancialStatements.tsx",
       "source_location": "L36",
       "id": "financialstatements_incomechart",
-      "community": 20,
+      "community": 21,
       "norm_label": "incomechart()"
     },
     {
@@ -6201,7 +6201,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\FundamentalTab.tsx",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_frontend_src_components_fundamentaltab_tsx",
-      "community": 21,
+      "community": 22,
       "norm_label": "fundamentaltab.tsx"
     },
     {
@@ -6210,7 +6210,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\FundamentalTab.tsx",
       "source_location": "L16",
       "id": "fundamentaltab_fmtlarge",
-      "community": 21,
+      "community": 22,
       "norm_label": "fmtlarge()"
     },
     {
@@ -6219,7 +6219,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\FundamentalTab.tsx",
       "source_location": "L26",
       "id": "fundamentaltab_fmtnum",
-      "community": 21,
+      "community": 22,
       "norm_label": "fmtnum()"
     },
     {
@@ -6228,7 +6228,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\FundamentalTab.tsx",
       "source_location": "L33",
       "id": "fundamentaltab_sectionheader",
-      "community": 21,
+      "community": 22,
       "norm_label": "sectionheader()"
     },
     {
@@ -6237,7 +6237,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\FundamentalTab.tsx",
       "source_location": "L50",
       "id": "fundamentaltab_kpicard",
-      "community": 21,
+      "community": 22,
       "norm_label": "kpicard()"
     },
     {
@@ -6246,7 +6246,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\Icons.tsx",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_frontend_src_components_icons_tsx",
-      "community": 14,
+      "community": 12,
       "norm_label": "icons.tsx"
     },
     {
@@ -6255,7 +6255,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\Icons.tsx",
       "source_location": "L9",
       "id": "icons_icgrid",
-      "community": 14,
+      "community": 12,
       "norm_label": "icgrid()"
     },
     {
@@ -6264,7 +6264,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\Icons.tsx",
       "source_location": "L18",
       "id": "icons_icchart",
-      "community": 14,
+      "community": 12,
       "norm_label": "icchart()"
     },
     {
@@ -6273,7 +6273,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\Icons.tsx",
       "source_location": "L25",
       "id": "icons_icbrain",
-      "community": 14,
+      "community": 12,
       "norm_label": "icbrain()"
     },
     {
@@ -6282,7 +6282,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\Icons.tsx",
       "source_location": "L33",
       "id": "icons_icbrief",
-      "community": 14,
+      "community": 12,
       "norm_label": "icbrief()"
     },
     {
@@ -6291,7 +6291,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\Icons.tsx",
       "source_location": "L40",
       "id": "icons_icbkmrk",
-      "community": 14,
+      "community": 12,
       "norm_label": "icbkmrk()"
     },
     {
@@ -6300,7 +6300,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\Icons.tsx",
       "source_location": "L46",
       "id": "icons_icnews",
-      "community": 14,
+      "community": 12,
       "norm_label": "icnews()"
     },
     {
@@ -6309,7 +6309,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\Icons.tsx",
       "source_location": "L54",
       "id": "icons_icbell",
-      "community": 14,
+      "community": 12,
       "norm_label": "icbell()"
     },
     {
@@ -6318,7 +6318,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\Icons.tsx",
       "source_location": "L61",
       "id": "icons_icgear",
-      "community": 14,
+      "community": 12,
       "norm_label": "icgear()"
     },
     {
@@ -6327,7 +6327,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\Icons.tsx",
       "source_location": "L68",
       "id": "icons_icsearch",
-      "community": 14,
+      "community": 12,
       "norm_label": "icsearch()"
     },
     {
@@ -6336,7 +6336,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\Icons.tsx",
       "source_location": "L75",
       "id": "icons_icsend",
-      "community": 14,
+      "community": 12,
       "norm_label": "icsend()"
     },
     {
@@ -6345,7 +6345,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\Icons.tsx",
       "source_location": "L81",
       "id": "icons_icplus",
-      "community": 14,
+      "community": 12,
       "norm_label": "icplus()"
     },
     {
@@ -6354,7 +6354,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\Icons.tsx",
       "source_location": "L88",
       "id": "icons_ictrash",
-      "community": 14,
+      "community": 12,
       "norm_label": "ictrash()"
     },
     {
@@ -6363,7 +6363,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\Icons.tsx",
       "source_location": "L94",
       "id": "icons_iclogout",
-      "community": 14,
+      "community": 12,
       "norm_label": "iclogout()"
     },
     {
@@ -6372,7 +6372,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\IndicatorCard.tsx",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_frontend_src_components_indicatorcard_tsx",
-      "community": 35,
+      "community": 36,
       "norm_label": "indicatorcard.tsx"
     },
     {
@@ -6381,7 +6381,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\IndicatorCard.tsx",
       "source_location": "L18",
       "id": "indicatorcard_indicatorcard",
-      "community": 35,
+      "community": 36,
       "norm_label": "indicatorcard()"
     },
     {
@@ -6390,7 +6390,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\SellHoldingModal.tsx",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_frontend_src_components_sellholdingmodal_tsx",
-      "community": 82,
+      "community": 83,
       "norm_label": "sellholdingmodal.tsx"
     },
     {
@@ -6399,7 +6399,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\ShareholdingDonut.tsx",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_frontend_src_components_shareholdingdonut_tsx",
-      "community": 36,
+      "community": 37,
       "norm_label": "shareholdingdonut.tsx"
     },
     {
@@ -6408,7 +6408,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\ShareholdingDonut.tsx",
       "source_location": "L13",
       "id": "shareholdingdonut_donutchart",
-      "community": 36,
+      "community": 37,
       "norm_label": "donutchart()"
     },
     {
@@ -6417,7 +6417,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\Sidebar.tsx",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_frontend_src_components_sidebar_tsx",
-      "community": 83,
+      "community": 84,
       "norm_label": "sidebar.tsx"
     },
     {
@@ -6426,7 +6426,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\SupportResistanceBar.tsx",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_frontend_src_components_supportresistancebar_tsx",
-      "community": 37,
+      "community": 38,
       "norm_label": "supportresistancebar.tsx"
     },
     {
@@ -6435,7 +6435,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\SupportResistanceBar.tsx",
       "source_location": "L20",
       "id": "supportresistancebar_pct",
-      "community": 37,
+      "community": 38,
       "norm_label": "pct()"
     },
     {
@@ -6444,7 +6444,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\TechnicalSummaryGauge.tsx",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_frontend_src_components_technicalsummarygauge_tsx",
-      "community": 38,
+      "community": 39,
       "norm_label": "technicalsummarygauge.tsx"
     },
     {
@@ -6453,7 +6453,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\TechnicalSummaryGauge.tsx",
       "source_location": "L16",
       "id": "technicalsummarygauge_technicalsummarygauge",
-      "community": 38,
+      "community": 39,
       "norm_label": "technicalsummarygauge()"
     },
     {
@@ -6462,7 +6462,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\TechnicalTab.tsx",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_frontend_src_components_technicaltab_tsx",
-      "community": 39,
+      "community": 40,
       "norm_label": "technicaltab.tsx"
     },
     {
@@ -6471,7 +6471,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\TechnicalTab.tsx",
       "source_location": "L24",
       "id": "technicaltab_getindicatorcards",
-      "community": 39,
+      "community": 40,
       "norm_label": "getindicatorcards()"
     },
     {
@@ -6480,7 +6480,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\TopBar.tsx",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_frontend_src_components_topbar_tsx",
-      "community": 16,
+      "community": 17,
       "norm_label": "topbar.tsx"
     },
     {
@@ -6489,7 +6489,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\TopBar.tsx",
       "source_location": "L8",
       "id": "topbar_topbar",
-      "community": 16,
+      "community": 17,
       "norm_label": "topbar()"
     },
     {
@@ -6498,7 +6498,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\TradingViewWidget.tsx",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_frontend_src_components_tradingviewwidget_tsx",
-      "community": 40,
+      "community": 41,
       "norm_label": "tradingviewwidget.tsx"
     },
     {
@@ -6507,7 +6507,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\TradingViewWidget.tsx",
       "source_location": "L8",
       "id": "tradingviewwidget_formatsymbol",
-      "community": 40,
+      "community": 41,
       "norm_label": "formatsymbol()"
     },
     {
@@ -6516,7 +6516,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\artifact\\ArtifactRenderer.tsx",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_frontend_src_components_artifact_artifactrenderer_tsx",
-      "community": 84,
+      "community": 85,
       "norm_label": "artifactrenderer.tsx"
     },
     {
@@ -6525,7 +6525,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\artifact\\atoms\\CompareColumns.tsx",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_frontend_src_components_artifact_atoms_comparecolumns_tsx",
-      "community": 41,
+      "community": 42,
       "norm_label": "comparecolumns.tsx"
     },
     {
@@ -6534,7 +6534,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\artifact\\atoms\\CompareColumns.tsx",
       "source_location": "L6",
       "id": "comparecolumns_comparecolumns",
-      "community": 41,
+      "community": 42,
       "norm_label": "comparecolumns()"
     },
     {
@@ -6543,7 +6543,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\artifact\\atoms\\ExpandableRiskPanel.tsx",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_frontend_src_components_artifact_atoms_expandableriskpanel_tsx",
-      "community": 85,
+      "community": 86,
       "norm_label": "expandableriskpanel.tsx"
     },
     {
@@ -6552,7 +6552,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\artifact\\atoms\\ExpandSection.tsx",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_frontend_src_components_artifact_atoms_expandsection_tsx",
-      "community": 86,
+      "community": 87,
       "norm_label": "expandsection.tsx"
     },
     {
@@ -6561,7 +6561,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\artifact\\atoms\\FundamentalGrid.tsx",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_frontend_src_components_artifact_atoms_fundamentalgrid_tsx",
-      "community": 42,
+      "community": 43,
       "norm_label": "fundamentalgrid.tsx"
     },
     {
@@ -6570,7 +6570,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\artifact\\atoms\\FundamentalGrid.tsx",
       "source_location": "L4",
       "id": "fundamentalgrid_fundamentalgrid",
-      "community": 42,
+      "community": 43,
       "norm_label": "fundamentalgrid()"
     },
     {
@@ -6579,7 +6579,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\artifact\\atoms\\HeroMetric.tsx",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_frontend_src_components_artifact_atoms_herometric_tsx",
-      "community": 87,
+      "community": 88,
       "norm_label": "herometric.tsx"
     },
     {
@@ -6588,7 +6588,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\artifact\\atoms\\MetricGrid.tsx",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_frontend_src_components_artifact_atoms_metricgrid_tsx",
-      "community": 88,
+      "community": 89,
       "norm_label": "metricgrid.tsx"
     },
     {
@@ -6597,7 +6597,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\artifact\\atoms\\MiniBarChart.tsx",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_frontend_src_components_artifact_atoms_minibarchart_tsx",
-      "community": 43,
+      "community": 44,
       "norm_label": "minibarchart.tsx"
     },
     {
@@ -6606,7 +6606,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\artifact\\atoms\\MiniBarChart.tsx",
       "source_location": "L8",
       "id": "minibarchart_minibarchart",
-      "community": 43,
+      "community": 44,
       "norm_label": "minibarchart()"
     },
     {
@@ -6615,7 +6615,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\artifact\\atoms\\MiniPriceCard.tsx",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_frontend_src_components_artifact_atoms_minipricecard_tsx",
-      "community": 89,
+      "community": 90,
       "norm_label": "minipricecard.tsx"
     },
     {
@@ -6624,7 +6624,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\artifact\\atoms\\NewsFeed.tsx",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_frontend_src_components_artifact_atoms_newsfeed_tsx",
-      "community": 90,
+      "community": 91,
       "norm_label": "newsfeed.tsx"
     },
     {
@@ -6633,7 +6633,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\artifact\\atoms\\NewsItem.tsx",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_frontend_src_components_artifact_atoms_newsitem_tsx",
-      "community": 44,
+      "community": 45,
       "norm_label": "newsitem.tsx"
     },
     {
@@ -6642,7 +6642,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\artifact\\atoms\\NewsItem.tsx",
       "source_location": "L6",
       "id": "newsitem_newsitem",
-      "community": 44,
+      "community": 45,
       "norm_label": "newsitem()"
     },
     {
@@ -6651,7 +6651,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\artifact\\atoms\\PeerComparisonTable.tsx",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_frontend_src_components_artifact_atoms_peercomparisontable_tsx",
-      "community": 45,
+      "community": 46,
       "norm_label": "peercomparisontable.tsx"
     },
     {
@@ -6660,7 +6660,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\artifact\\atoms\\PeerComparisonTable.tsx",
       "source_location": "L10",
       "id": "peercomparisontable_getmetric",
-      "community": 45,
+      "community": 46,
       "norm_label": "getmetric()"
     },
     {
@@ -6669,7 +6669,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\artifact\\atoms\\ProgressBar.tsx",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_frontend_src_components_artifact_atoms_progressbar_tsx",
-      "community": 46,
+      "community": 47,
       "norm_label": "progressbar.tsx"
     },
     {
@@ -6678,7 +6678,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\artifact\\atoms\\ProgressBar.tsx",
       "source_location": "L4",
       "id": "progressbar_shareholdingprogress",
-      "community": 46,
+      "community": 47,
       "norm_label": "shareholdingprogress()"
     },
     {
@@ -6687,7 +6687,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\artifact\\atoms\\RevenueProfitChart.tsx",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_frontend_src_components_artifact_atoms_revenueprofitchart_tsx",
-      "community": 91,
+      "community": 92,
       "norm_label": "revenueprofitchart.tsx"
     },
     {
@@ -6696,7 +6696,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\artifact\\atoms\\SegmentStrengthBars.tsx",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_frontend_src_components_artifact_atoms_segmentstrengthbars_tsx",
-      "community": 47,
+      "community": 48,
       "norm_label": "segmentstrengthbars.tsx"
     },
     {
@@ -6705,7 +6705,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\artifact\\atoms\\SegmentStrengthBars.tsx",
       "source_location": "L15",
       "id": "segmentstrengthbars_getcolors",
-      "community": 47,
+      "community": 48,
       "norm_label": "getcolors()"
     },
     {
@@ -6714,7 +6714,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\artifact\\atoms\\SignalRow.tsx",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_frontend_src_components_artifact_atoms_signalrow_tsx",
-      "community": 92,
+      "community": 93,
       "norm_label": "signalrow.tsx"
     },
     {
@@ -6723,7 +6723,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\artifact\\atoms\\SupportResistanceBar.tsx",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_frontend_src_components_artifact_atoms_supportresistancebar_tsx",
-      "community": 93,
+      "community": 94,
       "norm_label": "supportresistancebar.tsx"
     },
     {
@@ -6732,7 +6732,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\artifact\\atoms\\TechnicalGauges.tsx",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_frontend_src_components_artifact_atoms_technicalgauges_tsx",
-      "community": 94,
+      "community": 95,
       "norm_label": "technicalgauges.tsx"
     },
     {
@@ -6741,7 +6741,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\artifact\\atoms\\VerdictBanner.tsx",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_frontend_src_components_artifact_atoms_verdictbanner_tsx",
-      "community": 48,
+      "community": 49,
       "norm_label": "verdictbanner.tsx"
     },
     {
@@ -6750,7 +6750,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\artifact\\atoms\\VerdictBanner.tsx",
       "source_location": "L6",
       "id": "verdictbanner_verdictbanner",
-      "community": 48,
+      "community": 49,
       "norm_label": "verdictbanner()"
     },
     {
@@ -6759,7 +6759,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\artifact\\atoms\\VerdictCard.tsx",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_frontend_src_components_artifact_atoms_verdictcard_tsx",
-      "community": 49,
+      "community": 50,
       "norm_label": "verdictcard.tsx"
     },
     {
@@ -6768,7 +6768,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\artifact\\atoms\\VerdictCard.tsx",
       "source_location": "L4",
       "id": "verdictcard_verdictcard",
-      "community": 49,
+      "community": 50,
       "norm_label": "verdictcard()"
     },
     {
@@ -6777,7 +6777,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\artifact\\skeletons\\Shimmer.tsx",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_frontend_src_components_artifact_skeletons_shimmer_tsx",
-      "community": 50,
+      "community": 51,
       "norm_label": "shimmer.tsx"
     },
     {
@@ -6786,7 +6786,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\artifact\\skeletons\\Shimmer.tsx",
       "source_location": "L4",
       "id": "shimmer_shimmer",
-      "community": 50,
+      "community": 51,
       "norm_label": "shimmer()"
     },
     {
@@ -6795,7 +6795,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\artifact\\skeletons\\SkeletonFinancialsTimeline.tsx",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_frontend_src_components_artifact_skeletons_skeletonfinancialstimeline_tsx",
-      "community": 95,
+      "community": 96,
       "norm_label": "skeletonfinancialstimeline.tsx"
     },
     {
@@ -6804,7 +6804,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\artifact\\skeletons\\SkeletonHeroPrice.tsx",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_frontend_src_components_artifact_skeletons_skeletonheroprice_tsx",
-      "community": 51,
+      "community": 52,
       "norm_label": "skeletonheroprice.tsx"
     },
     {
@@ -6813,7 +6813,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\artifact\\skeletons\\SkeletonHeroPrice.tsx",
       "source_location": "L3",
       "id": "skeletonheroprice_skeletonheroprice",
-      "community": 51,
+      "community": 52,
       "norm_label": "skeletonheroprice()"
     },
     {
@@ -6822,7 +6822,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\artifact\\skeletons\\SkeletonInvestmentThesis.tsx",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_frontend_src_components_artifact_skeletons_skeletoninvestmentthesis_tsx",
-      "community": 96,
+      "community": 97,
       "norm_label": "skeletoninvestmentthesis.tsx"
     },
     {
@@ -6831,7 +6831,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\artifact\\skeletons\\SkeletonNewsEvent.tsx",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_frontend_src_components_artifact_skeletons_skeletonnewsevent_tsx",
-      "community": 52,
+      "community": 53,
       "norm_label": "skeletonnewsevent.tsx"
     },
     {
@@ -6840,7 +6840,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\artifact\\skeletons\\SkeletonNewsEvent.tsx",
       "source_location": "L3",
       "id": "skeletonnewsevent_skeletonnewsevent",
-      "community": 52,
+      "community": 53,
       "norm_label": "skeletonnewsevent()"
     },
     {
@@ -6849,7 +6849,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\artifact\\skeletons\\SkeletonTechnicalFocus.tsx",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_frontend_src_components_artifact_skeletons_skeletontechnicalfocus_tsx",
-      "community": 97,
+      "community": 98,
       "norm_label": "skeletontechnicalfocus.tsx"
     },
     {
@@ -6858,7 +6858,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\artifact\\skeletons\\SkeletonThreeWayCompare.tsx",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_frontend_src_components_artifact_skeletons_skeletonthreewaycompare_tsx",
-      "community": 98,
+      "community": 99,
       "norm_label": "skeletonthreewaycompare.tsx"
     },
     {
@@ -6867,7 +6867,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\landing\\FeatureGrid.tsx",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_frontend_src_components_landing_featuregrid_tsx",
-      "community": 99,
+      "community": 100,
       "norm_label": "featuregrid.tsx"
     },
     {
@@ -6876,7 +6876,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\landing\\HeroSection.tsx",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_frontend_src_components_landing_herosection_tsx",
-      "community": 100,
+      "community": 101,
       "norm_label": "herosection.tsx"
     },
     {
@@ -6885,7 +6885,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\landing\\LandingFooter.tsx",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_frontend_src_components_landing_landingfooter_tsx",
-      "community": 53,
+      "community": 54,
       "norm_label": "landingfooter.tsx"
     },
     {
@@ -6894,7 +6894,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\landing\\LandingFooter.tsx",
       "source_location": "L3",
       "id": "landingfooter_landingfooter",
-      "community": 53,
+      "community": 54,
       "norm_label": "landingfooter()"
     },
     {
@@ -6903,7 +6903,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\landing\\NavBar.tsx",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_frontend_src_components_landing_navbar_tsx",
-      "community": 54,
+      "community": 55,
       "norm_label": "navbar.tsx"
     },
     {
@@ -6912,7 +6912,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\landing\\NavBar.tsx",
       "source_location": "L5",
       "id": "navbar_navbar",
-      "community": 54,
+      "community": 55,
       "norm_label": "navbar()"
     },
     {
@@ -6921,7 +6921,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\landing\\ProtocolSection.tsx",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_frontend_src_components_landing_protocolsection_tsx",
-      "community": 55,
+      "community": 56,
       "norm_label": "protocolsection.tsx"
     },
     {
@@ -6930,7 +6930,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\landing\\ProtocolSection.tsx",
       "source_location": "L1",
       "id": "protocolsection_protocolsection",
-      "community": 55,
+      "community": 56,
       "norm_label": "protocolsection()"
     },
     {
@@ -6939,7 +6939,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\landing\\TickerTape.tsx",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_frontend_src_components_landing_tickertape_tsx",
-      "community": 56,
+      "community": 57,
       "norm_label": "tickertape.tsx"
     },
     {
@@ -6948,7 +6948,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\landing\\TickerTape.tsx",
       "source_location": "L14",
       "id": "tickertape_tickertape",
-      "community": 56,
+      "community": 57,
       "norm_label": "tickertape()"
     },
     {
@@ -6957,7 +6957,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\landing\\TrustBar.tsx",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_frontend_src_components_landing_trustbar_tsx",
-      "community": 57,
+      "community": 58,
       "norm_label": "trustbar.tsx"
     },
     {
@@ -6966,7 +6966,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\components\\landing\\TrustBar.tsx",
       "source_location": "L1",
       "id": "trustbar_trustbar",
-      "community": 57,
+      "community": 58,
       "norm_label": "trustbar()"
     },
     {
@@ -6975,7 +6975,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\lib\\ai.api.ts",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_frontend_src_lib_ai_api_ts",
-      "community": 4,
+      "community": 7,
       "norm_label": "ai.api.ts"
     },
     {
@@ -6984,7 +6984,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\lib\\ai.api.ts",
       "source_location": "L58",
       "id": "ai_api_streamagent",
-      "community": 4,
+      "community": 7,
       "norm_label": "streamagent()"
     },
     {
@@ -6993,7 +6993,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\lib\\alerts.api.ts",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_frontend_src_lib_alerts_api_ts",
-      "community": 101,
+      "community": 102,
       "norm_label": "alerts.api.ts"
     },
     {
@@ -7002,7 +7002,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\lib\\api-client.ts",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_frontend_src_lib_api_client_ts",
-      "community": 24,
+      "community": 25,
       "norm_label": "api-client.ts"
     },
     {
@@ -7011,7 +7011,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\lib\\api-client.ts",
       "source_location": "L13",
       "id": "api_client_apierror",
-      "community": 24,
+      "community": 25,
       "norm_label": "apierror"
     },
     {
@@ -7020,7 +7020,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\lib\\api-client.ts",
       "source_location": "L17",
       "id": "api_client_apierror_constructor",
-      "community": 24,
+      "community": 25,
       "norm_label": ".constructor()"
     },
     {
@@ -7029,7 +7029,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\lib\\api-client.ts",
       "source_location": "L25",
       "id": "api_client_apifetch",
-      "community": 24,
+      "community": 25,
       "norm_label": "apifetch()"
     },
     {
@@ -7038,7 +7038,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\lib\\artifact-assembler.ts",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_frontend_src_lib_artifact_assembler_ts",
-      "community": 17,
+      "community": 18,
       "norm_label": "artifact-assembler.ts"
     },
     {
@@ -7047,7 +7047,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\lib\\artifact-assembler.ts",
       "source_location": "L24",
       "id": "artifact_assembler_resolverenderorder",
-      "community": 17,
+      "community": 18,
       "norm_label": "resolverenderorder()"
     },
     {
@@ -7056,7 +7056,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\lib\\artifact-assembler.ts",
       "source_location": "L46",
       "id": "artifact_assembler_hasmeaningfulfundamentals",
-      "community": 17,
+      "community": 18,
       "norm_label": "hasmeaningfulfundamentals()"
     },
     {
@@ -7065,7 +7065,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\lib\\artifact-assembler.ts",
       "source_location": "L58",
       "id": "artifact_assembler_hasmeaningfultechnicals",
-      "community": 17,
+      "community": 18,
       "norm_label": "hasmeaningfultechnicals()"
     },
     {
@@ -7074,7 +7074,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\lib\\artifact-assembler.ts",
       "source_location": "L66",
       "id": "artifact_assembler_hasmeaningfulcompare",
-      "community": 17,
+      "community": 18,
       "norm_label": "hasmeaningfulcompare()"
     },
     {
@@ -7083,7 +7083,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\lib\\artifact-assembler.ts",
       "source_location": "L73",
       "id": "artifact_assembler_hasmeaningfulshareholding",
-      "community": 17,
+      "community": 18,
       "norm_label": "hasmeaningfulshareholding()"
     },
     {
@@ -7092,7 +7092,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\lib\\artifact-assembler.ts",
       "source_location": "L81",
       "id": "artifact_assembler_iscomponentready",
-      "community": 17,
+      "community": 18,
       "norm_label": "iscomponentready()"
     },
     {
@@ -7101,7 +7101,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\lib\\artifact-assembler.ts",
       "source_location": "L121",
       "id": "artifact_assembler_extractvariant",
-      "community": 17,
+      "community": 18,
       "norm_label": "extractvariant()"
     },
     {
@@ -7110,7 +7110,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\lib\\artifact-assembler.ts",
       "source_location": "L127",
       "id": "artifact_assembler_extractbasename",
-      "community": 17,
+      "community": 18,
       "norm_label": "extractbasename()"
     },
     {
@@ -7119,7 +7119,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\lib\\artifact-types.ts",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_frontend_src_lib_artifact_types_ts",
-      "community": 102,
+      "community": 103,
       "norm_label": "artifact-types.ts"
     },
     {
@@ -7128,7 +7128,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\lib\\auth-context.tsx",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_frontend_src_lib_auth_context_tsx",
-      "community": 16,
+      "community": 17,
       "norm_label": "auth-context.tsx"
     },
     {
@@ -7137,7 +7137,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\lib\\auth-context.tsx",
       "source_location": "L29",
       "id": "auth_context_authprovider",
-      "community": 16,
+      "community": 17,
       "norm_label": "authprovider()"
     },
     {
@@ -7146,7 +7146,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\lib\\auth-context.tsx",
       "source_location": "L88",
       "id": "auth_context_useauth",
-      "community": 16,
+      "community": 17,
       "norm_label": "useauth()"
     },
     {
@@ -7155,7 +7155,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\lib\\auth.api.ts",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_frontend_src_lib_auth_api_ts",
-      "community": 25,
+      "community": 26,
       "norm_label": "auth.api.ts"
     },
     {
@@ -7164,7 +7164,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\lib\\auth.api.ts",
       "source_location": "L102",
       "id": "auth_api_getstoredtoken",
-      "community": 25,
+      "community": 26,
       "norm_label": "getstoredtoken()"
     },
     {
@@ -7173,7 +7173,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\lib\\auth.api.ts",
       "source_location": "L107",
       "id": "auth_api_getstoreduser",
-      "community": 25,
+      "community": 26,
       "norm_label": "getstoreduser()"
     },
     {
@@ -7182,7 +7182,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\lib\\auth.api.ts",
       "source_location": "L113",
       "id": "auth_api_clearauthstorage",
-      "community": 25,
+      "community": 26,
       "norm_label": "clearauthstorage()"
     },
     {
@@ -7191,7 +7191,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\lib\\market.api.ts",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_frontend_src_lib_market_api_ts",
-      "community": 103,
+      "community": 104,
       "norm_label": "market.api.ts"
     },
     {
@@ -7200,7 +7200,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\lib\\mock.ts",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_frontend_src_lib_mock_ts",
-      "community": 104,
+      "community": 105,
       "norm_label": "mock.ts"
     },
     {
@@ -7209,7 +7209,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\lib\\news.api.ts",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_frontend_src_lib_news_api_ts",
-      "community": 105,
+      "community": 106,
       "norm_label": "news.api.ts"
     },
     {
@@ -7218,7 +7218,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\lib\\portfolio.api.ts",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_frontend_src_lib_portfolio_api_ts",
-      "community": 106,
+      "community": 107,
       "norm_label": "portfolio.api.ts"
     },
     {
@@ -7227,7 +7227,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\lib\\stock.api.ts",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_frontend_src_lib_stock_api_ts",
-      "community": 107,
+      "community": 108,
       "norm_label": "stock.api.ts"
     },
     {
@@ -7236,7 +7236,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\lib\\supabase.ts",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_frontend_src_lib_supabase_ts",
-      "community": 108,
+      "community": 109,
       "norm_label": "supabase.ts"
     },
     {
@@ -7245,7 +7245,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\lib\\useWebSocketPrice.ts",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_frontend_src_lib_usewebsocketprice_ts",
-      "community": 58,
+      "community": 59,
       "norm_label": "usewebsocketprice.ts"
     },
     {
@@ -7254,7 +7254,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\lib\\useWebSocketPrice.ts",
       "source_location": "L19",
       "id": "usewebsocketprice_usewebsocketprice",
-      "community": 58,
+      "community": 59,
       "norm_label": "usewebsocketprice()"
     },
     {
@@ -7263,7 +7263,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\lib\\utils.ts",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_frontend_src_lib_utils_ts",
-      "community": 19,
+      "community": 20,
       "norm_label": "utils.ts"
     },
     {
@@ -7272,7 +7272,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\lib\\utils.ts",
       "source_location": "L2",
       "id": "utils_formatinr",
-      "community": 19,
+      "community": 20,
       "norm_label": "formatinr()"
     },
     {
@@ -7281,7 +7281,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\lib\\utils.ts",
       "source_location": "L12",
       "id": "utils_formatpct",
-      "community": 19,
+      "community": 20,
       "norm_label": "formatpct()"
     },
     {
@@ -7290,7 +7290,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\lib\\utils.ts",
       "source_location": "L19",
       "id": "utils_formatdate",
-      "community": 19,
+      "community": 20,
       "norm_label": "formatdate()"
     },
     {
@@ -7299,7 +7299,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\lib\\utils.ts",
       "source_location": "L30",
       "id": "utils_formattime",
-      "community": 19,
+      "community": 20,
       "norm_label": "formattime()"
     },
     {
@@ -7308,7 +7308,7 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\lib\\utils.ts",
       "source_location": "L41",
       "id": "utils_changecolor",
-      "community": 19,
+      "community": 20,
       "norm_label": "changecolor()"
     },
     {
@@ -7317,15 +7317,24 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\types\\artifact-types.ts",
       "source_location": "L1",
       "id": "d_full_stack_client_dashboard_frontend_src_types_artifact_types_ts",
-      "community": 109,
+      "community": 110,
       "norm_label": "artifact-types.ts"
+    },
+    {
+      "label": "Liveness probe reporting system status.",
+      "file_type": "rationale",
+      "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\main.py",
+      "source_location": "L245",
+      "community": 6,
+      "norm_label": "liveness probe reporting system status.",
+      "id": "main_rationale_245"
     },
     {
       "label": "Complete state passed between all nodes in the graph.",
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\agent\\graph.py",
       "source_location": "L36",
-      "community": 110,
+      "community": 111,
       "norm_label": "complete state passed between all nodes in the graph.",
       "id": "graph_rationale_36"
     },
@@ -7334,7 +7343,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\agent\\graph.py",
       "source_location": "L95",
-      "community": 111,
+      "community": 112,
       "norm_label": "returns a chatopenai instance configured for openrouter.      - node_name select",
       "id": "graph_rationale_95"
     },
@@ -7343,7 +7352,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\agent\\graph.py",
       "source_location": "L128",
-      "community": 112,
+      "community": 113,
       "norm_label": "classifies the user query into one of: stock, news, portfolio, general.     sets",
       "id": "graph_rationale_128"
     },
@@ -7352,7 +7361,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\agent\\graph.py",
       "source_location": "L169",
-      "community": 113,
+      "community": 114,
       "norm_label": "decides which branch to execute based on intent_category.     returns the name o",
       "id": "graph_rationale_169"
     },
@@ -7361,7 +7370,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\agent\\graph.py",
       "source_location": "L197",
-      "community": 114,
+      "community": 115,
       "norm_label": "calls stock data, setup detection, and market structure tools in sequence.     a",
       "id": "graph_rationale_197"
     },
@@ -7370,7 +7379,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\agent\\graph.py",
       "source_location": "L236",
-      "community": 115,
+      "community": 116,
       "norm_label": "fetches general market news for synthesis.",
       "id": "graph_rationale_236"
     },
@@ -7379,7 +7388,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\agent\\graph.py",
       "source_location": "L254",
-      "community": 116,
+      "community": 117,
       "norm_label": "placeholder for portfolio data gathering.     returns empty portfolio structure",
       "id": "graph_rationale_254"
     },
@@ -7388,7 +7397,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\agent\\graph.py",
       "source_location": "L275",
-      "community": 117,
+      "community": 118,
       "norm_label": "calls the trading coach prompt with all gathered stock data.     uses dynamic pr",
       "id": "graph_rationale_275"
     },
@@ -7397,7 +7406,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\agent\\graph.py",
       "source_location": "L329",
-      "community": 118,
+      "community": 119,
       "norm_label": "calls the news synthesis prompt with gathered articles.     automatically detect",
       "id": "graph_rationale_329"
     },
@@ -7406,7 +7415,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\agent\\graph.py",
       "source_location": "L362",
-      "community": 119,
+      "community": 120,
       "norm_label": "calls the portfolio auditor prompt with gathered portfolio data.",
       "id": "graph_rationale_362"
     },
@@ -7415,7 +7424,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\agent\\graph.py",
       "source_location": "L390",
-      "community": 120,
+      "community": 121,
       "norm_label": "calls the general educator prompt.     auto-detects response_mode (educational/a",
       "id": "graph_rationale_390"
     },
@@ -7424,7 +7433,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\agent\\graph.py",
       "source_location": "L421",
-      "community": 121,
+      "community": 122,
       "norm_label": "handles screening/discovery queries where no specific stock is named.     fetche",
       "id": "graph_rationale_421"
     },
@@ -7433,7 +7442,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\agent\\graph.py",
       "source_location": "L504",
-      "community": 122,
+      "community": 123,
       "norm_label": "assembles the full langgraph state machine and returns a compiled graph.",
       "id": "graph_rationale_504"
     },
@@ -7442,7 +7451,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\agent\\prompt_builder.py",
       "source_location": "L122",
-      "community": 123,
+      "community": 124,
       "norm_label": "builds a fully dynamic analyst prompt. every section is conditional \u2014     only i",
       "id": "prompt_builder_rationale_122"
     },
@@ -7451,7 +7460,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\agent\\prompt_builder.py",
       "source_location": "L361",
-      "community": 124,
+      "community": 125,
       "norm_label": "returns the specific llm output instruction for each query mode.",
       "id": "prompt_builder_rationale_361"
     },
@@ -7460,7 +7469,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\agent\\prompt_builder.py",
       "source_location": "L427",
-      "community": 125,
+      "community": 126,
       "norm_label": "builds a query-aware news synthesis prompt.      query_mode:         \"narrative\"",
       "id": "prompt_builder_rationale_427"
     },
@@ -7469,7 +7478,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\agent\\prompt_builder.py",
       "source_location": "L486",
-      "community": 126,
+      "community": 127,
       "norm_label": "builds a query-aware prompt for the general educator node.     automatically sel",
       "id": "prompt_builder_rationale_486"
     },
@@ -7568,7 +7577,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\agent.py",
       "source_location": "L36",
-      "community": 11,
+      "community": 10,
       "norm_label": "lazy-import the compiled graph to avoid crashing main.py if langgraph has issues",
       "id": "agent_rationale_36"
     },
@@ -7577,7 +7586,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\agent.py",
       "source_location": "L48",
-      "community": 11,
+      "community": 10,
       "norm_label": "async generator that runs the agent graph and yields sse events.      event type",
       "id": "agent_rationale_48"
     },
@@ -7586,7 +7595,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\agent.py",
       "source_location": "L146",
-      "community": 11,
+      "community": 10,
       "norm_label": "split text into small word-based chunks for a streaming visual effect.     langg",
       "id": "agent_rationale_146"
     },
@@ -7595,7 +7604,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\agent.py",
       "source_location": "L164",
-      "community": 11,
+      "community": 10,
       "norm_label": "format a server-sent event string.",
       "id": "agent_rationale_164"
     },
@@ -7604,7 +7613,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\agent.py",
       "source_location": "L170",
-      "community": 11,
+      "community": 10,
       "norm_label": "sse streaming endpoint \u2014 tokens arrive in real-time.",
       "id": "agent_rationale_170"
     },
@@ -7613,7 +7622,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\agent.py",
       "source_location": "L185",
-      "community": 11,
+      "community": 10,
       "norm_label": "non-streaming endpoint \u2014 returns the complete response as json.",
       "id": "agent_rationale_185"
     },
@@ -7622,7 +7631,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\api\\news.py",
       "source_location": "L8",
-      "community": 127,
+      "community": 128,
       "norm_label": "returns latest financial news articles from yahoo finance rss.     each article",
       "id": "news_rationale_8"
     },
@@ -7631,7 +7640,7 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\services\\auth_service.py",
       "source_location": "L1",
-      "community": 128,
+      "community": 129,
       "norm_label": "auth_service.py \u2014 stub kept to prevent any legacy import errors.  authentication",
       "id": "auth_service_rationale_1"
     },
@@ -7902,7 +7911,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\main.py",
-      "source_location": "L223",
+      "source_location": "L227",
       "weight": 1.0,
       "_src": "d_full_stack_client_dashboard_backend_app_main_py",
       "_tgt": "main_on_shutdown",
@@ -7914,7 +7923,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\main.py",
-      "source_location": "L244",
+      "source_location": "L248",
       "weight": 1.0,
       "_src": "d_full_stack_client_dashboard_backend_app_main_py",
       "_tgt": "main_health_check",
@@ -8010,7 +8019,7 @@
       "relation": "calls",
       "confidence": "EXTRACTED",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\main.py",
-      "source_location": "L218",
+      "source_location": "L222",
       "weight": 1.0,
       "_src": "main_on_startup",
       "_tgt": "main_start_price_updater",
@@ -8034,7 +8043,7 @@
       "relation": "calls",
       "confidence": "EXTRACTED",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\main.py",
-      "source_location": "L225",
+      "source_location": "L229",
       "weight": 1.0,
       "_src": "main_on_shutdown",
       "_tgt": "main_stop_price_updater",
@@ -8082,12 +8091,12 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\main.py",
-      "source_location": "L245",
+      "source_location": "L249",
       "weight": 1.0,
-      "_src": "main_rationale_245",
+      "_src": "main_rationale_249",
       "_tgt": "main_health_check",
       "source": "main_health_check",
-      "target": "main_rationale_245",
+      "target": "main_rationale_249",
       "confidence_score": 1.0
     },
     {
@@ -8192,11 +8201,11 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\main.py",
       "source_location": "L65",
       "weight": 0.8,
-      "_src": "main_rationale_245",
+      "_src": "main_rationale_249",
       "_tgt": "analyze_healthresponse",
-      "confidence_score": 0.5,
-      "source": "main_rationale_245",
-      "target": "analyze_healthresponse"
+      "source": "main_rationale_249",
+      "target": "analyze_healthresponse",
+      "confidence_score": 0.5
     },
     {
       "relation": "uses",
@@ -8204,11 +8213,11 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\main.py",
       "source_location": "L66",
       "weight": 0.8,
-      "_src": "main_rationale_245",
+      "_src": "main_rationale_249",
       "_tgt": "database_base",
-      "confidence_score": 0.5,
-      "source": "main_rationale_245",
-      "target": "database_base"
+      "source": "main_rationale_249",
+      "target": "database_base",
+      "confidence_score": 0.5
     },
     {
       "relation": "contains",
@@ -17199,6 +17208,18 @@
       "target": "transaction_rationale_43"
     },
     {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\main.py",
+      "source_location": "L66",
+      "weight": 0.8,
+      "_src": "main_rationale_245",
+      "_tgt": "database_base",
+      "confidence_score": 0.5,
+      "source": "database_base",
+      "target": "main_rationale_245"
+    },
+    {
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\core\\database.py",
@@ -19477,6 +19498,18 @@
       "source": "d_full_stack_client_dashboard_backend_app_schemas_analyze_py",
       "target": "analyze_healthresponse",
       "confidence_score": 1.0
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\main.py",
+      "source_location": "L65",
+      "weight": 0.8,
+      "_src": "main_rationale_245",
+      "_tgt": "analyze_healthresponse",
+      "confidence_score": 0.5,
+      "source": "analyze_healthresponse",
+      "target": "main_rationale_245"
     },
     {
       "relation": "contains",
