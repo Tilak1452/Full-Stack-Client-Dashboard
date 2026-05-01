@@ -214,8 +214,11 @@ async def on_startup() -> None:
     logger.info("🚀 %s starting up", settings.app_name)
     logger.info("Step 1: Validating DB connection...")
     validate_db_connection()  # Fail fast if DB is unreachable
-    logger.info("Step 2: DB connection validated. Creating tables...")
-    Base.metadata.create_all(bind=engine)  # Auto-create all registered tables
+    if "pooler.supabase.com" in settings.database_url:
+        logger.info("Step 2: Skipping create_all because we are using a connection pooler (causes hangs).")
+    else:
+        logger.info("Step 2: DB connection validated. Creating tables...")
+        Base.metadata.create_all(bind=engine)  # Auto-create all registered tables
     logger.info("Step 3: Tables created. Starting scheduler...")
     start_scheduler()
     logger.info("Step 4: Scheduler started. Starting price updater...")

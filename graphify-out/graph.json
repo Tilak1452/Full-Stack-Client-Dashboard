@@ -170,9 +170,9 @@
       "file_type": "rationale",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\main.py",
       "source_location": "L249",
-      "id": "main_rationale_249",
       "community": 6,
-      "norm_label": "liveness probe reporting system status."
+      "norm_label": "liveness probe reporting system status.",
+      "id": "main_rationale_249"
     },
     {
       "label": "__init__.py",
@@ -7009,7 +7009,7 @@
       "label": "ApiError",
       "file_type": "code",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\lib\\api-client.ts",
-      "source_location": "L13",
+      "source_location": "L12",
       "id": "api_client_apierror",
       "community": 25,
       "norm_label": "apierror"
@@ -7018,7 +7018,7 @@
       "label": ".constructor()",
       "file_type": "code",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\lib\\api-client.ts",
-      "source_location": "L17",
+      "source_location": "L16",
       "id": "api_client_apierror_constructor",
       "community": 25,
       "norm_label": ".constructor()"
@@ -7027,7 +7027,7 @@
       "label": "apiFetch()",
       "file_type": "code",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\lib\\api-client.ts",
-      "source_location": "L25",
+      "source_location": "L24",
       "id": "api_client_apifetch",
       "community": 25,
       "norm_label": "apifetch()"
@@ -8203,9 +8203,9 @@
       "weight": 0.8,
       "_src": "main_rationale_249",
       "_tgt": "analyze_healthresponse",
+      "confidence_score": 0.5,
       "source": "main_rationale_249",
-      "target": "analyze_healthresponse",
-      "confidence_score": 0.5
+      "target": "analyze_healthresponse"
     },
     {
       "relation": "uses",
@@ -8215,9 +8215,9 @@
       "weight": 0.8,
       "_src": "main_rationale_249",
       "_tgt": "database_base",
+      "confidence_score": 0.5,
       "source": "main_rationale_249",
-      "target": "database_base",
-      "confidence_score": 0.5
+      "target": "database_base"
     },
     {
       "relation": "contains",
@@ -17213,8 +17213,8 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\main.py",
       "source_location": "L66",
       "weight": 0.8,
-      "_src": "main_rationale_245",
-      "_tgt": "database_base",
+      "_src": "database_base",
+      "_tgt": "main_rationale_245",
       "confidence_score": 0.5,
       "source": "database_base",
       "target": "main_rationale_245"
@@ -19505,8 +19505,8 @@
       "source_file": "D:\\Full-Stack-Client-Dashboard\\backend\\app\\main.py",
       "source_location": "L65",
       "weight": 0.8,
-      "_src": "main_rationale_245",
-      "_tgt": "analyze_healthresponse",
+      "_src": "analyze_healthresponse",
+      "_tgt": "main_rationale_245",
       "confidence_score": 0.5,
       "source": "analyze_healthresponse",
       "target": "main_rationale_245"
@@ -24315,7 +24315,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\lib\\api-client.ts",
-      "source_location": "L13",
+      "source_location": "L12",
       "weight": 1.0,
       "_src": "d_full_stack_client_dashboard_frontend_src_lib_api_client_ts",
       "_tgt": "api_client_apierror",
@@ -24327,7 +24327,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\lib\\api-client.ts",
-      "source_location": "L25",
+      "source_location": "L24",
       "weight": 1.0,
       "_src": "d_full_stack_client_dashboard_frontend_src_lib_api_client_ts",
       "_tgt": "api_client_apifetch",
@@ -24339,7 +24339,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "D:\\Full-Stack-Client-Dashboard\\frontend\\src\\lib\\api-client.ts",
-      "source_location": "L17",
+      "source_location": "L16",
       "weight": 1.0,
       "_src": "api_client_apierror",
       "_tgt": "api_client_apierror_constructor",
