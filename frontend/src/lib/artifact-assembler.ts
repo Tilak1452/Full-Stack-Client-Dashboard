@@ -45,8 +45,15 @@ export function resolveRenderOrder(components: ComponentName[]): ComponentName[]
 // Helper: Check if fundamentals has at least 3 valid non-null metrics
 function hasMeaningfulFundamentals(s: SlotData): boolean {
   if (!s.fundamentals) return false;
-  let validCount = 0;
   const f = s.fundamentals as any;
+  
+  // If it's the specialist LLM output fundamentals_draft, check its keys
+  if (f.valuation !== undefined || f.debt_health !== undefined || f.brief_text !== undefined) {
+    return true;
+  }
+  
+  // Otherwise check standard fundamental keys
+  let validCount = 0;
   const keysToCheck = ["pe_ratio", "eps", "roe", "debt_to_equity", "net_margin", "dividend_yield", "book_value", "price_to_book"];
   for (const k of keysToCheck) {
     if (f[k] !== null && f[k] !== undefined && f[k] !== "NaN" && !Number.isNaN(f[k])) validCount++;
@@ -65,15 +72,32 @@ function hasMeaningfulTechnicals(s: SlotData): boolean {
 // Helper: Check if compare data has valid entries
 function hasMeaningfulCompare(s: SlotData): boolean {
   const c = s.compare as any;
-  if (!c || !c.peers || c.peers.length === 0) return false;
-  return true;
+  if (!c) return false;
+  if (Array.isArray(c)) {
+    return c.length > 0;
+  }
+  if (c.peers && Array.isArray(c.peers)) {
+    return c.peers.length > 0;
+  }
+  return false;
 }
 
 // Helper: Check if shareholding data is valid
 function hasMeaningfulShareholding(s: SlotData): boolean {
   if (!s.fundamentals) return false;
   const f = s.fundamentals as any;
-  return f.promoter_holding !== null || f.fii_holding !== null;
+  
+  // If it's the specialist LLM output fundamentals_draft, it might have shareholding_health or promoter_holding_note
+  if (f.shareholding_health !== undefined || f.promoter_holding_note !== undefined) {
+    return true;
+  }
+  
+  // Check standard keys or nested shareholding pattern
+  return (
+    (f.promoter_holding !== null && f.promoter_holding !== undefined) ||
+    (f.fii_holding !== null && f.fii_holding !== undefined) ||
+    f.shareholding_pattern !== undefined
+  );
 }
 
 // Returns true if this component has enough slot data to render meaningfully.

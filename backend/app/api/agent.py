@@ -93,6 +93,9 @@ async def _agent_stream_generator(request: AgentRequest):
         emitted_classification  = False
         emitted_response_start  = False
         p4_task = None
+        intent_symbol = request.symbol
+        artifact_type = None
+        query_complexity = "complex"
 
         # Dual stream mode: "messages" for real tokens, "updates" for state snapshots
         async for stream_event in graph.astream(
@@ -114,6 +117,10 @@ async def _agent_stream_generator(request: AgentRequest):
                         symbol     = update.get("intent_symbol")
                         confidence = update.get("intent_confidence", 0.0)
                         complexity = update.get("query_complexity", "complex")
+
+                        intent_symbol = symbol
+                        artifact_type = update.get("artifact_type")
+                        query_complexity = complexity
 
                         _MODEL_BADGE = {
                             "simple":  "⚡ Gemini 2.5 Flash",
@@ -171,9 +178,9 @@ async def _agent_stream_generator(request: AgentRequest):
                                 **initial_state,
                                 **update,
                                 "gathered_data": update.get("gathered_data", {}),
-                                "intent_symbol": update.get("intent_symbol") or request.symbol,
-                                "artifact_type": update.get("artifact_type"),
-                                "query_complexity": update.get("query_complexity", "complex"),
+                                "intent_symbol": intent_symbol,
+                                "artifact_type": artifact_type,
+                                "query_complexity": query_complexity,
                             }
                             # Launch Phase 4 in the background so it doesn't block the main analysis stream
                             p4_task = asyncio.create_task(run_phase4_parallel(phase4_state))
@@ -254,6 +261,8 @@ async def _agent_stream_generator(request: AgentRequest):
                         yield _sse_event("slot_compare", artifact["compare"])
                     if artifact.get("verdict"):
                         yield _sse_event("slot_verdict", artifact["verdict"])
+                    if artifact.get("price"):
+                        yield _sse_event("slot_price", artifact["price"])
             except Exception as _p4_err:
                 logger.warning("Phase 4 background task failed: %s", _p4_err)
 
@@ -296,6 +305,19 @@ from fastapi import Query
 async def stream_agent(q: str = Query(..., description="User's financial question")):
     """SSE streaming endpoint — tokens arrive in real-time."""
     request = AgentRequest(query=q)
+    return StreamingResponse(
+        _agent_stream_generator(request),
+        media_type="text/event-stream",
+        headers={
+            "Cache-Control": "no-cache",
+            "X-Accel-Buffering": "no",
+        }
+    )
+
+
+@router.post("/stream")
+async def stream_agent_post(request: AgentRequest):
+    """SSE streaming endpoint (POST) — tokens arrive in real-time."""
     return StreamingResponse(
         _agent_stream_generator(request),
         media_type="text/event-stream",

@@ -1,12 +1,12 @@
-# Graph Report - D:\Full-Stack-Client-Dashboard  (2026-05-01)
+# Graph Report - D:\Full-Stack-Client-Dashboard  (2026-06-11)
 
 ## Corpus Check
-- 157 files · ~250,936 words
+- 157 files · ~305,459 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 857 nodes · 1429 edges · 131 communities detected
-- Extraction: 61% EXTRACTED · 39% INFERRED · 0% AMBIGUOUS · INFERRED: 554 edges (avg confidence: 0.62)
+- 879 nodes · 1448 edges · 144 communities detected
+- Extraction: 61% EXTRACTED · 39% INFERRED · 0% AMBIGUOUS · INFERRED: 565 edges (avg confidence: 0.62)
 - Token cost: 0 input · 0 output
 
 ## Community Hubs (Navigation)
@@ -141,18 +141,31 @@
 - [[_COMMUNITY_Community 128|Community 128]]
 - [[_COMMUNITY_Community 129|Community 129]]
 - [[_COMMUNITY_Community 130|Community 130]]
+- [[_COMMUNITY_Community 131|Community 131]]
+- [[_COMMUNITY_Community 132|Community 132]]
+- [[_COMMUNITY_Community 133|Community 133]]
+- [[_COMMUNITY_Community 134|Community 134]]
+- [[_COMMUNITY_Community 135|Community 135]]
+- [[_COMMUNITY_Community 136|Community 136]]
+- [[_COMMUNITY_Community 137|Community 137]]
+- [[_COMMUNITY_Community 138|Community 138]]
+- [[_COMMUNITY_Community 139|Community 139]]
+- [[_COMMUNITY_Community 140|Community 140]]
+- [[_COMMUNITY_Community 141|Community 141]]
+- [[_COMMUNITY_Community 142|Community 142]]
+- [[_COMMUNITY_Community 143|Community 143]]
 
 ## God Nodes (most connected - your core abstractions)
 1. `FinancialAnalysisResult` - 33 edges
 2. `Holding` - 28 edges
-3. `Base` - 25 edges
-4. `NewsResponse` - 25 edges
-5. `NewsService` - 23 edges
+3. `NewsResponse` - 27 edges
+4. `Base` - 25 edges
+5. `NewsService` - 24 edges
 6. `Portfolio` - 22 edges
 7. `StockService` - 22 edges
-8. `CircuitBreaker` - 21 edges
-9. `StockDataResponse` - 20 edges
-10. `KeyManager` - 19 edges
+8. `AgentState` - 21 edges
+9. `CircuitBreaker` - 21 edges
+10. `StockDataResponse` - 20 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `Base` --uses--> `Alert Model (models/alert.py) SQLAlchemy model for persisting user-defined mark`  [INFERRED]
@@ -161,10 +174,10 @@
   D:\Full-Stack-Client-Dashboard\backend\app\core\database.py → D:\Full-Stack-Client-Dashboard\backend\app\main.py
 - `Base` --uses--> `Liveness probe reporting system status.`  [INFERRED]
   D:\Full-Stack-Client-Dashboard\backend\app\core\database.py → D:\Full-Stack-Client-Dashboard\backend\app\main.py
-- `DOPathRewriteMiddleware` --uses--> `Base`  [INFERRED]
-  D:\Full-Stack-Client-Dashboard\backend\app\main.py → D:\Full-Stack-Client-Dashboard\backend\app\core\database.py
-- `Application Entry Point (main.py)  This module serves as the central orchestra` --uses--> `Base`  [INFERRED]
-  D:\Full-Stack-Client-Dashboard\backend\app\main.py → D:\Full-Stack-Client-Dashboard\backend\app\core\database.py
+- `NewsResponse` --uses--> `Stateful service (holds in-memory cache) for fetching targeted financial news.`  [INFERRED]
+  D:\Full-Stack-Client-Dashboard\backend\app\schemas\news.py → D:\Full-Stack-Client-Dashboard\backend\app\services\news_service.py
+- `NewsResponse` --uses--> `Fetches the latest news articles for a stock symbol.         Checks cache first.`  [INFERRED]
+  D:\Full-Stack-Client-Dashboard\backend\app\schemas\news.py → D:\Full-Stack-Client-Dashboard\backend\app\services\news_service.py
 
 ## Communities
 
@@ -173,68 +186,68 @@ Cohesion: 0.05
 Nodes (58): CircuitBreaker, CircuitBreakerOpenError, CircuitState, Circuit Breaker (core/circuit_breaker.py)  Implements the classic 3-state Circ, Called when a call succeeds. Resets failures and closes the circuit., Called when a call fails. Increments counter, trips to OPEN if threshold hit., Internal state transition with logging. Assumes lock is held., Returns current circuit breaker status as a dict (for health checks). (+50 more)
 
 ### Community 1 - "Community 1"
-Cohesion: 0.05
-Nodes (63): FinancialAnalysisResult, The rigid Decision Intelligence Output.     The LLM aggregates signals into a f, Financial Analyst Agent (ai/analyst.py) - LangGraph Edition  Responsible for t, Constructs the iterative StateGraph for the analysis pipeline., Node 1: Calls the LLM with rate-limit retry handling., Node 2: Defensive parse, Pydantic validation, Toxicity, Hallucination, & Length, Node 3: Hardcoded fallback if the retry loop exhausts., Determines next node post-validation. (+55 more)
-
-### Community 2 - "Community 2"
 Cohesion: 0.04
 Nodes (73): all_on_cooldown(), analyze_stock(), audit_portfolio(), build_agent_graph(), _build_provider_llm(), classify_intent(), classify_query_complexity(), _determine_artifact_type() (+65 more)
+
+### Community 2 - "Community 2"
+Cohesion: 0.07
+Nodes (51): FinancialAnalysisResult, Analysis Schemas (schemas/analysis.py)  Strict Pydantic models for enforcing J, A technical indicator score mapped by the deterministic engine., A sentiment component evaluated cleanly by the NLP engine., The rigid Decision Intelligence Output.     The LLM aggregates signals into a f, SentimentSignal, TechnicalSignal, Financial Analyst Agent (ai/analyst.py) - LangGraph Edition  Responsible for t (+43 more)
 
 ### Community 3 - "Community 3"
 Cohesion: 0.07
 Nodes (24): Fetch an item from cache., ParallelDataProvider, Phase 3 async parallel data fetcher for FinSight AI agent.      Uses asyncio.g, Priority order:           1. Twelve Data  — PRIMARY   (6 keys, 4,800 credits/da, Priority order:           1. Twelve Data  — PRIMARY   (official NSE/BSE exchang, FMP → Finnhub → Yahoo Finance, NewsAPI → Yahoo Finance RSS → Finnhub news, FMP → Finnhub → Twelve Data (+16 more)
 
 ### Community 4 - "Community 4"
-Cohesion: 0.1
-Nodes (39): Base, BaseSettings, Config, Application configuration — loaded from .env via python-dotenv. Extend this as, Settings, Base, Database Engine & Session Configuration (database.py)  Responsibilities: 1. C, Shared base class for all ORM models.      All future models must inherit from (+31 more)
+Cohesion: 0.12
+Nodes (35): Base, Base, Database Engine & Session Configuration (database.py)  Responsibilities: 1. C, Shared base class for all ORM models.      All future models must inherit from, DeclarativeBase, Holding, Holding Model (holding.py)  Responsibilities: 1. Represents a single stock po, SQLAlchemy model for the 'holdings' table.      A Holding represents how many (+27 more)
 
 ### Community 5 - "Community 5"
-Cohesion: 0.07
-Nodes (36): streamAgent(), Alert, AlertCondition, AlertStatus, Alert Model (models/alert.py) SQLAlchemy model for persisting user-defined mark, create_alert(), _evaluate_condition(), fetch_and_evaluate_alerts() (+28 more)
+Cohesion: 0.08
+Nodes (34): streamAgent(), Alert, AlertCondition, AlertStatus, Alert Model (models/alert.py) SQLAlchemy model for persisting user-defined mark, create_alert(), _evaluate_condition(), fetch_and_evaluate_alerts() (+26 more)
 
 ### Community 6 - "Community 6"
-Cohesion: 0.13
-Nodes (41): BlackScholesRequest, mpt_optimize(), MPTRequest, Given a list of tickers, fetches 5 years of historical price data and computes, BaseModel, optimize_portfolio(), Given a list of ticker symbols, fetches up to 5 years of historical data,     c, add_holding() (+33 more)
-
-### Community 7 - "Community 7"
 Cohesion: 0.07
 Nodes (22): ABC, DataProvider, DataProvider Interface (services/data_provider.py)  Defines the abstract contr, Abstract base class defining the minimum contract for any stock data source., Concrete DataProvider backed by yFinance (via StockService).      Delegates to, YFinanceProvider, DocumentProcessor, Document loader module for the Financial Research AI Agent. Handles ingestion o (+14 more)
 
+### Community 7 - "Community 7"
+Cohesion: 0.15
+Nodes (37): BaseModel, optimize_portfolio(), Given a list of ticker symbols, fetches up to 5 years of historical data,     c, add_holding(), AddHoldingRequest, _build_portfolio_response(), create_portfolio(), CreatePortfolioRequest (+29 more)
+
 ### Community 8 - "Community 8"
+Cohesion: 0.08
+Nodes (31): get_news(), NewsArticle, News Schemas (schemas/news.py)  Pydantic models for normalizing news data from, Returns latest financial news articles from Yahoo Finance RSS.     When symbol i, Standardized news article format.     All providers must map their responses to, NewsService, _parse_sentiment(), _parse_yf_news_item() (+23 more)
+
+### Community 9 - "Community 9"
 Cohesion: 0.07
 Nodes (30): start_scheduler(), stop_scheduler(), analyze(), AnalyzeRequest, AnalyzeResponse, HealthResponse, Schemas – Analyze Module (app/schemas/analyze.py)  This module defines the dat, Accepts a financial question, categorizes it, fetches relevant data,     runs L (+22 more)
 
-### Community 9 - "Community 9"
+### Community 10 - "Community 10"
 Cohesion: 0.08
 Nodes (33): _atr_series(), _bollinger_bands(), calculate_all(), calculate_ema(), calculate_rsi(), calculate_sma(), compute_all_indicators(), compute_pivot_points() (+25 more)
 
-### Community 10 - "Community 10"
-Cohesion: 0.13
-Nodes (23): _agent_stream_generator(), AgentRequest, _get_agent_graph(), invoke_agent(), Agent API Router (api/agent.py)  Exposes the FinSight LangGraph agent via:   - P, Split text into small word-based chunks for a streaming visual effect.     LangG, Format a Server-Sent Event string., SSE streaming endpoint — tokens arrive in real-time. (+15 more)
-
 ### Community 11 - "Community 11"
-Cohesion: 0.22
-Nodes (15): Analysis Schemas (schemas/analysis.py)  Strict Pydantic models for enforcing J, A technical indicator score mapped by the deterministic engine., A sentiment component evaluated cleanly by the NLP engine., SentimentSignal, TechnicalSignal, Response Length Limits (ai/response_limits.py)  Implements Task 6 – Guardrails, Truncates `text` to `limit` characters if it exceeds the threshold.     Logs a, Applies character-level limits to every text field inside a     FinancialAnalys (+7 more)
+Cohesion: 0.11
+Nodes (27): _agent_stream_generator(), AgentRequest, _get_agent_graph(), invoke_agent(), Agent API Router (api/agent.py)  Exposes the FinSight LangGraph agent via:   - P, Split text into small word-based chunks for a streaming visual effect.     LangG, Format a Server-Sent Event string., SSE streaming endpoint — tokens arrive in real-time. (+19 more)
 
 ### Community 12 - "Community 12"
+Cohesion: 0.1
+Nodes (23): BlackScholesRequest, get_macro_data(), get_options_data(), mpt_optimize(), MPTRequest, price_option(), Returns 10Y Treasury yield, CPI inflation, and unemployment rate from FRED., Returns the nearest expiration options chain for a given symbol.     Includes to (+15 more)
+
+### Community 13 - "Community 13"
 Cohesion: 0.19
 Nodes (12): categorize_query(), Categorization Service. Determines the intent of a user query: 'stock', 'news',, Classifies the user query using an LLM (mocked for now).     Falls back to 'gen, # TODO: Replace with actual LLM call in Task 12/4, # TODO: Import actual LLM client in Task 4, Unit Tests – Categorization Service  This module contains unit tests for the `, Ensure it doesn't crash on empty or weird input., test_categorize_fallback() (+4 more)
 
-### Community 13 - "Community 13"
+### Community 14 - "Community 14"
 Cohesion: 0.14
 Nodes (0): 
 
-### Community 14 - "Community 14"
-Cohesion: 0.21
-Nodes (11): get_options_data(), price_option(), Returns the nearest expiration options chain for a given symbol.     Includes to, Calculates theoretical Call and Put option prices using the Black-Scholes model., black_scholes_call(), black_scholes_put(), get_options_chain(), norm_cdf() (+3 more)
-
 ### Community 15 - "Community 15"
-Cohesion: 0.22
-Nodes (8): get_current_user(), get_db(), FastAPI Dependency Injection Layer (dependencies.py)  Responsibilities: 1. Provi, Dependency that provides a SQLAlchemy session with full transaction management., FastAPI dependency that extracts and validates a Supabase JWT from the     Autho, decode_access_token(), security.py — Supabase Auth edition  The backend no longer creates or hashes pas, Decodes and verifies a Supabase-issued JWT.      Uses the SUPABASE_JWT_SECRET (H
+Cohesion: 0.2
+Nodes (6): BaseSettings, CacheService, A unified caching layer that attempts to use Redis.     If Redis is unavailable, Config, Application configuration — loaded from .env via python-dotenv. Extend this as, Settings
 
 ### Community 16 - "Community 16"
-Cohesion: 0.28
-Nodes (8): get_macro_data(), Returns 10Y Treasury yield, CPI inflation, and unemployment rate from FRED., fetch_commodity_metric(), fetch_fred_metric(), get_macro_dashboard(), Fetch macroeconomic data from the Federal Reserve Economic Data (FRED).     Com, Fetch near-real-time commodity data using yfinance.     Common symbols: 'GC=F', Returns a comprehensive snapshot of the macro economy and key commodities.
+Cohesion: 0.22
+Nodes (8): get_current_user(), get_db(), FastAPI Dependency Injection Layer (dependencies.py)  Responsibilities: 1. Provi, Dependency that provides a SQLAlchemy session with full transaction management., FastAPI dependency that extracts and validates a Supabase JWT from the     Autho, decode_access_token(), security.py — Supabase Auth edition  The backend no longer creates or hashes pas, Decodes and verifies a Supabase-issued JWT.      Uses the SUPABASE_JWT_SECRET (H
 
 ### Community 17 - "Community 17"
 Cohesion: 0.22
@@ -618,51 +631,51 @@ Nodes (0):
 
 ### Community 112 - "Community 112"
 Cohesion: 1.0
-Nodes (1): Complete state passed between all nodes in the graph.
+Nodes (1): Fetches general market news for synthesis.
 
 ### Community 113 - "Community 113"
 Cohesion: 1.0
-Nodes (1): Returns a ChatOpenAI instance configured for OpenRouter.      - node_name select
+Nodes (1): Placeholder for portfolio data gathering.     Returns empty portfolio structure
 
 ### Community 114 - "Community 114"
 Cohesion: 1.0
-Nodes (1): Classifies the user query into one of: stock, news, portfolio, general.     Sets
+Nodes (1): Calls the Trading Coach prompt with all gathered stock data.     Uses dynamic pr
 
 ### Community 115 - "Community 115"
 Cohesion: 1.0
-Nodes (1): Decides which branch to execute based on intent_category.     Returns the name o
+Nodes (1): Calls the News Synthesis prompt with gathered articles.     Uses 3-attempt fallb
 
 ### Community 116 - "Community 116"
 Cohesion: 1.0
-Nodes (1): Calls stock data, setup detection, and market structure tools in sequence.     A
+Nodes (1): Calls the Portfolio Auditor prompt with gathered portfolio data.     Uses 3-atte
 
 ### Community 117 - "Community 117"
 Cohesion: 1.0
-Nodes (1): Fetches general market news for synthesis.
+Nodes (1): Calls the General Educator prompt.     Uses 3-attempt fallback via _invoke_with_
 
 ### Community 118 - "Community 118"
 Cohesion: 1.0
-Nodes (1): Placeholder for portfolio data gathering.     Returns empty portfolio structure
+Nodes (1): Handles screening/discovery queries where no specific stock is named.     Market
 
 ### Community 119 - "Community 119"
 Cohesion: 1.0
-Nodes (1): Calls the Trading Coach prompt with all gathered stock data.     Uses dynamic pr
+Nodes (1): Phase 4 specialist: Technical Analysis.     EXPLICIT MODEL: Gemini 2.5 Flash (fa
 
 ### Community 120 - "Community 120"
 Cohesion: 1.0
-Nodes (1): Calls the News Synthesis prompt with gathered articles.     Automatically detect
+Nodes (1): Phase 4 specialist: News Sentiment.     EXPLICIT MODEL: Gemini 2.5 Flash (fast +
 
 ### Community 121 - "Community 121"
 Cohesion: 1.0
-Nodes (1): Calls the Portfolio Auditor prompt with gathered portfolio data.
+Nodes (1): Phase 4 specialist: Fundamental Analysis.     Gap #1 Fix: Bypasses the hanging Q
 
 ### Community 122 - "Community 122"
 Cohesion: 1.0
-Nodes (1): Calls the General Educator prompt.     Auto-detects response_mode (educational/a
+Nodes (1): Phase 4 sequencer: Assembles verdict from 3 parallel drafts.     Runs AFTER all
 
 ### Community 123 - "Community 123"
 Cohesion: 1.0
-Nodes (1): Handles screening/discovery queries where no specific stock is named.     Fetche
+Nodes (1): Runs phase4_technicals_node, phase4_news_node, and phase4_fundamentals_node
 
 ### Community 124 - "Community 124"
 Cohesion: 1.0
@@ -670,30 +683,82 @@ Nodes (1): Assembles the full LangGraph state machine and returns a compiled gra
 
 ### Community 125 - "Community 125"
 Cohesion: 1.0
-Nodes (1): Builds a fully dynamic analyst prompt. Every section is conditional —     only i
+Nodes (1): Complete state passed between all nodes in the graph.
 
 ### Community 126 - "Community 126"
 Cohesion: 1.0
-Nodes (1): Returns the specific LLM output instruction for each query mode.
+Nodes (1): Returns a ChatOpenAI instance configured for OpenRouter.      - node_name select
 
 ### Community 127 - "Community 127"
 Cohesion: 1.0
-Nodes (1): Builds a query-aware news synthesis prompt.      query_mode:         "narrative"
+Nodes (1): Classifies the user query into one of: stock, news, portfolio, general.     Sets
 
 ### Community 128 - "Community 128"
 Cohesion: 1.0
-Nodes (1): Builds a query-aware prompt for the general educator node.     Automatically sel
+Nodes (1): Decides which branch to execute based on intent_category.     Returns the name o
 
 ### Community 129 - "Community 129"
 Cohesion: 1.0
-Nodes (1): Returns latest financial news articles from Yahoo Finance RSS.     Each article
+Nodes (1): Calls stock data, setup detection, and market structure tools in sequence.     A
 
 ### Community 130 - "Community 130"
+Cohesion: 1.0
+Nodes (1): Fetches general market news for synthesis.
+
+### Community 131 - "Community 131"
+Cohesion: 1.0
+Nodes (1): Placeholder for portfolio data gathering.     Returns empty portfolio structure
+
+### Community 132 - "Community 132"
+Cohesion: 1.0
+Nodes (1): Calls the Trading Coach prompt with all gathered stock data.     Uses dynamic pr
+
+### Community 133 - "Community 133"
+Cohesion: 1.0
+Nodes (1): Calls the News Synthesis prompt with gathered articles.     Automatically detect
+
+### Community 134 - "Community 134"
+Cohesion: 1.0
+Nodes (1): Calls the Portfolio Auditor prompt with gathered portfolio data.
+
+### Community 135 - "Community 135"
+Cohesion: 1.0
+Nodes (1): Calls the General Educator prompt.     Auto-detects response_mode (educational/a
+
+### Community 136 - "Community 136"
+Cohesion: 1.0
+Nodes (1): Handles screening/discovery queries where no specific stock is named.     Fetche
+
+### Community 137 - "Community 137"
+Cohesion: 1.0
+Nodes (1): Assembles the full LangGraph state machine and returns a compiled graph.
+
+### Community 138 - "Community 138"
+Cohesion: 1.0
+Nodes (1): Builds a fully dynamic analyst prompt. Every section is conditional —     only i
+
+### Community 139 - "Community 139"
+Cohesion: 1.0
+Nodes (1): Returns the specific LLM output instruction for each query mode.
+
+### Community 140 - "Community 140"
+Cohesion: 1.0
+Nodes (1): Builds a query-aware news synthesis prompt.      query_mode:         "narrative"
+
+### Community 141 - "Community 141"
+Cohesion: 1.0
+Nodes (1): Builds a query-aware prompt for the general educator node.     Automatically sel
+
+### Community 142 - "Community 142"
+Cohesion: 1.0
+Nodes (1): Returns latest financial news articles from Yahoo Finance RSS.     Each article
+
+### Community 143 - "Community 143"
 Cohesion: 1.0
 Nodes (1): auth_service.py — stub kept to prevent any legacy import errors.  Authentication
 
 ## Knowledge Gaps
-- **192 isolated node(s):** `FinSight AI — LangGraph Agent State Machine Flow: classify intent → route to app`, `Complete state passed between all nodes in the graph.`, `Returns the appropriate artifact type string for the given intent.`, `Rule-based complexity classifier — zero API cost, runs in <1ms.     Complex keyw`, `Returns True for 429 / quota-exhausted / 503-high-demand errors.     503 UNAVAIL` (+187 more)
+- **209 isolated node(s):** `FinSight AI — LangGraph Agent State Machine Flow: classify intent → route to app`, `Complete state passed between all nodes in the graph.`, `Returns the appropriate artifact type string for the given intent.`, `Rule-based complexity classifier — zero API cost, runs in <1ms.     Complex keyw`, `Returns True for 429 / quota-exhausted / 503-high-demand errors.     503 UNAVAIL` (+204 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **Thin community `Community 30`** (2 nodes): `migrate.py`, `migrate()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
@@ -859,59 +924,85 @@ Nodes (1): auth_service.py — stub kept to prevent any legacy import errors.  A
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 - **Thin community `Community 111`** (1 nodes): `artifact-types.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 112`** (1 nodes): `Complete state passed between all nodes in the graph.`
+- **Thin community `Community 112`** (1 nodes): `Fetches general market news for synthesis.`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 113`** (1 nodes): `Returns a ChatOpenAI instance configured for OpenRouter.      - node_name select`
+- **Thin community `Community 113`** (1 nodes): `Placeholder for portfolio data gathering.     Returns empty portfolio structure`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 114`** (1 nodes): `Classifies the user query into one of: stock, news, portfolio, general.     Sets`
+- **Thin community `Community 114`** (1 nodes): `Calls the Trading Coach prompt with all gathered stock data.     Uses dynamic pr`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 115`** (1 nodes): `Decides which branch to execute based on intent_category.     Returns the name o`
+- **Thin community `Community 115`** (1 nodes): `Calls the News Synthesis prompt with gathered articles.     Uses 3-attempt fallb`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 116`** (1 nodes): `Calls stock data, setup detection, and market structure tools in sequence.     A`
+- **Thin community `Community 116`** (1 nodes): `Calls the Portfolio Auditor prompt with gathered portfolio data.     Uses 3-atte`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 117`** (1 nodes): `Fetches general market news for synthesis.`
+- **Thin community `Community 117`** (1 nodes): `Calls the General Educator prompt.     Uses 3-attempt fallback via _invoke_with_`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 118`** (1 nodes): `Placeholder for portfolio data gathering.     Returns empty portfolio structure`
+- **Thin community `Community 118`** (1 nodes): `Handles screening/discovery queries where no specific stock is named.     Market`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 119`** (1 nodes): `Calls the Trading Coach prompt with all gathered stock data.     Uses dynamic pr`
+- **Thin community `Community 119`** (1 nodes): `Phase 4 specialist: Technical Analysis.     EXPLICIT MODEL: Gemini 2.5 Flash (fa`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 120`** (1 nodes): `Calls the News Synthesis prompt with gathered articles.     Automatically detect`
+- **Thin community `Community 120`** (1 nodes): `Phase 4 specialist: News Sentiment.     EXPLICIT MODEL: Gemini 2.5 Flash (fast +`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 121`** (1 nodes): `Calls the Portfolio Auditor prompt with gathered portfolio data.`
+- **Thin community `Community 121`** (1 nodes): `Phase 4 specialist: Fundamental Analysis.     Gap #1 Fix: Bypasses the hanging Q`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 122`** (1 nodes): `Calls the General Educator prompt.     Auto-detects response_mode (educational/a`
+- **Thin community `Community 122`** (1 nodes): `Phase 4 sequencer: Assembles verdict from 3 parallel drafts.     Runs AFTER all`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 123`** (1 nodes): `Handles screening/discovery queries where no specific stock is named.     Fetche`
+- **Thin community `Community 123`** (1 nodes): `Runs phase4_technicals_node, phase4_news_node, and phase4_fundamentals_node`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 - **Thin community `Community 124`** (1 nodes): `Assembles the full LangGraph state machine and returns a compiled graph.`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 125`** (1 nodes): `Builds a fully dynamic analyst prompt. Every section is conditional —     only i`
+- **Thin community `Community 125`** (1 nodes): `Complete state passed between all nodes in the graph.`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 126`** (1 nodes): `Returns the specific LLM output instruction for each query mode.`
+- **Thin community `Community 126`** (1 nodes): `Returns a ChatOpenAI instance configured for OpenRouter.      - node_name select`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 127`** (1 nodes): `Builds a query-aware news synthesis prompt.      query_mode:         "narrative"`
+- **Thin community `Community 127`** (1 nodes): `Classifies the user query into one of: stock, news, portfolio, general.     Sets`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 128`** (1 nodes): `Builds a query-aware prompt for the general educator node.     Automatically sel`
+- **Thin community `Community 128`** (1 nodes): `Decides which branch to execute based on intent_category.     Returns the name o`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 129`** (1 nodes): `Returns latest financial news articles from Yahoo Finance RSS.     Each article`
+- **Thin community `Community 129`** (1 nodes): `Calls stock data, setup detection, and market structure tools in sequence.     A`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 130`** (1 nodes): `auth_service.py — stub kept to prevent any legacy import errors.  Authentication`
+- **Thin community `Community 130`** (1 nodes): `Fetches general market news for synthesis.`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 131`** (1 nodes): `Placeholder for portfolio data gathering.     Returns empty portfolio structure`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 132`** (1 nodes): `Calls the Trading Coach prompt with all gathered stock data.     Uses dynamic pr`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 133`** (1 nodes): `Calls the News Synthesis prompt with gathered articles.     Automatically detect`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 134`** (1 nodes): `Calls the Portfolio Auditor prompt with gathered portfolio data.`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 135`** (1 nodes): `Calls the General Educator prompt.     Auto-detects response_mode (educational/a`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 136`** (1 nodes): `Handles screening/discovery queries where no specific stock is named.     Fetche`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 137`** (1 nodes): `Assembles the full LangGraph state machine and returns a compiled graph.`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 138`** (1 nodes): `Builds a fully dynamic analyst prompt. Every section is conditional —     only i`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 139`** (1 nodes): `Returns the specific LLM output instruction for each query mode.`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 140`** (1 nodes): `Builds a query-aware news synthesis prompt.      query_mode:         "narrative"`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 141`** (1 nodes): `Builds a query-aware prompt for the general educator node.     Automatically sel`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 142`** (1 nodes): `Returns latest financial news articles from Yahoo Finance RSS.     Each article`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 143`** (1 nodes): `auth_service.py — stub kept to prevent any legacy import errors.  Authentication`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `build_fallback_verdict()` connect `Community 11` to `Community 1`, `Community 3`?**
-  _High betweenness centrality (0.048) - this node is a cross-community bridge._
-- **Why does `FinancialAnalysisResult` connect `Community 1` to `Community 8`, `Community 11`, `Community 6`?**
+- **Why does `build_fallback_verdict()` connect `Community 2` to `Community 3`?**
   _High betweenness centrality (0.046) - this node is a cross-community bridge._
-- **Why does `Base` connect `Community 4` to `Community 8`, `Community 5`, `Community 6`?**
-  _High betweenness centrality (0.030) - this node is a cross-community bridge._
+- **Why does `FinancialAnalysisResult` connect `Community 2` to `Community 9`, `Community 7`?**
+  _High betweenness centrality (0.044) - this node is a cross-community bridge._
+- **Why does `Base` connect `Community 4` to `Community 9`, `Community 5`, `Community 7`?**
+  _High betweenness centrality (0.029) - this node is a cross-community bridge._
 - **Are the 39 inferred relationships involving `str` (e.g. with `global_exception_handler()` and `_is_rate_limit_error()`) actually correct?**
   _`str` has 39 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 30 inferred relationships involving `FinancialAnalysisResult` (e.g. with `Hallucination Check (ai/hallucination_check.py)  Implements Task 6 – Guardrail` and `Extracts all numeric values from a free-text string.`) actually correct?**
   _`FinancialAnalysisResult` has 30 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 24 inferred relationships involving `Holding` (e.g. with `Portfolio Pydantic Schemas (schemas/portfolio.py)  Responsibilities: - Define` and `Returns a list of all portfolios for the current user.`) actually correct?**
   _`Holding` has 24 INFERRED edges - model-reasoned connections that need verification._
-- **Are the 22 inferred relationships involving `Base` (e.g. with `DOPathRewriteMiddleware` and `Application Entry Point (main.py)  This module serves as the central orchestra`) actually correct?**
-  _`Base` has 22 INFERRED edges - model-reasoned connections that need verification._
+- **Are the 24 inferred relationships involving `NewsResponse` (e.g. with `NewsService` and `News Service (services/news_service.py)  Fetches, normalizes, and caches relev`) actually correct?**
+  _`NewsResponse` has 24 INFERRED edges - model-reasoned connections that need verification._

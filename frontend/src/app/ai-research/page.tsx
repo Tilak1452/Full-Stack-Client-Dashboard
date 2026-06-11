@@ -62,6 +62,7 @@ export default function AIResearchPage() {
     es.addEventListener("slot_financials", (e) => { const d = parseSafeJSON(e.data); setArtifact(p => ({ ...p, slots: { ...p.slots, financials: d } })); });
     es.addEventListener("slot_compare", (e) => { const d = parseSafeJSON(e.data); setArtifact(p => ({ ...p, slots: { ...p.slots, compare: d } })); });
     es.addEventListener("slot_verdict", (e) => { const d = parseSafeJSON(e.data); setArtifact(p => ({ ...p, slots: { ...p.slots, verdict: d } })); });
+    es.addEventListener("slot_price", (e) => { const d = parseSafeJSON(e.data); setArtifact(p => ({ ...p, slots: { ...p.slots, price: d } })); });
 
     es.addEventListener("classified", (e) => { const d = parseSafeJSON(e.data); setArtifact(p => ({ ...p, symbol: d.symbol || p.symbol })); });
     es.addEventListener("chunk", (e) => { const d = parseSafeJSON(e.data); assistantText += d.text || d.content || ""; });

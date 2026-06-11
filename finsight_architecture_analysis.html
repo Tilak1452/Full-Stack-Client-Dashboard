@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>FinSight AI — Architecture Analysis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#0B0D11;--bg2:#12141B;--bg3:#1A1D26;--bg4:#0E1014;
+  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);
+  --text:#ECEEF2;--muted:#636B7A;--muted2:#4A5260;
+  --lime:#C8FF00;--lime-dim:rgba(200,255,0,0.10);--lime-glow:rgba(200,255,0,0.25);
+  --purple:#9B72FF;--purple-dim:rgba(155,114,255,0.12);
+  --blue:#378ADD;--blue-dim:rgba(55,138,221,0.12);
+  --green:#4ADE80;--green-dim:rgba(74,222,128,0.12);
+  --red:#F87171;--red-dim:rgba(248,113,113,0.12);
+  --amber:#FBBF24;--amber-dim:rgba(251,191,36,0.12);
+  --teal:#2DD4BF;--teal-dim:rgba(45,212,191,0.12);
+  --pink:#FF4FD8;
+  --radius:12px;--radius-sm:8px;--radius-xs:4px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Inter',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  overflow-x:hidden;
+}
+
+/* ── CANVAS PARTICLES ── */
+#canvas{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:.4}
+
+/* ── LAYOUT ── */
+.page{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:2rem 1.5rem}
+
+/* ── HERO HEADER ── */
+.hero{
+  text-align:center;
+  padding:3.5rem 1rem 2.5rem;
+  position:relative;
+  overflow:hidden;
+}
+.hero::before{
+  content:'';
+  position:absolute;inset:0;
+  background:radial-gradient(ellipse 70% 60% at 50% 0%, rgba(200,255,0,.08) 0%, transparent 70%);
+  pointer-events:none;
+}
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:.5rem;
+  font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--lime);
+  background:var(--lime-dim);border:1px solid rgba(200,255,0,.2);
+  padding:4px 14px;border-radius:20px;margin-bottom:1.25rem;
+  animation:fadeDown .6s ease both;
+}
+.hero-title{
+  font-size:clamp(2rem,5vw,3.25rem);font-weight:700;line-height:1.1;
+  background:linear-gradient(135deg,#fff 30%,var(--lime) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  animation:fadeDown .6s .1s ease both;
+  margin-bottom:.75rem;
+}
+.hero-sub{
+  font-size:14px;color:var(--muted);
+  animation:fadeDown .6s .2s ease both;
+  max-width:540px;margin:0 auto 1.75rem;line-height:1.7;
+}
+.hero-badges{
+  display:flex;flex-wrap:wrap;justify-content:center;gap:.5rem;
+  animation:fadeDown .6s .3s ease both;
+  margin-bottom:2rem;
+}
+.hbadge{
+  font-size:11px;font-weight:500;padding:4px 12px;border-radius:20px;
+  border:1px solid var(--border2);
+  background:rgba(255,255,255,.04);
+  color:var(--muted);
+  transition:all .25s;cursor:default;
+}
+.hbadge:hover{background:rgba(255,255,255,.08);color:var(--text);border-color:rgba(255,255,255,.2)}
+.hbadge.lime{border-color:rgba(200,255,0,.3);color:var(--lime);background:var(--lime-dim)}
+.hbadge.green{border-color:rgba(74,222,128,.3);color:var(--green);background:var(--green-dim)}
+.hbadge.blue{border-color:rgba(55,138,221,.3);color:var(--blue);background:var(--blue-dim)}
+.hbadge.amber{border-color:rgba(251,191,36,.3);color:var(--amber);background:var(--amber-dim)}
+.hbadge.purple{border-color:rgba(155,114,255,.3);color:var(--purple);background:var(--purple-dim)}
+
+/* ── STAT COUNTERS ── */
+.stats-row{
+  display:flex;flex-wrap:wrap;justify-content:center;gap:1px;
+  background:var(--border);border:1px solid var(--border);
+  border-radius:var(--radius);overflow:hidden;
+  animation:fadeUp .6s .4s ease both;
+}
+.stat{
+  flex:1;min-width:130px;padding:1.25rem 1rem;text-align:center;
+  background:var(--bg2);transition:background .2s;
+}
+.stat:hover{background:var(--bg3)}
+.stat-val{
+  font-size:2rem;font-weight:700;
+  background:linear-gradient(135deg,var(--text),var(--muted));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  display:block;
+}
+.stat-val.lime{background:linear-gradient(135deg,var(--lime),#8fba00);-webkit-background-clip:text;background-clip:text}
+.stat-lab{font-size:11px;color:var(--muted);margin-top:3px;text-transform:uppercase;letter-spacing:.06em}
+
+/* ── TABS ── */
+.tabs-wrap{
+  position:sticky;top:0;z-index:100;
+  background:rgba(11,13,17,.85);backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);
+  padding:.5rem 0;
+  margin:0 -1.5rem 2rem;padding-left:1.5rem;padding-right:1.5rem;
+}
+.tabs{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab-btn{
+  flex-shrink:0;padding:8px 18px;font-size:13px;font-weight:500;
+  border:none;background:transparent;color:var(--muted);cursor:pointer;
+  border-radius:var(--radius-sm);transition:all .2s;white-space:nowrap;
+  position:relative;
+}
+.tab-btn:hover{color:var(--text);background:rgba(255,255,255,.05)}
+.tab-btn.active{color:var(--lime);background:var(--lime-dim)}
+.tab-btn.active::after{
+  content:'';position:absolute;bottom:-9px;left:50%;transform:translateX(-50%);
+  width:24px;height:2px;background:var(--lime);border-radius:2px;
+}
+.tab-num{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:18px;height:18px;border-radius:50%;font-size:10px;
+  background:rgba(255,255,255,.08);color:var(--muted);
+  margin-left:6px;vertical-align:middle;
+}
+.tab-btn.active .tab-num{background:rgba(200,255,0,.2);color:var(--lime)}
+
+/* ── PANELS ── */
+.panel{display:none;animation:panelIn .35s ease}
+.panel.active{display:block}
+@keyframes panelIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── CARDS ── */
+.card{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:var(--radius);padding:1.5rem;margin-bottom:1rem;
+  transition:border-color .25s,box-shadow .25s;position:relative;overflow:hidden;
+}
+.card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.08),transparent);
+}
+.card:hover{border-color:var(--border2);box-shadow:0 8px 32px rgba(0,0,0,.3)}
+.card.glow-lime:hover{box-shadow:0 0 24px var(--lime-glow),0 8px 32px rgba(0,0,0,.3);border-color:rgba(200,255,0,.2)}
+.card.glow-purple:hover{box-shadow:0 0 24px rgba(155,114,255,.2),0 8px 32px rgba(0,0,0,.3);border-color:rgba(155,114,255,.2)}
+.card-head{display:flex;align-items:center;gap:.75rem;margin-bottom:1.25rem}
+.card-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.card-icon.lime{background:var(--lime-dim);border:1px solid rgba(200,255,0,.2)}
+.card-icon.blue{background:var(--blue-dim);border:1px solid rgba(55,138,221,.2)}
+.card-icon.green{background:var(--green-dim);border:1px solid rgba(74,222,128,.2)}
+.card-icon.purple{background:var(--purple-dim);border:1px solid rgba(155,114,255,.2)}
+.card-icon.red{background:var(--red-dim);border:1px solid rgba(248,113,113,.2)}
+.card-icon.amber{background:var(--amber-dim);border:1px solid rgba(251,191,36,.2)}
+.card-title{font-size:13px;font-weight:600;color:var(--text);letter-spacing:.01em}
+.card-sub{font-size:11px;color:var(--muted);margin-top:2px}
+
+/* ── GRIDS ── */
+.g2{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1rem}
+.g3{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.75rem}
+.g4{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:.75rem}
+
+/* ── BADGE ── */
+.badge{
+  display:inline-flex;align-items:center;font-size:11px;font-weight:500;
+  padding:3px 9px;border-radius:20px;
+}
+.b-lime{background:var(--lime-dim);color:var(--lime);border:1px solid rgba(200,255,0,.2)}
+.b-green{background:var(--green-dim);color:var(--green);border:1px solid rgba(74,222,128,.2)}
+.b-blue{background:var(--blue-dim);color:var(--blue);border:1px solid rgba(55,138,221,.2)}
+.b-purple{background:var(--purple-dim);color:var(--purple);border:1px solid rgba(155,114,255,.2)}
+.b-amber{background:var(--amber-dim);color:var(--amber);border:1px solid rgba(251,191,36,.2)}
+.b-red{background:var(--red-dim);color:var(--red);border:1px solid rgba(248,113,113,.2)}
+.b-gray{background:rgba(255,255,255,.06);color:var(--muted);border:1px solid var(--border)}
+.b-teal{background:var(--teal-dim);color:var(--teal);border:1px solid rgba(45,212,191,.2)}
+
+/* ── SECTION TITLE ── */
+.sec-title{
+  font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;
+  color:var(--muted2);margin-bottom:.75rem;display:flex;align-items:center;gap:.5rem;
+}
+.sec-title::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* ── LAYER ROWS ── */
+.layer{
+  border-left:3px solid;padding:.75rem 1rem;margin:.4rem 0;
+  border-radius:0 var(--radius-sm) var(--radius-sm) 0;font-size:13px;
+  position:relative;overflow:hidden;transition:transform .2s;
+}
+.layer:hover{transform:translateX(4px)}
+.layer::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,rgba(255,255,255,.03),transparent);pointer-events:none}
+.l-blue{border-color:var(--blue);background:var(--blue-dim)}
+.l-green{border-color:var(--green);background:var(--green-dim)}
+.l-purple{border-color:var(--purple);background:var(--purple-dim)}
+.l-amber{border-color:var(--amber);background:var(--amber-dim)}
+.l-teal{border-color:var(--teal);background:var(--teal-dim)}
+.l-red{border-color:var(--red);background:var(--red-dim)}
+.l-lime{border-color:var(--lime);background:var(--lime-dim)}
+
+/* ── FLOW NODES ── */
+.flow{display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin:.4rem 0}
+.fn{
+  font-size:12px;padding:5px 12px;border-radius:var(--radius-xs);
+  border:1px solid var(--border2);background:var(--bg3);
+  font-family:'JetBrains Mono',monospace;transition:all .2s;
+}
+.fn:hover{border-color:var(--lime);color:var(--lime)}
+.fa{color:var(--muted);font-size:13px;font-weight:600}
+
+/* ── TABLE ── */
+.tbl{width:100%;border-collapse:collapse;font-size:13px}
+.tbl th{
+  text-align:left;font-size:11px;font-weight:600;color:var(--muted);
+  padding:8px 10px;border-bottom:1px solid var(--border);
+  text-transform:uppercase;letter-spacing:.06em;
+}
+.tbl td{padding:9px 10px;border-bottom:1px solid var(--border);vertical-align:top;color:var(--muted)}
+.tbl td:first-child{color:var(--text)}
+.tbl tr:last-child td{border-bottom:none}
+.tbl tr:hover td{background:rgba(255,255,255,.02)}
+.mono{font-family:'JetBrains Mono',monospace;font-size:11.5px;background:rgba(255,255,255,.06);padding:2px 6px;border-radius:4px;color:var(--text)}
+
+/* ── FLAW / FIX CARDS ── */
+.flaw-card{
+  border-left:3px solid var(--red);background:var(--red-dim);
+  border-radius:0 var(--radius-sm) var(--radius-sm) 0;
+  padding:1rem 1.25rem;margin-bottom:.75rem;
+  border:1px solid rgba(248,113,113,.15);border-left:3px solid var(--red);
+  animation:slideIn .3s ease both;
+}
+.flaw-card:hover{background:rgba(248,113,113,.1)}
+.fix-card{
+  border-left:3px solid var(--green);background:var(--green-dim);
+  border-radius:0 var(--radius-sm) var(--radius-sm) 0;
+  padding:1rem 1.25rem;margin-bottom:.75rem;
+  border:1px solid rgba(74,222,128,.15);border-left:3px solid var(--green);
+}
+.fix-card:hover{background:rgba(74,222,128,.1)}
+.warn-card{
+  border-left:3px solid var(--amber);background:var(--amber-dim);
+  border-radius:0 var(--radius-sm) var(--radius-sm) 0;
+  padding:1rem 1.25rem;margin-bottom:.75rem;
+  border:1px solid rgba(251,191,36,.15);border-left:3px solid var(--amber);
+}
+.fc-head{display:flex;align-items:center;gap:.5rem;margin-bottom:.4rem}
+.fc-title{font-size:13px;font-weight:600;color:var(--text)}
+.fc-body{font-size:12.5px;color:var(--muted);line-height:1.7}
+
+/* ── ARCH BOXES ── */
+.arch-layer{
+  background:var(--bg3);border:1px solid var(--border);
+  border-radius:var(--radius);padding:1rem;margin:.5rem 0;
+}
+.arch-layer-label{
+  font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;
+  color:var(--muted2);margin-bottom:.75rem;
+}
+.arch-row{display:flex;gap:.5rem;flex-wrap:wrap}
+.arch-box{
+  flex:1;min-width:120px;background:var(--bg2);border:1px solid var(--border);
+  border-radius:var(--radius-sm);padding:.6rem .75rem;text-align:center;
+  transition:all .2s;cursor:default;
+}
+.arch-box:hover{border-color:var(--border2);background:var(--bg3);transform:translateY(-2px)}
+.arch-box-label{font-size:12px;font-weight:600;color:var(--text)}
+.arch-box-sub{font-size:10.5px;color:var(--muted);margin-top:3px;line-height:1.4}
+.arch-connector{text-align:center;color:var(--muted2);font-size:12px;padding:4px 0;letter-spacing:.04em}
+
+/* ── DIVIDER ── */
+.divider{height:1px;background:var(--border);margin:1.25rem 0}
+
+/* ── PRIORITY LABELS ── */
+.p1{font-size:11px;font-weight:700;color:var(--red)}
+.p2{font-size:11px;font-weight:700;color:var(--amber)}
+.p3{font-size:11px;font-weight:700;color:var(--blue)}
+.p4{font-size:11px;font-weight:700;color:var(--muted)}
+
+/* ── PIPELINE STEP ── */
+.pipeline{display:flex;flex-direction:column;gap:0}
+.pipe-step{
+  display:flex;align-items:flex-start;gap:.75rem;padding:.75rem 0;
+  border-bottom:1px solid var(--border);
+}
+.pipe-step:last-child{border-bottom:none}
+.pipe-num{
+  width:28px;height:28px;border-radius:50%;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:700;border:2px solid;
+  animation:pulse 2s infinite;
+}
+.pipe-num.lime{border-color:var(--lime);color:var(--lime);animation-delay:0s}
+.pipe-num.blue{border-color:var(--blue);color:var(--blue);animation-delay:.3s}
+.pipe-num.purple{border-color:var(--purple);color:var(--purple);animation-delay:.6s}
+.pipe-num.amber{border-color:var(--amber);color:var(--amber);animation-delay:.9s}
+.pipe-num.teal{border-color:var(--teal);color:var(--teal);animation-delay:1.2s}
+.pipe-num.green{border-color:var(--green);color:var(--green);animation-delay:1.5s}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 currentColor}50%{box-shadow:0 0 0 5px transparent}}
+
+/* ── MUTED TEXT ── */
+.muted{color:var(--muted);font-size:13px;line-height:1.65}
+.muted2{color:var(--muted2)}
+.small{font-size:12px}
+
+/* ── DECISION TABLE ── */
+.decision-row{
+  display:flex;gap:1rem;padding:.8rem 0;border-bottom:1px solid var(--border);
+  flex-wrap:wrap;align-items:flex-start;
+}
+.decision-row:last-child{border-bottom:none}
+.dr-key{width:120px;flex-shrink:0;font-size:13px;font-weight:500;color:var(--text)}
+.dr-val{flex:1;min-width:140px}
+.dr-why{flex:2;min-width:200px;font-size:12px;color:var(--muted);line-height:1.6}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:2px}
+::-webkit-scrollbar-thumb:hover{background:rgba(255,255,255,.2)}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeDown{from{opacity:0;transform:translateY(-16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes slideIn{from{opacity:0;transform:translateX(-8px)}to{opacity:1;transform:translateX(0)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes glow{0%,100%{opacity:.5}50%{opacity:1}}
+
+/* ── GLOW LINE ── */
+.glow-line{
+  width:100%;height:1px;margin:2rem 0;
+  background:linear-gradient(90deg,transparent,var(--lime-glow),transparent);
+  animation:glow 3s ease infinite;
+}
+
+/* ── RESPONSIVE ── */
+@media(max-width:640px){
+  .page{padding:1rem}
+  .hero{padding:2rem .5rem 1.5rem}
+  .g2,.g3,.g4{grid-template-columns:1fr}
+  .dr-key{width:100%}
+}
+</style>
+</head>
+<body>
+<canvas id="canvas"></canvas>
+<div class="page" id="app">
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">⚡ Architecture Analysis Report</div>
+  <div class="hero-title">FinSight AI</div>
+  <div class="hero-sub">Production-grade financial research dashboard for Indian equity markets · Full-stack monorepo · As of May 1, 2026</div>
+  <div class="hero-badges">
+    <span class="hbadge lime">Next.js 14</span>
+    <span class="hbadge green">FastAPI</span>
+    <span class="hbadge blue">Supabase</span>
+    <span class="hbadge purple">OpenRouter</span>
+    <span class="hbadge amber">DigitalOcean</span>
+    <span class="hbadge">LangGraph</span>
+    <span class="hbadge">ChromaDB</span>
+    <span class="hbadge">WebSocket</span>
+  </div>
+  <div class="stats-row">
+    <div class="stat"><span class="stat-val lime" data-count="695">695</span><div class="stat-lab">Graph nodes</div></div>
+    <div class="stat"><span class="stat-val" data-count="1243">1243</span><div class="stat-lab">Graph edges</div></div>
+    <div class="stat"><span class="stat-val" data-count="16">16</span><div class="stat-lab">Feature modules</div></div>
+    <div class="stat"><span class="stat-val" data-count="10">10</span><div class="stat-lab">API routers</div></div>
+    <div class="stat"><span class="stat-val" data-count="4">4</span><div class="stat-lab">DB tables</div></div>
+    <div class="stat"><span class="stat-val" data-count="6">6</span><div class="stat-lab">Artifact types</div></div>
+  </div>
+</div>
+
+<div class="glow-line"></div>
+
+<!-- TABS -->
+<div class="tabs-wrap">
+  <div class="tabs" id="tabs">
+    <button class="tab-btn active" onclick="show(0)">Overview<span class="tab-num">7</span></button>
+    <button class="tab-btn" onclick="show(1)">Architecture<span class="tab-num">4</span></button>
+    <button class="tab-btn" onclick="show(2)">Tech Stack<span class="tab-num">2</span></button>
+    <button class="tab-btn" onclick="show(3)">Module Map<span class="tab-num">3</span></button>
+    <button class="tab-btn" onclick="show(4)">Data Flow<span class="tab-num">4</span></button>
+    <button class="tab-btn" onclick="show(5)">Known Flaws<span class="tab-num">11</span></button>
+    <button class="tab-btn" onclick="show(6)">Fix Plan<span class="tab-num">8</span></button>
+  </div>
+</div>
+
+<!-- ════ PANEL 0 — OVERVIEW ════ -->
+<div id="p0" class="panel active">
+  <div class="g2">
+    <div class="card glow-lime">
+      <div class="card-head">
+        <div class="card-icon lime">🎯</div>
+        <div><div class="card-title">What FinSight AI Does</div><div class="card-sub">Core platform capabilities</div></div>
+      </div>
+      <div class="muted" style="line-height:1.75;margin-bottom:1rem">A production-grade financial research platform for Indian equity markets. Users get live NSE/BSE data, an AI research agent backed by OpenRouter, full portfolio CRUD with FIFO P&amp;L, market alerts, news with VADER sentiment, and RAG document search — all in a single dark-themed dashboard.</div>
+      <div style="display:flex;flex-wrap:wrap;gap:4px">
+        <span class="badge b-blue">Live NIFTY/SENSEX</span>
+        <span class="badge b-blue">AI Research Agent</span>
+        <span class="badge b-blue">Portfolio FIFO P&amp;L</span>
+        <span class="badge b-blue">WebSocket Streaming</span>
+        <span class="badge b-blue">RAG Document Search</span>
+        <span class="badge b-blue">MPT Optimization</span>
+        <span class="badge b-blue">Market Alerts</span>
+        <span class="badge b-blue">Options Chain</span>
+        <span class="badge b-lime">Shareholding Donut</span>
+        <span class="badge b-lime">Financial Statements</span>
+      </div>
+    </div>
+    <div class="card glow-purple">
+      <div class="card-head">
+        <div class="card-icon purple">🌐</div>
+        <div><div class="card-title">Deployment Topology</div><div class="card-sub">DigitalOcean App Platform</div></div>
+      </div>
+      <div class="layer l-blue" style="margin-top:0"><strong>Browser</strong> — Next.js 14 (port 3000 dev / route / prod)</div>
+      <div style="text-align:center;color:var(--muted2);font-size:12px;padding:3px 0;font-family:'JetBrains Mono',monospace">↕ HTTP REST + WebSocket</div>
+      <div class="layer l-green"><strong>FastAPI Backend</strong> — Python 3.11, Uvicorn (port 8000 dev / /api prod)</div>
+      <div style="text-align:center;color:var(--muted2);font-size:12px;padding:3px 0;font-family:'JetBrains Mono',monospace">↕ PostgreSQL · LLM API · yFinance</div>
+      <div class="layer l-purple"><strong>Supabase</strong> — PostgreSQL + GoTrue Auth (shared cloud DB)</div>
+      <div style="margin-top:.75rem;font-size:12px;color:var(--muted)">Session Pooler (PgBouncer) for IPv4 compatibility on DigitalOcean · Both services in one App spec</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head">
+      <div class="card-icon blue">⚙️</div>
+      <div><div class="card-title">Key Design Decisions</div><div class="card-sub">Architectural choices and rationale</div></div>
+    </div>
+    <div class="decision-row">
+      <div class="dr-key">Auth</div>
+      <div class="dr-val"><span class="mono">Supabase GoTrue</span></div>
+      <div class="dr-why">Zero custom auth code — JWT issued to browser, backend verifies via SUPABASE_JWT_SECRET; auto-detects HS256 &amp; ES256</div>
+    </div>
+    <div class="decision-row">
+      <div class="dr-key">Database</div>
+      <div class="dr-val"><span class="mono">Supabase PG</span></div>
+      <div class="dr-why">Cloud-hosted, shared across all developers; Session Pooler for DigitalOcean IPv4 compatibility</div>
+    </div>
+    <div class="decision-row">
+      <div class="dr-key">LLM routing</div>
+      <div class="dr-val"><span class="mono">OpenRouter</span></div>
+      <div class="dr-why">Single key routes to Claude, GPT-4o, Gemini — automatic fallback; model swap = string change</div>
+    </div>
+    <div class="decision-row">
+      <div class="dr-key">Background jobs</div>
+      <div class="dr-val"><span class="mono">APScheduler</span></div>
+      <div class="dr-why">In-process scheduler avoids Celery/Redis broker overhead for 2 simple 5-min polling jobs</div>
+    </div>
+    <div class="decision-row">
+      <div class="dr-key">Caching</div>
+      <div class="dr-val"><span class="mono">Redis → dict fallback</span></div>
+      <div class="dr-why">Graceful degradation if Redis unreachable; in-memory is process-local and non-persistent</div>
+    </div>
+    <div class="decision-row">
+      <div class="dr-key">Vector store</div>
+      <div class="dr-val"><span class="mono">ChromaDB / Pinecone</span></div>
+      <div class="dr-why">Abstract interface enables local-dev ChromaDB, prod Pinecone — zero code change needed</div>
+    </div>
+    <div class="decision-row">
+      <div class="dr-key">Migrations</div>
+      <div class="dr-val"><span class="mono">Manual migrate.py</span></div>
+      <div class="dr-why">Idempotent ALTER TABLE IF NOT EXISTS; chosen over Alembic for simplicity (4 tables only)</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head">
+      <div class="card-icon green">📡</div>
+      <div><div class="card-title">Authentication Flow</div><div class="card-sub">Supabase GoTrue — zero custom auth</div></div>
+    </div>
+    <div class="flow">
+      <div class="fn">Signup/Login</div><div class="fa">→</div>
+      <div class="fn">Supabase GoTrue</div><div class="fa">→</div>
+      <div class="fn">JWT to browser</div><div class="fa">→</div>
+      <div class="fn">Authorization: Bearer</div><div class="fa">→</div>
+      <div class="fn">FastAPI verify</div>
+    </div>
+    <div style="margin-top:.75rem;font-size:12px;color:var(--muted)">No <span class="mono">public.users</span> table — identity lives exclusively in Supabase <span class="mono">auth.users</span> schema. Backend extracts UUID + email from verified JWT payload.</div>
+  </div>
+</div>
+
+<!-- ════ PANEL 1 — ARCHITECTURE ════ -->
+<div id="p1" class="panel">
+  <div class="card">
+    <div class="card-head">
+      <div class="card-icon lime">🏗️</div>
+      <div><div class="card-title">System Architecture Layers</div><div class="card-sub">4-tier separation of concerns</div></div>
+    </div>
+    <div class="arch-layer">
+      <div class="arch-layer-label">Client Layer (Browser)</div>
+      <div class="arch-row">
+        <div class="arch-box"><div class="arch-box-label">Pages</div><div class="arch-box-sub">Next.js App Router · 8 routes</div></div>
+        <div class="arch-box"><div class="arch-box-label">Components</div><div class="arch-box-sub">Sidebar · Artifact renderer · Modals · Stock tabs</div></div>
+        <div class="arch-box"><div class="arch-box-label">State</div><div class="arch-box-sub">React Query · Supabase session · localStorage watchlist</div></div>
+        <div class="arch-box"><div class="arch-box-label">API Client</div><div class="arch-box-sub">apiFetch() · 7 domain modules · WS hook</div></div>
+      </div>
+    </div>
+    <div class="arch-connector">↕ HTTP REST (JWT Bearer) + WebSocket</div>
+    <div class="arch-layer">
+      <div class="arch-layer-label">API Layer (FastAPI)</div>
+      <div class="arch-row">
+        <div class="arch-box"><div class="arch-box-label">10 Routers</div><div class="arch-box-sub">auth · stock · market · news · portfolio · alerts · agent · analyze · assets · rag · stream</div></div>
+        <div class="arch-box"><div class="arch-box-label">Middleware Stack</div><div class="arch-box-sub">DOPathRewrite → CORS → Telemetry → SlowAPI rate limit</div></div>
+        <div class="arch-box"><div class="arch-box-label">Auth Guard</div><div class="arch-box-sub">Depends(get_current_user) · JWT verify · HS256/ES256 auto-detect</div></div>
+      </div>
+    </div>
+    <div class="arch-connector">↕ Service calls (singleton instances)</div>
+    <div class="arch-layer">
+      <div class="arch-layer-label">Service / Business Logic Layer</div>
+      <div class="arch-row">
+        <div class="arch-box"><div class="arch-box-label">stock_service</div><div class="arch-box-sub">yFinance wrapper</div></div>
+        <div class="arch-box"><div class="arch-box-label">portfolio_service</div><div class="arch-box-sub">FIFO P&amp;L · CRUD</div></div>
+        <div class="arch-box"><div class="arch-box-label">news_service</div><div class="arch-box-sub">RSS + NewsAPI + VADER</div></div>
+        <div class="arch-box"><div class="arch-box-label">alert_service</div><div class="arch-box-sub">Condition polling</div></div>
+        <div class="arch-box"><div class="arch-box-label">macro_service</div><div class="arch-box-sub">FRED + commodities</div></div>
+        <div class="arch-box"><div class="arch-box-label">mpt_service</div><div class="arch-box-sub">PyPortfolioOpt</div></div>
+        <div class="arch-box"><div class="arch-box-label">agent/graph</div><div class="arch-box-sub">LangGraph orchestrator</div></div>
+      </div>
+    </div>
+    <div class="arch-connector">↕ External APIs · Supabase DB · Redis Cache</div>
+    <div class="arch-layer">
+      <div class="arch-layer-label">Infrastructure / Data Layer</div>
+      <div class="arch-row">
+        <div class="arch-box"><div class="arch-box-label">Supabase PG</div><div class="arch-box-sub">4 app tables</div></div>
+        <div class="arch-box"><div class="arch-box-label">Redis / dict</div><div class="arch-box-sub">Optional cache</div></div>
+        <div class="arch-box"><div class="arch-box-label">ChromaDB / Pinecone</div><div class="arch-box-sub">Vector store RAG</div></div>
+        <div class="arch-box"><div class="arch-box-label">yFinance</div><div class="arch-box-sub">Market data</div></div>
+        <div class="arch-box"><div class="arch-box-label">OpenRouter</div><div class="arch-box-sub">LLM gateway</div></div>
+        <div class="arch-box"><div class="arch-box-label">APScheduler</div><div class="arch-box-sub">Price + alert jobs</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div class="card glow-lime">
+      <div class="card-head"><div class="card-icon lime">🔄</div><div><div class="card-title">Request Lifecycle (Authenticated)</div></div></div>
+      <div class="flow"><div class="fn">Browser</div><div class="fa">→</div><div class="fn">apiFetch()</div><div class="fa">→</div><div class="fn">+JWT header</div></div>
+      <div class="flow"><div class="fn">DigitalOcean</div><div class="fa">→ strip /api →</div><div class="fn">FastAPI</div></div>
+      <div class="flow"><div class="fn">DOPathRewrite</div><div class="fa">→ re-add /api →</div><div class="fn">Router match</div></div>
+      <div class="flow"><div class="fn">Depends(get_current_user)</div><div class="fa">→</div><div class="fn">JWT verify</div></div>
+      <div class="flow"><div class="fn">Service call</div><div class="fa">→</div><div class="fn">Pydantic response</div><div class="fa">→</div><div class="fn">JSON</div></div>
+    </div>
+    <div class="card glow-purple">
+      <div class="card-head"><div class="card-icon purple">📡</div><div><div class="card-title">WebSocket Price Stream</div></div></div>
+      <div class="flow"><div class="fn">useWebSocketPrice(symbol)</div></div>
+      <div class="flow"><div class="fa">→ opens</div><div class="fn">WS /api/v1/stream/price/{sym}</div></div>
+      <div class="flow"><div class="fn">stream.py handler</div><div class="fa">polls yFinance every 5s</div></div>
+      <div class="flow"><div class="fa">→ pushes</div><div class="fn">{symbol, price, change, ts}</div></div>
+      <div class="flow"><div class="fn">price state update</div><div class="fa">→</div><div class="fn">Stock page re-render</div></div>
+      <div class="divider"></div>
+      <div style="font-size:12px;color:var(--amber)">⚠ No auth on WS endpoint — anyone can subscribe to any ticker stream</div>
+    </div>
+  </div>
+</div>
+</div>
+<script>
+/* ── PARTICLE CANVAS ── */
+const cv=document.getElementById('canvas'),ctx=cv.getContext('2d');
+let W,H,pts=[];
+function resize(){W=cv.width=innerWidth;H=cv.height=innerHeight}
+resize();window.addEventListener('resize',resize);
+function mkPts(){
+  pts=[];
+  for(let i=0;i<60;i++)pts.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.3,vy:(Math.random()-.5)*.3,r:Math.random()*1.5+.5});
+}
+mkPts();
+function draw(){
+  ctx.clearRect(0,0,W,H);
+  pts.forEach(p=>{
+    p.x+=p.vx;p.y+=p.vy;
+    if(p.x<0||p.x>W)p.vx*=-1;
+    if(p.y<0||p.y>H)p.vy*=-1;
+    ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+    ctx.fillStyle='rgba(200,255,0,.4)';ctx.fill();
+  });
+  for(let i=0;i<pts.length;i++)for(let j=i+1;j<pts.length;j++){
+    const dx=pts[i].x-pts[j].x,dy=pts[i].y-pts[j].y,d=Math.sqrt(dx*dx+dy*dy);
+    if(d<120){ctx.beginPath();ctx.moveTo(pts[i].x,pts[i].y);ctx.lineTo(pts[j].x,pts[j].y);ctx.strokeStyle=`rgba(200,255,0,${.15*(1-d/120)})`;ctx.lineWidth=.5;ctx.stroke()}
+  }
+  requestAnimationFrame(draw);
+}
+draw();
+
+/* ── COUNTER ANIMATION ── */
+function animateCount(el,target,suffix=''){
+  let start=0,duration=1400,startTime=null;
+  function step(ts){
+    if(!startTime)startTime=ts;
+    const p=Math.min((ts-startTime)/duration,1);
+    const val=Math.floor(p*p*(3-2*p)*target);
+    el.textContent=val.toLocaleString()+suffix;
+    if(p<1)requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+document.addEventListener('DOMContentLoaded',()=>{
+  document.querySelectorAll('[data-count]').forEach(el=>{
+    const obs=new IntersectionObserver(entries=>{
+      if(entries[0].isIntersecting){animateCount(el,+el.dataset.count,el.dataset.suffix||'');obs.disconnect()}
+    },{threshold:.3});
+    obs.observe(el);
+  });
+});
+/* ── TAB SWITCHER ── */
+function show(i){
+  for(let j=0;j<7;j++){
+    const p=document.getElementById('p'+j);
+    const t=document.querySelectorAll('.tab-btn')[j];
+    if(p){p.classList.toggle('active',j===i);p.style.display=''}
+    if(t)t.classList.toggle('active',j===i);
+  }
+}
+/* init: hide all except p0 */
+document.querySelectorAll('.panel').forEach((p,i)=>{if(i>0)p.style.display='none'});
+</script>
+
+<!-- ════ PANEL 2 — TECH STACK ════ -->
+<div id="p2" class="panel">
+  <div class="g2">
+    <div class="card">
+      <div class="card-head"><div class="card-icon green">🐍</div><div><div class="card-title">Backend — Python</div><div class="card-sub">FastAPI + SQLAlchemy stack</div></div></div>
+      <table class="tbl">
+        <thead><tr><th>Package</th><th>Purpose</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td><span class="mono">FastAPI</span></td><td>HTTP + WS server</td><td><span class="badge b-green">Core</span></td></tr>
+          <tr><td><span class="mono">SQLAlchemy 2.x</span></td><td>ORM · PostgreSQL</td><td><span class="badge b-green">Core</span></td></tr>
+          <tr><td><span class="mono">pydantic v2</span></td><td>Schema validation</td><td><span class="badge b-green">Core</span></td></tr>
+          <tr><td><span class="mono">yfinance</span></td><td>Market data</td><td><span class="badge b-amber">Unstable API</span></td></tr>
+          <tr><td><span class="mono">LangGraph</span></td><td>Agent state machine</td><td><span class="badge b-blue">AI</span></td></tr>
+          <tr><td><span class="mono">OpenRouter</span></td><td>LLM routing</td><td><span class="badge b-blue">AI</span></td></tr>
+          <tr><td><span class="mono">ChromaDB</span></td><td>Local vector store</td><td><span class="badge b-gray">Optional</span></td></tr>
+          <tr><td><span class="mono">PyPortfolioOpt</span></td><td>MPT optimization</td><td><span class="badge b-gray">Feature</span></td></tr>
+          <tr><td><span class="mono">APScheduler</span></td><td>Background jobs</td><td><span class="badge b-green">Core</span></td></tr>
+          <tr><td><span class="mono">VADER</span></td><td>Sentiment scoring</td><td><span class="badge b-gray">Feature</span></td></tr>
+          <tr><td><span class="mono">pandas-datareader</span></td><td>FRED macro data</td><td><span class="badge b-red">Broken ≥pandas3</span></td></tr>
+          <tr><td><span class="mono">Redis</span></td><td>Cache layer</td><td><span class="badge b-amber">Falls back silently</span></td></tr>
+          <tr><td><span class="mono">structlog</span></td><td>Structured logging</td><td><span class="badge b-amber">Must be in req.txt</span></td></tr>
+          <tr><td><span class="mono">slowapi</span></td><td>Rate limiting</td><td><span class="badge b-green">Core</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card">
+      <div class="card-head"><div class="card-icon blue">⚛️</div><div><div class="card-title">Frontend — TypeScript</div><div class="card-sub">Next.js 14 · App Router</div></div></div>
+      <table class="tbl">
+        <thead><tr><th>Package</th><th>Purpose</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td><span class="mono">Next.js 14</span></td><td>React framework · App Router</td><td><span class="badge b-green">Core</span></td></tr>
+          <tr><td><span class="mono">React 18</span></td><td>UI rendering</td><td><span class="badge b-green">Core</span></td></tr>
+          <tr><td><span class="mono">TailwindCSS 3.4</span></td><td>Utility CSS · dark theme</td><td><span class="badge b-green">Core</span></td></tr>
+          <tr><td><span class="mono">@tanstack/react-query</span></td><td>Server state · caching</td><td><span class="badge b-green">Core</span></td></tr>
+          <tr><td><span class="mono">@supabase/supabase-js</span></td><td>Auth · session mgmt</td><td><span class="badge b-green">Core</span></td></tr>
+          <tr><td><span class="mono">Recharts</span></td><td>Portfolio area chart</td><td><span class="badge b-gray">1 chart only</span></td></tr>
+          <tr><td><span class="mono">Lucide React</span></td><td>Icon library</td><td><span class="badge b-gray">UI</span></td></tr>
+          <tr><td><span class="mono">Outfit · DM Sans</span></td><td>Typography</td><td><span class="badge b-gray">Google Fonts</span></td></tr>
+        </tbody>
+      </table>
+      <div class="divider"></div>
+      <div class="sec-title">React Query Cache Config</div>
+      <div class="layer l-blue" style="margin-top:0;font-size:12px"><span class="mono">staleTime: 30s</span> — No refetch within 30s window</div>
+      <div class="layer l-green" style="font-size:12px"><span class="mono">gcTime: 5min</span> — Inactive queries GC'd after 5 min</div>
+      <div class="layer l-amber" style="font-size:12px"><span class="mono">retry: 1</span> — Single retry on failure</div>
+      <div class="layer l-purple" style="font-size:12px"><span class="mono">refetchOnWindowFocus: false</span> — No tab-switch refetch</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ PANEL 3 — MODULE MAP ════ -->
+<div id="p3" class="panel">
+  <div class="g2">
+    <div class="card">
+      <div class="card-head"><div class="card-icon purple">🗂️</div><div><div class="card-title">Backend Layers</div><div class="card-sub">thin → thick · api → services → agent → ai → models → core</div></div></div>
+      <div class="layer l-blue" style="margin-top:0"><strong>api/ (10 files)</strong><br><span class="muted small">Thin controllers · validate input · call services · return Pydantic response</span></div>
+      <div class="layer l-green"><strong>services/ (14 files)</strong><br><span class="muted small">All business logic · singletons · stock, portfolio, news, alerts, macro, mpt, agent</span></div>
+      <div class="layer l-purple"><strong>agent/ (4 files)</strong><br><span class="muted small">LangGraph state machine · prompt_builder · prompts · tools · ~136KB total</span></div>
+      <div class="layer l-amber"><strong>ai/ (9 files)</strong><br><span class="muted small">Shared AI infra · vector stores · scoring · moderation · hallucination check</span></div>
+      <div class="layer l-teal"><strong>models/ (4 files)</strong><br><span class="muted small">SQLAlchemy ORM · portfolios · holdings · transactions · alerts</span></div>
+      <div class="layer l-lime"><strong>core/ (7 files)</strong><br><span class="muted small">Config · DB · security · cache · circuit_breaker · deps · telemetry</span></div>
+    </div>
+    <div class="card">
+      <div class="card-head"><div class="card-icon blue">📦</div><div><div class="card-title">Frontend Layers</div><div class="card-sub">app/ → components/ → lib/</div></div></div>
+      <div class="layer l-blue" style="margin-top:0"><strong>app/ (8 routes)</strong><br><span class="muted small">dashboard · stock/[sym] · ai-research · portfolio · watchlist · news · alerts · settings</span></div>
+      <div class="layer l-green"><strong>components/ (30+ files)</strong><br><span class="muted small">Sidebar · TopBar · artifact/ (6 types, 20 atoms, 7 skeletons) · stock tabs · modals</span></div>
+      <div class="layer l-purple"><strong>lib/ (15 files)</strong><br><span class="muted small">apiFetch · 7 API modules · useWebSocketPrice · artifact-types · artifact-assembler · utils · mock</span></div>
+      <div class="layer l-amber"><strong>middleware.ts</strong><br><span class="muted small">Auth guard · redirect unauthenticated → /auth/login</span></div>
+      <div class="divider"></div>
+      <div class="sec-title">3-Layer API Pattern</div>
+      <div class="flow" style="flex-direction:column;align-items:stretch;gap:6px">
+        <div class="fn" style="text-align:center"><span class="mono">apiFetch()</span> — base wrapper, JWT, error handling</div>
+        <div style="text-align:center;color:var(--muted2);font-size:13px">↓</div>
+        <div class="fn" style="text-align:center"><span class="mono">stock.api.ts</span> / <span class="mono">portfolio.api.ts</span> / etc — domain wrappers</div>
+        <div style="text-align:center;color:var(--muted2);font-size:13px">↓</div>
+        <div class="fn" style="text-align:center"><span class="mono">useQuery()</span> in page components</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head"><div class="card-icon lime">🎨</div><div><div class="card-title">Artifact Rendering System (AI Research Page)</div><div class="card-sub">Agent JSON → ArtifactRenderer → skeleton → atoms → rich UI</div></div></div>
+    <table class="tbl">
+      <thead><tr><th>Artifact Type</th><th>Atoms Used</th><th>Skeleton Component</th></tr></thead>
+      <tbody>
+        <tr><td><span class="mono">hero_price</span></td><td class="muted">HeroMetric · MiniPriceCard</td><td><span class="mono">SkeletonHeroPrice</span></td></tr>
+        <tr><td><span class="mono">investment_thesis</span></td><td class="muted">VerdictBanner · MetricGrid · ExpandableRiskPanel · NewsFeed</td><td><span class="mono">SkeletonInvestmentThesis</span></td></tr>
+        <tr><td><span class="mono">technical_focus</span></td><td class="muted">TechnicalGauges · SignalRow · SupportResistanceBar</td><td><span class="mono">SkeletonTechnicalFocus</span></td></tr>
+        <tr><td><span class="mono">financials_timeline</span></td><td class="muted">RevenueProfitChart · FundamentalGrid</td><td><span class="mono">SkeletonFinancialsTimeline</span></td></tr>
+        <tr><td><span class="mono">news_event</span></td><td class="muted">NewsItem · VerdictCard</td><td><span class="mono">SkeletonNewsEvent</span></td></tr>
+        <tr><td><span class="mono">three_way_compare</span></td><td class="muted">PeerComparisonTable · CompareColumns · VerdictCard</td><td><span class="mono">SkeletonThreeWayCompare</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ════ PANEL 4 — DATA FLOW ════ -->
+<div id="p4" class="panel">
+  <div class="card">
+    <div class="card-head"><div class="card-icon purple">🤖</div><div><div class="card-title">AI Agent Pipeline</div><div class="card-sub">POST /api/v1/agent/chat</div></div></div>
+    <div class="pipeline">
+      <div class="pipe-step"><div class="pipe-num lime">1</div><div><strong>categorizer.py</strong> — Classifies intent: stock_analysis / news / portfolio / macro / general<br><span class="muted small">Routes query to appropriate prompt template and data fetcher</span></div></div>
+      <div class="pipe-step"><div class="pipe-num blue">2</div><div><strong>prompt_builder.py</strong> — Fetches real-time context and builds full LLM prompt<br><span class="muted small">Stock: calls stock_service + market_structure · News: RSS filtered by ticker · Macro: FRED data</span></div></div>
+      <div class="pipe-step"><div class="pipe-num amber">3</div><div><strong>agent/tools.py</strong> — LangChain @tool functions for structured lookups<br><span class="muted small">stock_lookup · get_market_structure · detect_trading_setups</span></div></div>
+      <div class="pipe-step"><div class="pipe-num purple">4</div><div><strong>graph.py (LangGraph)</strong> — Multi-model routing via OpenRouter<br><span class="muted small">Primary model → fallback model · 45s timeout guard · degraded response on timeout</span></div></div>
+      <div class="pipe-step"><div class="pipe-num teal">5</div><div><strong>Response parser</strong> — Extracts text + optional artifact JSON block<br><span class="muted small">Returns { response, artifact, steps, model_used }</span></div></div>
+      <div class="pipe-step"><div class="pipe-num green">6</div><div><strong>Frontend ArtifactRenderer</strong> — Routes artifact.type to correct skeleton<br><span class="muted small">Renders interactive card: hero_price / investment_thesis / technical_focus / etc.</span></div></div>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div class="card">
+      <div class="card-head"><div class="card-icon amber">⏱️</div><div><div class="card-title">Background Jobs (APScheduler)</div><div class="card-sub">Both run in-process · every 5 minutes</div></div></div>
+      <div class="layer l-green" style="margin-top:0"><strong>price_update_job</strong> — every 5 min<br><span class="muted small">Batch-fetch all holding symbols via yFinance · update current_price, current_value, unrealized_pl on holdings · single DB transaction</span></div>
+      <div class="layer l-amber"><strong>alert_service job</strong> — every 5 min (300s)<br><span class="muted small">Load all active alerts · fetch price/RSI/SMA per symbol · evaluate condition vs threshold · mark triggered + set triggered_at</span></div>
+      <div class="warn-card" style="margin-top:.75rem"><div class="fc-head"><span class="badge b-amber">⚠ Warning</span></div><div class="fc-body">Both run in-process. A blocking yFinance call on 50+ symbols could delay both jobs. No timeout per symbol fetch.</div></div>
+    </div>
+    <div class="card">
+      <div class="card-head"><div class="card-icon green">💼</div><div><div class="card-title">Portfolio Transaction Flow</div><div class="card-sub">BUY / SELL / Summary</div></div></div>
+      <div class="layer l-blue" style="margin-top:0"><strong>BUY</strong> — weighted avg price recalculated · holding upserted · Transaction record created (immutable)</div>
+      <div class="layer l-green"><strong>SELL</strong> — quantity validated · FIFO P&amp;L = qty × (price − avg_price) · holding qty reduced or deleted · Transaction with realized_pl created</div>
+      <div class="layer l-purple"><strong>Portfolio Summary</strong> — pre-computed by background job every 5 min · NOT recalculated on-demand</div>
+      <div style="margin-top:.75rem;font-size:12px;color:var(--amber)">Note: "FIFO" in code actually uses weighted average cost basis — true FIFO tracks individual lots</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head"><div class="card-icon teal">🚀</div><div><div class="card-title">Startup Sequence (main.py)</div><div class="card-sub">4-step boot with conditional create_all()</div></div></div>
+    <div class="flow" style="flex-wrap:wrap">
+      <div class="fn">Step 1<br><span style="font-size:10px">validate_db_connection() — SELECT 1</span></div>
+      <div class="fa">→</div>
+      <div class="fn">Step 2<br><span style="font-size:10px">create_all() — SKIPPED if pooler URL</span></div>
+      <div class="fa">→</div>
+      <div class="fn">Step 3<br><span style="font-size:10px">alert_service.start_scheduler()</span></div>
+      <div class="fa">→</div>
+      <div class="fn">Step 4<br><span style="font-size:10px">price_update_job.start()</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ PANEL 5 — KNOWN FLAWS ════ -->
+<div id="p5" class="panel">
+  <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:1rem;flex-wrap:wrap">
+    <span class="badge b-red">Critical</span><span class="badge b-amber">High</span><span class="badge b-blue">Medium</span><span class="badge b-gray">Low</span>
+    <span class="muted small">— Severity from architecture review</span>
+  </div>
+
+  <div class="flaw-card"><div class="fc-head"><span class="badge b-red">Critical</span><div class="fc-title">Sequential N+1 fetching on dashboard &amp; stock pages</div></div><div class="fc-body">Dashboard fetches indices, movers, news, and per-symbol watchlist data in separate sequential useQuery calls. Backend has same pattern — no asyncio.gather() anywhere in services. On a watchlist of 10 stocks, that's 10 sequential HTTP round-trips, easily 10–15s total latency for Indian users.</div></div>
+
+  <div class="flaw-card"><div class="fc-head"><span class="badge b-red">Critical</span><div class="fc-title">Zero caching on stock data and LLM responses</div></div><div class="fc-body">Every /api/v1/stock/{symbol} call hits yFinance fresh. Redis is deployed but cache.py is never called by stock_service.py. LLM responses for identical queries are never cached — OpenRouter billed per token every time regardless of duplicate requests.</div></div>
+
+  <div class="flaw-card"><div class="fc-head"><span class="badge b-amber">High</span><div class="fc-title">Mock data on core dashboard sections</div></div><div class="fc-body">Portfolio value area chart uses static portfolioHistory from mock.ts. AI insights cards use aiInsightsData from mock.ts — hardcoded content. Users with real portfolios see fake numbers on the main dashboard.</div></div>
+
+  <div class="flaw-card"><div class="fc-head"><span class="badge b-amber">High</span><div class="fc-title">Watchlist not persisted server-side</div></div><div class="fc-body">localStorage only. Clearing browser data, opening on another device, or incognito mode = empty watchlist. No /api/v1/watchlist endpoint exists. Critical UX gap for a market dashboard users expect cross-device access.</div></div>
+
+  <div class="flaw-card"><div class="fc-head"><span class="badge b-amber">High</span><div class="fc-title">CORS allow_origins=["*"] in production</div></div><div class="fc-body">Allows any domain to make cross-origin requests to the API. Combined with JWT auth this is partially mitigated, but it enables CSRF-style attacks and leaks the API's existence to malicious scanners.</div></div>
+
+  <div class="flaw-card"><div class="fc-head"><span class="badge b-amber">High</span><div class="fc-title">pandas-datareader incompatible with pandas ≥ 3.0</div></div><div class="fc-body">macro_service.py silently returns hardcoded fallback values for 10Y Treasury, CPI, Unemployment. Dashboard shows stale static data (4.28%, 3.2%, 3.9%) as if live. No user-facing indicator that data is not real.</div></div>
+
+  <div class="flaw-card"><div class="fc-head"><span class="badge b-blue">Medium</span><div class="fc-title">WebSocket stream has no authentication</div></div><div class="fc-body">WS /api/v1/stream/price/{symbol} accepts connections from anyone without a JWT. Risk is infrastructure abuse — bots could open thousands of connections and exhaust server resources. No connection limit or WS-level rate limiting.</div></div>
+
+  <div class="flaw-card"><div class="fc-head"><span class="badge b-blue">Medium</span><div class="fc-title">Background job: no per-symbol timeout on yFinance calls</div></div><div class="fc-body">price_update_job.py batch-fetches all holding symbols. If Yahoo Finance hangs on one call, the entire job hangs, blocking both price update and alert check for that 5-min window. No asyncio.gather() with timeout, no circuit breaker.</div></div>
+
+  <div class="flaw-card"><div class="fc-head"><span class="badge b-blue">Medium</span><div class="fc-title">Dual AI endpoints with overlapping purpose</div></div><div class="fc-body">POST /api/v1/analyze and POST /api/v1/agent/chat both do AI financial analysis. The frontend only uses /agent/chat. /analyze appears to be a legacy endpoint but is still registered, rate-limited, and uses AI tokens for nothing visible to users.</div></div>
+
+  <div class="flaw-card" style="border-left-color:var(--muted2);background:rgba(255,255,255,.04)"><div class="fc-head"><span class="badge b-gray">Low</span><div class="fc-title">Settings page has zero backend integration</div></div><div class="fc-body">The /settings page renders a form with no save functionality. Any settings change is lost on page reload. No user preferences are persisted anywhere.</div></div>
+
+  <div class="flaw-card" style="border-left-color:var(--muted2);background:rgba(255,255,255,.04)"><div class="fc-head"><span class="badge b-gray">Low</span><div class="fc-title">"FIFO" P&amp;L is actually weighted average cost</div></div><div class="fc-body">SELL logic computes realized_pl = qty × (price - average_price) — weighted average cost basis, not true FIFO (which tracks individual lots). Documentation says FIFO. The mismatch could matter for tax reporting.</div></div>
+</div>
+
+<!-- ════ PANEL 6 — FIX PLAN ════ -->
+<div id="p6" class="panel">
+  <div class="muted small" style="margin-bottom:1rem">Ordered by impact-to-effort ratio. Start with the top items — each delivers visible user-facing improvement within a single session.</div>
+
+  <div class="fix-card"><div class="fc-head"><span class="p1">Priority 1 — Quick wins (hours each)</span></div><div class="fc-title">Add asyncio.gather() for parallel backend fetches</div><div class="fc-body">In stock_service.py and any route calling multiple services, replace sequential awaits with asyncio.gather(). On the dashboard route, fetch indices + movers + news concurrently. Estimated latency reduction: 60–80%. Zero API changes needed.</div></div>
+
+  <div class="fix-card"><div class="fc-head"><span class="p1">Priority 1 — Quick wins</span></div><div class="fc-title">Wire stock_service.py to the existing cache.py</div><div class="fc-body">cache.get/set is already built and Redis-connected. Add a 30s cache TTL to get_full_stock_data() and get_current_price(). Also add a 10-min cache on LLM responses keyed by (question_hash + market_session_date) — removes identical OpenRouter charges.</div></div>
+
+  <div class="fix-card"><div class="fc-head"><span class="p2">Priority 2 — High value (1–2 days each)</span></div><div class="fc-title">Replace mock dashboard data with live API calls</div><div class="fc-body">Portfolio chart: call GET /portfolios/{id}/summary and plot current_value. AI insights cards: call /api/v1/agent/chat with 3 pre-set prompt templates on page load, cache results for the session. This is the #1 visible UX gap — fake data on the main screen.</div></div>
+
+  <div class="fix-card"><div class="fc-head"><span class="p2">Priority 2 — High value</span></div><div class="fc-title">Add server-side watchlist persistence</div><div class="fc-body">Add a watchlist table (user_id, symbol, added_at) + CRUD endpoints GET/POST/DELETE /api/v1/watchlist. Migrate from localStorage on first load. Keep localStorage as offline fallback. Single-session effort, high user retention impact.</div></div>
+
+  <div class="fix-card"><div class="fc-head"><span class="p3">Priority 3 — Security &amp; reliability</span></div><div class="fc-title">Lock CORS to production domain</div><div class="fc-body">Change allow_origins=["*"] to allow_origins=[settings.frontend_url] where FRONTEND_URL is set in .env. Add to .env.example and DigitalOcean env vars. 5-minute change, significant security improvement.</div></div>
+
+  <div class="fix-card"><div class="fc-head"><span class="p3">Priority 3</span></div><div class="fc-title">Fix pandas-datareader / replace with direct FRED API</div><div class="fc-body">Either pin pandas&lt;3.0 in requirements.txt (quick, tech debt) OR replace pandas_datareader with direct FRED REST API calls using httpx. FRED API is free and returns JSON — no pandas dependency needed. Add UI indicator when macro data is from fallback.</div></div>
+
+  <div class="fix-card"><div class="fc-head"><span class="p3">Priority 3</span></div><div class="fc-title">Add WS connection auth + rate limiting</div><div class="fc-body">Accept an optional ?token=... query param on the WS endpoint. Verify it on connect (same decode_access_token logic). Add a max-connections-per-IP counter using the existing cache layer. Prevents resource exhaustion from bot connections.</div></div>
+
+  <div class="fix-card"><div class="fc-head"><span class="p4">Priority 4 — Low effort cleanup</span></div><div class="fc-title">Add per-symbol timeout to price_update_job</div><div class="fc-body">Wrap each symbol fetch in asyncio.wait_for(..., timeout=5.0). Any symbol that times out logs a warning and is skipped — other symbols still update. Prevents one bad ticker from blocking the entire 5-min job window.</div></div>
+
+  <div class="card" style="margin-top:1rem;border-color:rgba(200,255,0,.15)">
+    <div class="card-head"><div class="card-icon lime">📋</div><div><div class="card-title">Recommended Execution Order</div></div></div>
+    <div class="flow" style="flex-wrap:wrap">
+      <div class="fn" style="border-color:rgba(248,113,113,.4);color:var(--red)">1. asyncio.gather()</div>
+      <div class="fa">→</div>
+      <div class="fn" style="border-color:rgba(248,113,113,.4);color:var(--red)">2. Wire cache.py</div>
+      <div class="fa">→</div>
+      <div class="fn" style="border-color:rgba(251,191,36,.4);color:var(--amber)">3. Live dashboard data</div>
+      <div class="fa">→</div>
+      <div class="fn" style="border-color:rgba(251,191,36,.4);color:var(--amber)">4. Watchlist persistence</div>
+      <div class="fa">→</div>
+      <div class="fn" style="border-color:rgba(74,222,128,.4);color:var(--green)">5. CORS + WS auth</div>
+      <div class="fa">→</div>
+      <div class="fn" style="border-color:rgba(74,222,128,.4);color:var(--green)">6. FRED fix + cleanup</div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

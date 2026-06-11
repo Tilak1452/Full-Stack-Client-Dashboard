@@ -1051,7 +1051,11 @@ async def gather_stock_data(state: AgentState) -> AgentState:
             cached_news      = cached_news or _store("news",      key_news,      _CACHE_TTL_NEWS,      [])
             
         financials_r = fetched.get("financials", {})
+        if isinstance(financials_r, Exception):
+            financials_r = {}
         shareholding_r = fetched.get("shareholding", {})
+        if isinstance(shareholding_r, Exception):
+            shareholding_r = {}
 
         def _safe(r, key, default):
             return r.get(key, default) if isinstance(r, dict) else default
@@ -1479,9 +1483,13 @@ async def phase4_news_node(state: AgentState) -> AgentState:
     """
     data = state.get("gathered_data", {})
     symbol = state.get("intent_symbol", "UNKNOWN")
-    articles = (data.get("news_headlines") or {}).get("articles", []) or data.get("news_headlines", [])
-    if isinstance(articles, dict):
-        articles = articles.get("articles", [])
+    raw_news = data.get("news_headlines") or []
+    if isinstance(raw_news, dict):
+        articles = raw_news.get("articles", [])
+    elif isinstance(raw_news, list):
+        articles = raw_news
+    else:
+        articles = []
 
     headlines_text = "\n".join(
         f"- {a.get('title', '')} [{a.get('source', '')}]" for a in articles[:8]
@@ -1679,6 +1687,7 @@ async def phase4_sequencer_node(state: AgentState) -> AgentState:
         "financials": financials,
         "compare": compare,
         "verdict": verdict,
+        "price": gathered_data.get("stock_data", {}),
     }
     logger.info("[Phase4-Sequencer] Verdict=%s for %s (score=%d)", overall, symbol, score)
     return {**state, "artifact_data": artifact_data}
@@ -1714,7 +1723,7 @@ async def run_phase4_parallel(state: AgentState) -> AgentState:
         }
         return await phase4_sequencer_node(merged)
     except Exception as e:
-        logger.error("[Phase4] Parallel run failed: %s", e)
+        logger.error("[Phase4] Parallel run failed: %s", e, exc_info=True)
         # Silently return original state — final_response is still valid
         return state
 

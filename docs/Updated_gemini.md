@@ -68,7 +68,7 @@ The frontend communicates with the backend over two channels:
 The backend orchestrates multiple external systems:
 - **Yahoo Finance (via yfinance)** — live prices, OHLCV history, news RSS.
 - **Supabase (PostgreSQL)** — cloud-hosted relational database for portfolios, holdings, transactions, and alerts.
-- **OpenRouter** — LLM routing layer for the multi-model AI agent.
+- **Google Gemini (Direct API)** — LLM provider for the AI agent (`gemini-2.5-flash-lite` and `gemini-2.5-flash`, with 10-key rotation).
 - **ChromaDB / Pinecone** — vector databases for RAG document search.
 - **FRED (Federal Reserve Economic Data)** — macroeconomic indicators via `pandas_datareader`.
 - **Redis** — optional caching layer (falls back to in-memory dict if unavailable).
@@ -91,7 +91,7 @@ The application is deployed on **DigitalOcean App Platform** at:
 |---------|-------------|
 | **Live Indian Market Indices** | Real-time NIFTY 50, SENSEX, NIFTY BANK, NIFTY IT data |
 | **Individual Stock Data** | Price, RSI, SMA, EMA, fundamental data, options chain |
-| **AI Research Agent** | Multi-model chat interface (OpenRouter) for financial Q&A with rich artifact rendering |
+| **AI Research Agent** | Gemini-powered chat interface (`gemini-2.5-flash-lite` / `gemini-2.5-flash`) for financial Q&A with rich artifact rendering |
 | **Artifact Rendering System** | Structured AI responses rendered as interactive cards — verdict banners, metric grids, peer comparison tables, technical gauges, news feeds, revenue charts |
 | **Portfolio Management** | Full CRUD: create portfolios, buy/sell holdings with FIFO P&L calculation |
 | **Market Alerts** | Price-based and indicator-based alert rules; APScheduler polls every 5 minutes |
@@ -126,7 +126,7 @@ The following items existed in earlier versions of the codebase and have been **
 |-------------|--------|
 | `backend/app/models/user.py` | `public.users` table dropped; Supabase Auth handles identity |
 | `backend/app/services/auth_service.py` | Auth logic fully delegated to Supabase |
-| `backend/app/ai/analyst.py` | Replaced by the new `backend/app/agent/` package (OpenRouter multi-model agent) |
+| `backend/app/ai/analyst.py` | Replaced by the new `backend/app/agent/` package (Gemini Direct API agent with 10-key rotation) |
 | `backend/app/schemas/auth.py` → `UserCreate`, `Token` schemas | Removed; only `UserPublic` retained |
 | `wipe_users.py`, `drop_users_table.py`, `migrate_user_id.py`, `verify_migration.py`, `test_jwt.py` | One-time migration scripts; no longer needed |
 | `app/data/`, `app/sentiment/`, `app/portfolio/`, `app/utils/` | Empty placeholder packages; deleted |
@@ -174,7 +174,7 @@ Full-Stack-Client-Dashboard/              ← ROOT (open this in your editor)
 │   ├── 09_API_CLIENT_LAYER.md           ← Frontend API modules and WebSocket hook
 │   ├── 10_DESIGN_SYSTEM.md              ← Design tokens, typography, currency formatting
 │   ├── 11_SERVICES.md                   ← Backend service layer deep-dive
-│   ├── 12_AI_AGENT_AND_RAG.md           ← OpenRouter agent system + RAG pipeline
+│   ├── 12_AI_AGENT_AND_RAG.md           ← Gemini Direct API agent system + RAG pipeline
 │   ├── 13_KNOWN_ISSUES.md               ← Known bugs, gotchas, and deployment notes
 │   ├── 14_GIT_AND_COLLABORATION.md      ← Git workflow and branch strategy
 │   ├── 15_DATABASE_MIGRATIONS.md        ← Manual migration guide (migrate.py)
@@ -201,7 +201,7 @@ Full-Stack-Client-Dashboard/              ← ROOT (open this in your editor)
 │       │   ├── market.py                 ← GET /api/v1/indices, /api/v1/movers
 │       │   ├── rag.py                    ← POST /rag/upload, GET /rag/query
 │       │   ├── stream.py                 ← WS /api/v1/stream/price/{symbol}
-│       │   └── agent.py                  ← /api/v1/agent/* (OpenRouter multi-model AI agent)
+│       │   └── agent.py                  ← /api/v1/agent/* (Gemini Direct API AI agent)
 │       │
 │       ├── core/                         ← Infrastructure / cross-cutting concerns
 │       │   ├── __init__.py
@@ -213,7 +213,7 @@ Full-Stack-Client-Dashboard/              ← ROOT (open this in your editor)
 │       │   ├── dependencies.py           ← FastAPI get_db() dependency injection generator
 │       │   └── telemetry.py              ← HTTP middleware for request duration logging
 │       │
-│       ├── agent/                        ← OpenRouter AI agent system (the active agent — replaced ai/analyst.py)
+│       ├── agent/                        ← Gemini Direct API AI agent system (the active agent — replaced ai/analyst.py)
 │       │   ├── __init__.py
 │       │   ├── graph.py                  ← Main agent orchestrator: multi-model routing, timeout-aware (~79KB)
 │       │   ├── prompt_builder.py         ← Builds context-aware prompts from stock/news/portfolio data (~28KB)
@@ -395,7 +395,7 @@ Full-Stack-Client-Dashboard/              ← ROOT (open this in your editor)
 |-----------|-------|---------|
 | `backend/app/api/` | HTTP Controllers | Thin route handlers — validate input, call services, return responses |
 | `backend/app/core/` | Infrastructure | Config, DB connection, caching, security, dependency injection |
-| `backend/app/agent/` | AI Agent | Active LLM agent: OpenRouter multi-model orchestration |
+| `backend/app/agent/` | AI Agent | Active LLM agent: Gemini Direct API (gemini-2.5-flash-lite / gemini-2.5-flash) with 10-key rotation |
 | `backend/app/services/` | Business Logic | All domain logic: portfolios, stocks, news, alerts, market data |
 | `backend/app/ai/` | AI Utilities | Shared AI infrastructure: vector stores, doc loading, moderation, scoring |
 | `backend/app/models/` | Data Models | SQLAlchemy ORM table definitions |
@@ -405,7 +405,7 @@ Full-Stack-Client-Dashboard/              ← ROOT (open this in your editor)
 | `frontend/src/lib/` | Client Layer | API fetch wrappers, React hooks, type definitions, utilities |
 # FinSight AI — Technology Stack
 
-> This document lists every technology used in the project as of **May 1, 2026**, including versions, purpose, and any critical notes. Do not add dependencies outside of this list without updating this document.
+> This document lists every technology used in the project as of **May 6, 2026** (updated after full system audit). It reflects the ACTUAL state of the codebase — verified by direct code inspection. Do not add dependencies outside of this list without updating this document.
 
 ---
 
@@ -426,22 +426,25 @@ The backend is a **FastAPI** Python application deployed on DigitalOcean App Pla
 | **pydantic-settings** | Config management via environment variables | v2 | Reads `.env` file automatically via `BaseSettings`. Config is in `backend/app/core/config.py`. |
 | **yfinance** | Yahoo Finance market data client | Latest | Used for live prices, OHLCV history, options chain, news RSS. Primary market data source. |
 | **LangChain** | LLM orchestration framework | Latest | Used by the agent system for tool calling, chain composition, and prompt management |
-| **LangGraph** | Stateful agent workflow graphs | Latest | Used in `agent/graph.py` for multi-step agent state machines |
-| **langchain-groq** | Groq LLM provider adapter | Latest | Groq is free-tier; good for development testing |
-| **langchain-openai** | OpenAI LLM provider adapter | Latest | GPT-4o and GPT-4o-mini |
-| **langchain-google-genai** | Gemini LLM provider adapter | Latest | Gemini 1.5 Pro / Flash |
-| **OpenRouter** | LLM routing and multi-model API gateway | Latest | The primary production LLM provider used by `agent/graph.py`. Routes requests to the best available model. |
+| **LangGraph** | Stateful agent workflow graphs | Latest | Used in `agent/graph.py` for the multi-step agent state machine |
+| **langchain-google-genai** | Google Gemini LLM adapter | 4.2.1 | **THE ONLY ACTIVE LLM ADAPTER.** Connects `ChatGoogleGenerativeAI` to Google AI directly. |
+| **langchain-groq** | Groq LLM adapter | Latest | ⚠️ Listed in requirements.txt but **NOT imported or used anywhere** in the active codebase. Candidate for removal. |
+| **langchain-openai** | OpenAI-compatible LLM adapter | Latest | ⚠️ Listed in requirements.txt but **NOT imported in any active code** (only appears in commented-out DeepSeek stub). Candidate for removal. |
 | **ChromaDB** | Local vector database for RAG | Latest | Stores document embeddings on disk at `backend/vector_db/`. Used when Pinecone key is absent. |
 | **Pinecone** | Cloud vector database for RAG | Latest | Optional. Used when `Pinecone_Vector_Database` env var is set. Falls back to ChromaDB. |
+| **python-jose[cryptography]** | JWT decoding for Supabase auth | 3.5.0 | **ACTIVELY USED** in `core/security.py` (`from jose import JWTError, jwt`). Do NOT remove. |
 | **PyPortfolioOpt** | Modern Portfolio Theory optimization | Latest | Used by `mpt_service.py` for Max-Sharpe Ratio portfolio weights |
 | **APScheduler** | Background job scheduler | Latest | Powers two background jobs: alert polling (every 5 min) and holding price refresh (every 5 min) |
 | **SlowAPI** | Rate limiting middleware for FastAPI | Latest | Wraps FastAPI with rate limit decorators. Default: 20 req/min globally, stricter on LLM endpoints. |
 | **VADER Sentiment** | Rule-based sentiment analysis | Latest | Applied to news article titles in `news_service.py`. Returns compound score → `positive/neutral/negative` label. |
 | **pandas** | Data processing and numerical analysis | Latest | Used throughout services for time-series data manipulation |
-| **pandas-datareader** | FRED economic data fetching | Latest | **Known incompatibility with pandas ≥ 3.0.** Import is wrapped in try/except to prevent crashes. FRED data falls back to hardcoded values when broken. |
+| **pandas-datareader** | FRED economic data fetching | Latest | **Known incompatibility with pandas ≥ 3.0.** Import is wrapped in try/except. FRED data falls back to hardcoded values when broken. |
 | **Redis** | Optional caching layer | Latest | Used by `core/cache.py`. Falls back silently to in-memory dict if Redis is not running. |
 | **structlog** | Structured logging | Latest | Used by `ai/document_loader.py`. Must be in `requirements.txt` or the RAG upload will crash on import. |
 | **pybreaker** | Circuit breaker pattern | Latest | Wraps external API calls in `core/circuit_breaker.py` to prevent cascading failures |
+| **aiohttp** | Async HTTP client | 3.9.0+ | Used by `ParallelDataProvider` for async calls to TwelveData, FMP, NewsAPI, FRED |
+| **finnhub-python** | Finnhub market data | 2.4.19+ | Used by `ParallelDataProvider` for fundamentals, news, and shareholding fallbacks |
+| **twelvedata** | Twelve Data market data | 1.0.7+ | Used by `ParallelDataProvider` for live prices and OHLCV history (NSE/BSE primary source) |
 
 ---
 
@@ -469,16 +472,21 @@ The frontend is a **Next.js 14** application with the App Router.
 | Service | Purpose | Required? | Configuration |
 |---------|---------|-----------|---------------|
 | **Supabase** | PostgreSQL cloud database + Auth (GoTrue JWT) | **Yes — required** | `DATABASE_URL`, `SUPABASE_JWT_SECRET`, `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` |
-| **OpenRouter** | Multi-model LLM API gateway for AI agent | **Yes — for AI features** | Configure in `agent/graph.py` — uses OpenRouter API key |
-| **Groq** | Free LLM provider (Llama 3, Mixtral) | Optional | `GROQ_API_KEY` in `.env` |
-| **OpenAI** | GPT-4o / GPT-4o-mini provider | Optional | `OPENAI_API_KEY` in `.env` |
-| **Google Gemini** | Gemini 1.5 Pro / Flash provider | Optional | `GEMINI_API_KEY` in `.env` |
-| **NewsAPI** | Supplementary news articles | Optional | `NEWS_API_KEY` in `.env`. Falls back to Yahoo RSS only if absent. |
-| **FRED (Federal Reserve)** | Macroeconomic indicators | Optional | `FRED_API_KEY` in `.env`. Falls back to hardcoded values if absent or pandas incompatibility occurs. |
+| **Google Gemini (Direct API)** | **The sole active LLM provider** — `gemini-2.5-flash-lite` (classify/analysis) + `gemini-2.5-flash` (fundamentals) | **Yes — required for AI features** | `GEMINI_API_KEY_1` … `GEMINI_API_KEY_10` in `.env`. Up to 10 keys rotated to handle rate limits. |
+| **Twelve Data** | Primary market data for live prices and OHLCV history (NSE/BSE official feed) | Optional | `TWELVE_DATA_API_KEYS` in `.env` (comma-separated). Falls back to Yahoo Finance if absent. |
+| **FMP (Financial Modeling Prep)** | Fundamentals, income statements, sector peers | Optional | `FMP_API_KEYS` in `.env` (comma-separated). Falls back to Finnhub/Yahoo. |
+| **Finnhub** | Secondary fundamentals, news, shareholding data | Optional | `FINNHUB_API_KEYS` in `.env` (comma-separated). Falls back to Yahoo. |
+| **Alpha Vantage** | Secondary live price source | Optional | `ALPHA_VANTAGE_KEYS` in `.env` (comma-separated). Falls back to Yahoo. |
+| **NewsAPI** | Supplementary news articles | Optional | `NEWS_API_KEYS` in `.env`. Falls back to Yahoo RSS only if absent. |
+| **FRED (Federal Reserve)** | Macroeconomic indicators | Optional | `FRED_API_KEYS` in `.env`. Falls back to hardcoded values if absent or pandas incompatibility occurs. |
 | **Pinecone** | Cloud vector database for RAG | Optional | `Pinecone_Vector_Database` in `.env`. Falls back to local ChromaDB if absent. |
 | **Redis** | Caching layer | Optional | `redis_url` in `.env`. Falls back silently to in-memory dict if unreachable. |
 | **LangSmith** | LangChain observability and tracing | Optional | `LANGCHAIN_TRACING_V2=true`, `LANGCHAIN_API_KEY`, `LANGCHAIN_PROJECT` in `.env` |
 | **DigitalOcean App Platform** | Production hosting for both frontend and backend | **Production only** | Frontend on route `/`, Backend on route `/api`, port `8080` |
+| ~~OpenRouter~~ | ~~Multi-model LLM gateway~~ | ~~Removed~~ | **NOT USED.** Replaced by direct Google Gemini API calls with custom multi-key rotation. |
+| ~~Groq~~ | ~~Free LLM provider~~ | ~~Removed~~ | **NOT USED.** `langchain-groq` package is still in requirements.txt but is never imported. |
+| ~~OpenAI~~ | ~~GPT-4o provider~~ | ~~Removed~~ | **NOT USED.** `langchain-openai` package is still in requirements.txt but is never imported. |
+| ~~NVIDIA NIM~~ | ~~Qwen3.5 397B provider~~ | ~~Removed~~ | **NEVER EXISTED** in this codebase. Mentioned in old comments only. |
 
 ---
 
@@ -500,11 +508,14 @@ npm install
 
 ## Key Dependency Notes
 
-### Why OpenRouter over direct LLM providers?
-`agent/graph.py` uses OpenRouter as a unified gateway, which means:
-- A single API key can route to GPT-4o, Claude 3.5, Gemini 1.5, and open-source models.
-- Model fallback and load balancing are handled by OpenRouter automatically.
-- No code changes are needed to switch models — just change the model ID string.
+### LLM Architecture — Gemini Direct Provider (Current)
+`agent/graph.py` uses **direct Google Gemini API calls** (via `langchain-google-genai`) with a custom multi-key rotation and fallback system:
+- **`gemini-2.5-flash-lite`** — Used for all nodes: classify_intent, analyze_stock, synthesize_news, audit_portfolio, handle_general, handle_market, plus Phase 4 technicals and news nodes.
+- **`gemini-2.5-flash`** (full model) — Used exclusively for the Phase 4 fundamentals node, which requires deeper financial reasoning.
+- **10-key pool** (`GEMINI_API_KEY_1` … `GEMINI_API_KEY_10`): Keys rotate automatically; rate-limited keys enter a 60-second cooldown and are skipped.
+- **No OpenRouter, no Groq, no OpenAI, no NVIDIA** — despite some of these packages existing in requirements.txt.
+
+> ⚠️ **Audit Finding (May 6, 2026):** Three pool objects in `graph.py` (`_GEMMA_POOL`, `_GEMINI_FLASH_POOL`, `_GEMINI_PRO_POOL`) all reference the same `gemini-2.5-flash-lite` model. `_GEMINI_PRO_POOL` is never added to `_PROVIDER_CHAINS` and is dead code. The name `_GEMMA_POOL` is misleading — it does NOT call Gemma 4 31B.
 
 ### Why both ChromaDB and Pinecone?
 The RAG system supports both vector stores through an abstract interface (`ai/interfaces/vector_store.py`). At runtime, if `Pinecone_Vector_Database` is set in `.env`, Pinecone is used for cloud-scale semantic search. If absent, ChromaDB stores embeddings locally in `backend/vector_db/`. This allows the same codebase to work in both local development and production without code changes.
@@ -623,21 +634,30 @@ DATABASE_URL=postgresql+psycopg2://postgres:[YOUR-PASSWORD]@db.xxxxxxxxxxxx.supa
 SUPABASE_JWT_SECRET=your_jwt_secret_or_jwk_json_here
 
 # ─────────────────────────────────────────────────────────
-# LLM PROVIDERS (at least one is required for AI features)
+# GOOGLE GEMINI — THE ONLY ACTIVE LLM PROVIDER
+# Up to 10 keys for rotation (rate limit cooldown is per-key, 60s)
 # ─────────────────────────────────────────────────────────
 
-# Groq — free tier, best for development testing
-GROQ_API_KEY=
+# Required: at least GEMINI_API_KEY_1 must be set for AI features to work
+GEMINI_API_KEY_1=your_first_gemini_key_here
+GEMINI_API_KEY_2=
+GEMINI_API_KEY_3=
+GEMINI_API_KEY_4=
+GEMINI_API_KEY_5=
+GEMINI_API_KEY_6=
+GEMINI_API_KEY_7=
+GEMINI_API_KEY_8=
+GEMINI_API_KEY_9=
+GEMINI_API_KEY_10=
 
-# OpenAI — GPT-4o and GPT-4o-mini
-OPENAI_API_KEY=
-
-# Google Gemini — Gemini 1.5 Pro / Flash
-GEMINI_API_KEY=
+# Model slugs (these are set in config.py — no need to change unless upgrading models)
+# Active model for classify/analysis/news/general nodes:
+#   gemini_flash_lite_model = "gemini-2.5-flash-preview-04-17" (flash-lite)
+# Active model for Phase 4 fundamentals node (deeper reasoning):
+#   gemini_flash_model = "gemini-2.5-flash-preview-04-17"    (full flash)
 
 # ─────────────────────────────────────────────────────────
-# OPTIONAL EXTERNAL DATA SOURCES
-# ─────────────────────────────────────────────────────────
+# OPTIONAL EXTERNAL DATA SOURCES (all fall back gracefully if absent)
 
 # NewsAPI.org — supplementary news articles (falls back to Yahoo RSS if absent)
 NEWS_API_KEY=
@@ -676,8 +696,8 @@ LANGCHAIN_API_KEY=
 The `settings` singleton is imported throughout the backend:
 ```python
 from app.core.config import settings
-settings.database_url   # → value from .env
-settings.groq_api_key   # → value from .env
+settings.database_url        # → value from .env
+settings.gemini_api_key_1    # → first Gemini key from .env
 ```
 
 ---
@@ -790,7 +810,7 @@ When deployed to DigitalOcean App Platform, environment variables are set in the
 **Backend env vars required in DigitalOcean:**
 - `DATABASE_URL` → Session Pooler URL (`aws-1-ap-southeast-1.pooler.supabase.com`)
 - `SUPABASE_JWT_SECRET` → JWK JSON or plain HS256 string
-- At least one LLM key (`GROQ_API_KEY`, `OPENAI_API_KEY`, or `GEMINI_API_KEY`)
+- `GEMINI_API_KEY_1` through `GEMINI_API_KEY_10` → at least `GEMINI_API_KEY_1` must be set
 
 **Frontend env vars required in DigitalOcean:**
 - `NEXT_PUBLIC_API_URL` → `https://finsight-app-v8wgj.ondigitalocean.app`
@@ -824,7 +844,7 @@ There is no shared memory, no server-side rendering of backend data (Next.js cal
 │                             │  GET /api/v1/indices               │                             │
 │  React components           │  GET /api/v1/stock/RELIANCE.NS     │  Python services            │
 │  call apiFetch()            │  POST /api/v1/agent/chat           │  yFinance + Supabase        │
-│  or useQuery()              │  WS /api/v1/stream/price/INFY.NS   │  OpenRouter LLMs            │
+│  or useQuery()              │  WS /api/v1/stream/price/INFY.NS   │  Gemini Direct API          │
 │                             │                                    │                             │
 └─────────────────────────────┘                                    └─────────────────────────────┘
                   │                                                              │
@@ -1084,9 +1104,9 @@ Defines the `Settings` class using Pydantic's `BaseSettings`. Settings are read 
 | `log_level` | `str` | `LOG_LEVEL` env var | Python logging level (default: `"INFO"`) |
 | `database_url` | `str` | `DATABASE_URL` env var | **Required.** PostgreSQL connection string |
 | `supabase_jwt_secret` | `str` | `SUPABASE_JWT_SECRET` env var | JWT verification secret (HS256 string or JWK JSON) |
-| `openai_api_key` | `str` | `OPENAI_API_KEY` env var | Optional OpenAI key |
-| `gemini_api_key` | `str` | `GEMINI_API_KEY` env var | Optional Gemini key |
-| `groq_api_key` | `str` | `GROQ_API_KEY` env var | Optional Groq key |
+| `gemini_api_key_1` … `gemini_api_key_10` | `str` | `GEMINI_API_KEY_1` … `GEMINI_API_KEY_10` env vars | **The active LLM provider keys.** At least `gemini_api_key_1` must be set. Keys 2–10 are optional rotation slots. |
+| `gemini_flash_lite_model` | `str` | Hardcoded default | Model slug for all standard nodes (classify, analyze, news, general, market). Default: `gemini-2.5-flash-lite` |
+| `gemini_flash_model` | `str` | Hardcoded default | Model slug for Phase 4 fundamentals node (deeper reasoning). Default: `gemini-2.5-flash` |
 | `news_api_key` | `str` | `NEWS_API_KEY` env var | Optional NewsAPI key |
 | `fred_api_key` | `str` | `FRED_API_KEY` env var | Optional FRED key |
 | `redis_url` | `str` | `redis_url` env var | Optional Redis URL |
@@ -1280,12 +1300,11 @@ Constraints:
 
 ## AI Agent Endpoints
 
-The agent system at `api/agent.py` exposes the OpenRouter multi-model chat agent.
+The agent system at `api/agent.py` exposes the Gemini-powered financial chat agent.
 
 | Method | Endpoint | Auth Required | Description |
 |--------|----------|:---:|-------------|
 | `POST` | `/api/v1/agent/chat` | ✅ Yes | Send a message to the financial AI agent; returns a structured response with optional artifacts |
-| `GET` | `/api/v1/agent/models` | ✅ Yes | List available LLM models via OpenRouter |
 | `GET` | `/api/v1/agent/status` | ✅ Yes | Agent health and configuration status |
 
 ### `POST /api/v1/agent/chat` — Request Body
@@ -1313,7 +1332,7 @@ The response includes the text answer plus an optional `artifact` block containi
     { "tool": "stock_lookup", "input": "TCS.NS", "status": "done" },
     { "tool": "stock_lookup", "input": "INFY.NS", "status": "done" }
   ],
-  "model_used": "anthropic/claude-3.5-sonnet",
+  "model_used": "gemini-2.5-flash-lite",
   "conversation_id": "uuid"
 }
 ```
@@ -3180,7 +3199,7 @@ Used by `agent/tools.py` to provide the AI agent with structural market context.
 Thin wrapper around PDF parsing for the RAG upload endpoint. Uses LangChain's `PyPDFLoader` internally. Returns text content split into page-level chunks. Used by `api/rag.py` before passing content to the vector store.
 # FinSight AI — AI Agent System & RAG Pipeline
 
-> This document covers the OpenRouter-powered multi-model AI agent (the active system) and the RAG (Retrieval-Augmented Generation) document intelligence pipeline.
+> This document covers the Gemini Direct API-powered AI agent (the active system) and the RAG (Retrieval-Augmented Generation) document intelligence pipeline.
 
 ---
 
@@ -3188,7 +3207,7 @@ Thin wrapper around PDF parsing for the RAG upload endpoint. Uses LangChain's `P
 
 The AI agent system lives in `backend/app/agent/`. It is the **currently active** AI backbone, replacing the old `ai/analyst.py` (which was deleted April 29, 2026). The agent is exposed via `api/agent.py` at `/api/v1/agent/*`.
 
-The agent uses **OpenRouter** as its LLM gateway — a routing layer that allows sending requests to multiple model providers (Anthropic Claude, OpenAI GPT-4o, Mistral, etc.) through a single API with automatic fallback.
+The agent uses **direct Google Gemini API calls** (via `langchain-google-genai`) with a custom `ProviderPool` system that rotates across up to 10 Gemini API keys. Rate-limited keys enter a 60-second cooldown and are automatically skipped.
 
 ---
 
@@ -3220,7 +3239,7 @@ User Message
          │
          ▼
 ┌─────────────────┐
-│   LLM Call      │ ← OpenRouter API: routes to best available model
+│   LLM Call      │ ← Google Gemini API: routes to gemini-2.5-flash-lite (or gemini-2.5-flash for fundamentals)
 └────────┬────────┘
          │
          ▼
@@ -3233,11 +3252,12 @@ User Message
    { response, artifact, steps, model_used }
 ```
 
-### Multi-Model Routing
+### Provider Pool & Key Rotation
 
-`graph.py` supports multiple model tiers:
-- **Primary model:** Selected based on query complexity (e.g., `anthropic/claude-3.5-sonnet` for complex analysis, `openai/gpt-4o-mini` for simple lookups).
-- **Fallback model:** If the primary model times out or returns an error, the orchestrator retries with a fallback model.
+`graph.py` uses a custom `ProviderPool` class for LLM routing:
+- **Standard nodes** (`classify_intent`, `analyze_stock`, `synthesize_news`, `audit_portfolio`, `handle_general`, `handle_market`, Phase 4 technicals, Phase 4 news): use `gemini-2.5-flash-lite` from `_GEMINI_FLASH_POOL`.
+- **Phase 4 fundamentals node**: uses `gemini-2.5-flash` (full model) from `_GEMINI_FLASH_POOL_FULL` for deeper financial reasoning.
+- **Key rotation**: Each pool holds up to 10 Gemini API keys. Rate-limited keys enter a 60-second cooldown and are skipped automatically.
 - **Timeout protection:** Each LLM call has a configurable timeout (default 45 seconds). If exceeded, the agent returns a degraded response rather than hanging indefinitely.
 
 ### Artifact Generation
@@ -3401,7 +3421,7 @@ class AbstractVectorStore(ABC):
 
 ### ChromaDB Details (`vector_store_chroma.py`)
 - Stores embeddings on-disk at `backend/vector_db/`.
-- Uses the default embedding model configured via LangChain (typically OpenAI embeddings or a local model).
+- Uses the Google Gemini embedding model (configured via `langchain-google-genai`) when available, or falls back to a local embedding model.
 - The `vector_db/` directory is GITIGNORED — each developer's local vector store is independent.
 
 ### Pinecone Details (`vector_store_pinecone.py`)
@@ -3814,7 +3834,7 @@ Steps for a new team member to get the project running from scratch:
 
 1. **Clone the repo:** `git clone https://github.com/Tilak1452/Full-Stack-Client-Dashboard.git`
 2. **Read `docs/03_ENVIRONMENT_SETUP.md`** — covers Python venv, `.env` creation, frontend setup.
-3. **Get secrets from the team lead:** `DATABASE_URL`, `SUPABASE_JWT_SECRET`, Supabase URL and anon key, at least one LLM API key.
+3. **Get secrets from the team lead:** `DATABASE_URL`, `SUPABASE_JWT_SECRET`, Supabase URL and anon key, and at least `GEMINI_API_KEY_1` (Google Gemini API key).
 4. **Create `.env`** from `.env.example` and fill in the secrets.
 5. **Create `frontend/.env.local`** with Supabase URL and anon key.
 6. **Install Python deps:** `pip install -r requirements.txt`
